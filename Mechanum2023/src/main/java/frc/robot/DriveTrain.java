@@ -20,25 +20,29 @@ public class DriveTrain extends TeleopModule{
     private double rightFront;
     private double leftRear;
     private double rightRear;
+    private MotorController frontLeftMotor;
+    private MotorController backLeftMotor;
+    private MotorController frontRightMotor;
+    private MotorController backRightMotor;
 
-    private final MotorController frontLeftMotor = new CANSparkMax(1, MotorType.kBrushless);
-    private final MotorController frontRightMotor = new CANSparkMax(2, MotorType.kBrushless);
-    private final MotorController backLeftMotor = new CANSparkMax(4, MotorType.kBrushless);
-    private final MotorController backRightMotor = new CANSparkMax(3, MotorType.kBrushless);
+
+
 
     public DriveTrain() {
     }
 
     @Override
     public void robotInit() {
+        frontLeftMotor = new CANSparkMax(1, MotorType.kBrushless);
+        frontRightMotor = new CANSparkMax(2, MotorType.kBrushless);
+        backLeftMotor = new CANSparkMax(4, MotorType.kBrushless);
+        backRightMotor = new CANSparkMax(3, MotorType.kBrushless);
         frontRightMotor.setInverted(true);
         backRightMotor.setInverted(true);
     }
 
     @Override
     public void teleopInit() {
-        frontRightMotor.setInverted(true);
-        backRightMotor.setInverted(true);
     }
 
     @Override
@@ -56,6 +60,7 @@ public class DriveTrain extends TeleopModule{
         frontRightMotor.set(rightFront*0.5);
         backLeftMotor.set(leftRear*0.5);
         backRightMotor.set(rightRear*0.5);
+
     }
 
     @Override
