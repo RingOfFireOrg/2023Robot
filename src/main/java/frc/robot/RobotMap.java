@@ -12,8 +12,8 @@ public class RobotMap {
 	public static final int FRONT_RIGHT_DRIVE = 2;
 	public static final int BACK_RIGHT_DRIVE = 3;
 	public static final int BACK_LEFT_DRIVE = 4;
-	public static final int LINEAR_SLIDE = 5;
-	public static final int INTAKE_ACTUATOR = 6;
+	public static final int LINEAR_SLIDE = 6;
+	public static final int INTAKE_ACTUATOR = 5;
 
 	//Pistons
 }
