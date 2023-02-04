@@ -22,22 +22,13 @@ public class ControlSystems {
 
     // Joystick Controls
     public double joystickY() {
-        if (Math.abs(driverJoystick.getY()) < .1) {
-            return 0;
-        }
-        return driverJoystick.getY();
+            return driverJoystick.getY();
     }
     public double joystickX() {
-        if (Math.abs(driverJoystick.getX()) < .1) {
-            return 0;
-        }
-        return driverJoystick.getY();
+        return driverJoystick.getX();
     }
     public double joystickTwist() {
-        if (Math.abs(driverJoystick.getTwist()) < .1) {
-            return 0;
-        }
-        return driverJoystick.getY();
+        return driverJoystick.getTwist();
     }
 
     // GamePad Controls

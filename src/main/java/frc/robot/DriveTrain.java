@@ -50,6 +50,7 @@ public class DriveTrain extends TeleopModule{
         strafe = ControlSystems.getInstance().joystickX();
         turn = ControlSystems.getInstance().joystickTwist();
 
+
         leftFront = speed + turn + strafe;
         rightFront = speed - turn - strafe;
         leftRear = speed + turn - strafe;
