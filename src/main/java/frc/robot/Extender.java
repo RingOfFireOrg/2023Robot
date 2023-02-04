@@ -6,17 +6,18 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 
 public class Extender extends TeleopModule{
    
-    public CANSparkMax extender;
-    public RelativeEncoder extenderEncoder;
+    public VictorSP extender;
+    //public RelativeEncoder extenderEncoder;
     public double extenderPosition;
 
 
     public Extender () {
-        extender = new CANSparkMax(RobotMap.LINEAR_SLIDE, MotorType.kBrushless);
-        extenderEncoder = extender.getEncoder();
+        extender = new VictorSP(RobotMap.LINEAR_SLIDE);
+        //extenderEncoder = extender.getEncoder();
     }
 
     public void robotInit() {
@@ -27,8 +28,8 @@ public class Extender extends TeleopModule{
 
     public void teleopControl() {
         extender.set(ControlSystems.getInstance().gamepadLeftY());
-        extenderPosition = extenderEncoder.getPosition();
-        SmartDashboard.putNumber("Extender Position", extenderPosition);
+        //extenderPosition = extenderEncoder.getPosition();
+        //SmartDashboard.putNumber("Extender Position", extenderPosition);
     }
 
     public void periodic() {

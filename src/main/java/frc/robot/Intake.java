@@ -25,22 +25,41 @@ public class Intake extends TeleopModule{
     public Intake() {
         intakeActuator = new CANSparkMax(RobotMap.INTAKE_ACTUATOR, MotorType.kBrushless);
         intakeEncoder = intakeActuator.getEncoder();
-
+        intakeActuator.setInverted(true);
         intake = new DoubleSolenoid (PneumaticsModuleType.CTREPCM, 1, 0);
         //piston1 = new DoubleSolenoid (3, null, 2, 4);
     }
 
     @Override
     public void teleopControl() {
-        if(ControlSystems.getInstance().gamepadA()) {
+        if(ControlSystems.getInstance().gamepadB()) {
             intake.set(Value.kForward);
-        } else if (ControlSystems.getInstance().gamepadB()) {
+        } else if (ControlSystems.getInstance().gamepadA()) {
             intake.set(Value.kReverse);
         } else {
             intake.set(Value.kOff);
         }
         
-        intakeActuator.set(ControlSystems.getInstance().gamepadRightY());
+        if(ControlSystems.getInstance().gamepadRightY() < -0.1 || ControlSystems.getInstance().gamepadRightY() > 0.1) {
+            intakeActuator.set(ControlSystems.getInstance().gamepadRightY()*0.4);
+        }
+        else if(intakePosition < -7 && ControlSystems.getInstance().gamepadX()) {
+            intakeActuator.set(0.4);
+        } else if (intakePosition > -5 && ControlSystems.getInstance().gamepadX()) {
+            intakeActuator.set(-0.4);
+        }
+        else if(intakePosition < -60 && ControlSystems.getInstance().gamepadY()) {
+            intakeActuator.set(0.4);
+        } else if (intakePosition > -58 && ControlSystems.getInstance().gamepadY()) {
+            intakeActuator.set(-0.6);
+        }
+        
+        
+        else {
+            intakeActuator.set(0);
+        } 
+        
+        
         intakePosition = intakeEncoder.getPosition();
         SmartDashboard.putNumber("Intake Position", intakePosition);
     }
