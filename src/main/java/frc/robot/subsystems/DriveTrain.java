@@ -8,15 +8,14 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class DriveTrain extends SubsystemBase {
-//   private final CANSparkMax frontLeft;
-//   private final CANSparkMax frontRight;
-//   private final CANSparkMax backLeft;
-//   private final CANSparkMax backRight;
 
-  private static final int kFrontLeftChannel = 2;
-  private static final int kBackLeftChannel = 3;
-  private static final int kFrontRightChannel = 1;
-  private static final int kBackRightChannel = 0;
+
+  private static final int FrontLeftChannel = 2;
+  private static final int BackLeftChannel = 3;
+  private static final int FrontRightChannel = 1;
+  private static final int BackRightChannel = 0;
+
+
 
   private static final int kJoystickChannel = 0;
 
@@ -24,18 +23,18 @@ public class DriveTrain extends SubsystemBase {
   private Joystick m_stick;
 
   public DriveTrain() {
-    CANSparkMax frontLeft = new CANSparkMax(kFrontLeftChannel,MotorType.kBrushless);
-    CANSparkMax backLeft = new CANSparkMax(kBackLeftChannel,MotorType.kBrushless);
-    CANSparkMax frontRight = new CANSparkMax(kFrontRightChannel,MotorType.kBrushless);
-    CANSparkMax backRight = new CANSparkMax(kBackRightChannel,MotorType.kBrushless);
+    CANSparkMax frontLeft = new CANSparkMax(FrontLeftChannel,MotorType.kBrushless);
+    CANSparkMax backLeft = new CANSparkMax(BackLeftChannel,MotorType.kBrushless);
+    CANSparkMax frontRight = new CANSparkMax(FrontRightChannel,MotorType.kBrushless);
+    CANSparkMax backRight = new CANSparkMax(BackRightChannel,MotorType.kBrushless);
 
-    // Invert the right side motors.
-    // You may need to change or remove this to match your robot.
+
     frontRight.setInverted(true);
     backRight.setInverted(true);
+	//  Invert Left if robots Backwards
+
 
     m_robotDrive = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
-
     m_stick = new Joystick(kJoystickChannel);
 
   }
