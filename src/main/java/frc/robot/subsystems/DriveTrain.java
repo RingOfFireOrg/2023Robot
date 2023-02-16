@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import com.revrobotics.RelativeEncoder;
 
@@ -23,7 +23,7 @@ public class DriveTrain extends SubsystemBase {
   public RelativeEncoder backkRightEncoder;
 
   private MecanumDrive m_robotDrive;
-  //private Joystick m_stick;
+  private Joystick m_stick;
 
   CANSparkMax frontLeft = new CANSparkMax(FrontLeftChannel,MotorType.kBrushless);
   CANSparkMax backLeft = new CANSparkMax(BackLeftChannel,MotorType.kBrushless);
@@ -48,7 +48,13 @@ public class DriveTrain extends SubsystemBase {
 
   public CommandBase joystickDrive(double y,double x,double z) {
 
-    return run(() -> m_robotDrive.driveCartesian(y,x,z)).withName("joystickDrive");
+    double axisValueY = m_stick.getRawAxis(1); //Up and down on lleft Joystick
+    double axisValueX = m_stick.getRawAxis(0); //Left RIght on left joystick
+    double axisValueZ = m_stick.getRawAxis(4); //X value on right joystick (for turnining)
+
+    //return run(() -> m_robotDrive.driveCartesian(axisValueX,axisValueY,axisValueZ)).withName("Joystick Drive");
+    
+    return run(() -> m_robotDrive.driveCartesian(x,y,z)).withName("Joystick Drive");
   
   }
 
