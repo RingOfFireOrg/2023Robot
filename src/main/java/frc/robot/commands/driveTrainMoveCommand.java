@@ -3,31 +3,16 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
-<<<<<<< Updated upstream
-
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.Joystick;
 
-/** An example command that uses an example subsystem. */
-public class ExampleCommand extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ExampleSubsystem m_subsystem;
 
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
-=======
-import frc.robot.subsystems.ExampleSubsystem;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+public class driveTrainMoveCommand extends CommandBase {
+  private final DriveTrain m_DriveTrain;
 
-public class ExampleCommand extends CommandBase {
-  private final ExampleSubsystem m_subsystem;
-
->>>>>>> Stashed changes
-  public ExampleCommand(ExampleSubsystem subsystem) {
-    m_subsystem = subsystem;
+  public driveTrainMoveCommand(DriveTrain subsystem) {
+    m_DriveTrain = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -38,7 +23,10 @@ public class ExampleCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+
+    m_DriveTrain.joystickDrive();
+  }
 
   // Called once the command ends or is interrupted.
   @Override

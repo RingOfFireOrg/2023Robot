@@ -8,6 +8,11 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+<<<<<<< Updated upstream
+=======
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
+>>>>>>> Stashed changes
 
 
 public class DriveTrain extends SubsystemBase {
@@ -21,9 +26,30 @@ public class DriveTrain extends SubsystemBase {
   public RelativeEncoder frontRightEncoder;
   public RelativeEncoder backLeftEncoder;
   public RelativeEncoder backkRightEncoder;
+<<<<<<< Updated upstream
 
   private MecanumDrive m_robotDrive;
   private Joystick m_stick;
+=======
+  XboxController driverController;
+
+
+
+  public void Controllers() {
+    driverController = new XboxController(1);
+
+
+
+  }  
+
+
+  private MecanumDrive m_robotDrive;
+  
+
+
+
+
+>>>>>>> Stashed changes
 
   CANSparkMax frontLeft = new CANSparkMax(FrontLeftChannel,MotorType.kBrushless);
   CANSparkMax backLeft = new CANSparkMax(BackLeftChannel,MotorType.kBrushless);
@@ -45,6 +71,7 @@ public class DriveTrain extends SubsystemBase {
 
   }
 
+<<<<<<< Updated upstream
 
   public CommandBase joystickDrive(double y,double x,double z) {
 
@@ -55,6 +82,33 @@ public class DriveTrain extends SubsystemBase {
     //return run(() -> m_robotDrive.driveCartesian(axisValueX,axisValueY,axisValueZ)).withName("Joystick Drive");
     
     return run(() -> m_robotDrive.driveCartesian(x,y,z)).withName("Joystick Drive");
+=======
+  public boolean joystickBoolean() {
+
+    if(driverController.getRawAxis(0) >= 0.2 || driverController.getRawAxis(0) <= -0.2) {
+      return true;
+    }
+    else if(driverController.getRawAxis(1) >= 0.2 || driverController.getRawAxis(1) <= -0.2  ) {
+      return true;
+    }
+    else if(driverController.getRawAxis(4) >= 0.2 || driverController.getRawAxis(4) <= -0.2  ){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  public void joystickDrive() {
+
+    double axisValueX = driverController.getRawAxis(0); //Left RIght on left joystick
+    double axisValueY = driverController.getRawAxis(1); //Up and down on lleft Joystick
+    double axisValueZ = driverController.getRawAxis(4); //X value on right joystick (for turnining)
+
+    //return run(() -> m_robotDrive.driveCartesian(axisValueX,axisValueY,axisValueZ)).withName("Joystick Drive");
+    
+    m_robotDrive.driveCartesian(axisValueX,axisValueY,axisValueZ);
+>>>>>>> Stashed changes
   
   }
 
