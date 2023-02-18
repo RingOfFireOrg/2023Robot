@@ -1,0 +1,6 @@
+# pack-refs with: peeled fully-peeled sorted 
+00d998be040ee08d7f7a5dd333c7a1cc11b532bd refs/remotes/origin/2023MecanumCMD
+4adb34dbe0b114ad9c4a2cd6bb46d0bf7c48b503 refs/remotes/origin/2023SwerveCMD
+4a40c283b1dc49597a3c6b7a2d83722bdee2f428 refs/remotes/origin/CommandBased-Test
+4a1b48a2c8cc122b0c6ce92fee9a2be0f20e8a74 refs/remotes/origin/Mechanum-2023
+4a40c283b1dc49597a3c6b7a2d83722bdee2f428 refs/remotes/origin/main
