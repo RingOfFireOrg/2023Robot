@@ -1,11 +1,8 @@
 package frc.robot;
 
-import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -31,7 +28,7 @@ public class RobotContainer {
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driverController, 8);
-    private final JoystickButton robotCentric = new JoystickButton(driverController, 0);
+    private final JoystickButton robotCentric = new JoystickButton(driverController, 9);
     
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
