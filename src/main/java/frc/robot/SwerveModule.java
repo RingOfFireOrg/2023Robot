@@ -12,6 +12,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.lib.math.Conversions;
 import frc.lib.util.ModuleStateOptimizer;
 import frc.lib.util.SwerveModuleConstants;
 
@@ -130,7 +131,8 @@ public class SwerveModule {
         angleMotor.setSmartCurrentLimit(Constants.Swerve.ANGLE_SMART_CURRENT_LIMIT);
         angleMotor.setSecondaryCurrentLimit(Constants.Swerve.ANGLE_SECONDARY_CURRENT_LIMIT);
         angleMotor.setInverted(Constants.Swerve.ANGLE_MOTOR_INVERT);
-        angleMotor.setIdleMode(Constants.Swerve.ANGLE_NEUTRAL_MODE);
+        //angleMotor.setIdleMode(Constants.Swerve.ANGLE_NEUTRAL_MODE);
+        angleMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
         angleEncoder.setPositionConversionFactor(
                 (1
@@ -155,7 +157,8 @@ public class SwerveModule {
         driveMotor.setSmartCurrentLimit(Constants.Swerve.DRIVE_SMART_CURRENT_LIMIT);
         driveMotor.setSecondaryCurrentLimit(Constants.Swerve.DRIVE_SECONDARY_CURRENT_LIMIT);
         driveMotor.setInverted(Constants.Swerve.DRIVE_MOTOR_INVERT);
-        driveMotor.setIdleMode(Constants.Swerve.DRIVE_NEUTRAL_MODE);
+        // driveMotor.setIdleMode(Constants.Swerve.DRIVE_NEUTRAL_MODE);
+        driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         driveMotor.setOpenLoopRampRate(Constants.Swerve.OPEN_LOOP_RAMP);
         driveMotor.setClosedLoopRampRate(Constants.Swerve.CLOSED_LOOP_RAMP);
 
@@ -185,10 +188,23 @@ public class SwerveModule {
     }
 
     public SwerveModulePosition getPosition() {
-        return null;
+        //SwerveModulePosition modPos = new SwerveModulePosition();
+       // double position = Conversions.falconToMeters(driveMotor.getSelectedSensorPosition(),
+        //Constants.Swerve.DRIVE_GEAR_RATIO, Constants.Swerve.WHEEL_CIRCUMFERENCE);
+
+    //Rotation2d angle = Rotation2d.fromDegrees(Conversions.falconToDegrees(
+        //angleMotor.getSelectedSensorPosition(), Constants.Swerve.ANGLE_GEAR_RATIO));
+    //return new SwerveModulePosition(position, angle);
+
+    return new SwerveModulePosition(
+        1.0,
+        getAngle());
+   
     }
 
     public Rotation2d getCanCoder() {
-        return null;
+        //TODO: Actually code this properly
+        return new Rotation2d(1,1);
     }
 }
+
