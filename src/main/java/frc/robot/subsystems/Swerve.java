@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.SwerveModule;
+
 import frc.robot.Constants;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -65,6 +66,8 @@ public class Swerve extends SubsystemBase {
         }
     }    
 
+
+
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
@@ -86,6 +89,7 @@ public class Swerve extends SubsystemBase {
         SwerveModuleState[] states = new SwerveModuleState[4];
         for(SwerveModule mod : mSwerveMods){
             states[mod.moduleNumber] = mod.getState();
+
         }
         return states;
     }
@@ -98,7 +102,17 @@ public class Swerve extends SubsystemBase {
         return positions;
     }
 
-    public void zeroGyro(){
+    public void smartdashboardInputs(){
+
+    }
+
+    public void zeroMotors(){
+        for(SwerveModule mod : mSwerveMods){
+            mod.setDesiredState(new SwerveModuleState(0,getYaw()),false);
+        }
+    }
+
+    public void zeroGyro(){        
         navx.zeroYaw();
     }
     
@@ -109,11 +123,15 @@ public class Swerve extends SubsystemBase {
             mod.resetToAbsolute();
         }
     }
+    public double getHeading() {
+        return Math.IEEEremainder(navx.getAngle(), 360);
+    }
 
     @Override
     public void periodic(){
         swerveOdometry.update(getYaw(), getModulePositions());  
-        
+        SmartDashboard.putNumber("Robot Heading", getHeading());
+        SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
         //TODO: We don't need this to get the robot moving so come back to it later
         // for(SwerveModule mod : mSwerveMods){
         //     SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());

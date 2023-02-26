@@ -14,7 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.lib.util.ModuleStateOptimizer;
 import frc.lib.util.SwerveModuleConstants;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class SwerveModule {
     public final int moduleNumber;
     private final Rotation2d angleOffset;
@@ -62,6 +62,7 @@ public class SwerveModule {
     }
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
+        
         desiredState =
                 ModuleStateOptimizer.optimize(
                         desiredState,
@@ -108,6 +109,7 @@ public class SwerveModule {
     }
 
     private Rotation2d getAngle() {
+
         if (Robot.isReal()) return Rotation2d.fromDegrees(angleEncoder.getPosition());
         return simAngleCache; // If sim.
     }
@@ -184,6 +186,7 @@ public class SwerveModule {
     public SwerveModuleState getState() {
         return new SwerveModuleState(
                 Robot.isReal() ? driveEncoder.getVelocity() : simSpeedCache, getAngle());
+
     }
 
     public SwerveModulePosition getPosition() {
@@ -196,8 +199,10 @@ public class SwerveModule {
     //return new SwerveModulePosition(position, angle);
 
     return new SwerveModulePosition(
-        1.0,
-        getAngle());
+        driveEncoder.getPosition() * (Constants.Swerve.DRIVE_GEAR_RATIO) * (Constants.Swerve.WHEEL_CIRCUMFERENCE),
+            getAngle());
+        // 1.0,
+        // getAngle());
    
     }
 

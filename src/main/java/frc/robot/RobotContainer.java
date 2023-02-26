@@ -36,11 +36,12 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+        
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(s_Swerve,
-               () -> -driverController.getRawAxis(translationAxis),
-               () -> -driverController.getRawAxis(strafeAxis), 
-               () -> -driverController.getRawAxis(rotationAxis), 
+               () -> -(driverController.getRawAxis(translationAxis)/2),
+               () -> -(driverController.getRawAxis(strafeAxis)/2), 
+               () -> -(driverController.getRawAxis(rotationAxis)/2), 
                robotCentric)
         );
 

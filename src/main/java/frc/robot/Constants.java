@@ -11,6 +11,7 @@ import edu.wpi.first.math.util.Units;
 //import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 import frc.lib.util.COTSNeoSwerveConstants;
+import java.lang.Math;
 
 public final class Constants {
     public static final double stickDeadband = 0.1;
@@ -99,7 +100,7 @@ public final class Constants {
         public static final double OPEN_LOOP_RAMP = 0;
         public static final double CLOSED_LOOP_RAMP = 0;
         public static final double DRIVE_GEAR_RATIO = COTSNeoSwerveConstants.driveGearRatios.SDSMK4i_L2;
-        public static final double WHEEL_CIRCUMFERENCE = 4*Math.PI;
+        public static final double WHEEL_CIRCUMFERENCE = inchesToMeters(4)*Math.PI;
         public static final boolean CAN_CODER_INVERT = false;
 
         /* Module Specific Constants */
@@ -146,6 +147,10 @@ public final class Constants {
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0.0);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
+        }
+
+        private static double inchesToMeters(int i) {
+            return i * 0.0254;
         }
     }
 

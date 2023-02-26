@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
@@ -29,6 +30,11 @@ public class TeleopSwerve extends CommandBase {
     }
 
     @Override
+    public void initialize() {
+
+    }
+
+    @Override
     public void execute() {
         /* Get Values, Deadband*/
         double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
@@ -42,5 +48,17 @@ public class TeleopSwerve extends CommandBase {
             !robotCentricSup.getAsBoolean(), 
             true
         );
+        
+    }
+    @Override
+    public void end(boolean interrupted) {
+        s_Swerve.zeroMotors();
+    }
+
+  
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+      return true;
     }
 }
