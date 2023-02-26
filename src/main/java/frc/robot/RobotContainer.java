@@ -36,14 +36,22 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        
-        s_Swerve.setDefaultCommand(
-            new TeleopSwerve(s_Swerve,
-               () -> -(driverController.getRawAxis(translationAxis)/2),
-               () -> -(driverController.getRawAxis(strafeAxis)/2), 
-               () -> -(driverController.getRawAxis(rotationAxis)/2), 
-               robotCentric)
-        );
+        // s_Swerve.setDefaultCommand(
+        //     new TeleopSwerve(s_Swerve,
+        //        () -> -(driverController.getRawAxis(translationAxis)/2),
+        //        () -> -(driverController.getRawAxis(strafeAxis)/2), 
+        //        () -> -(driverController.getRawAxis(rotationAxis)/2), 
+        //        robotCentric)
+        // );
+
+        //s_Swerve.mSwerveMods[0].driveMotor.set(0.25);
+        //s_Swerve.mSwerveMods[1].driveMotor.set(0.25);
+        s_Swerve.mSwerveMods[2].driveMotor.set(0.25);
+        //s_Swerve.mSwerveMods[3].driveMotor.set(0.25);
+        //s_Swerve.mSwerveMods[0].angleMotor.set(0.25);
+        //s_Swerve.mSwerveMods[1].angleMotor.set(0.25);
+        s_Swerve.mSwerveMods[2].angleMotor.set(0.25);
+        //s_Swerve.mSwerveMods[3].angleMotor.set(0.25);
 
         // Configure the button bindings
         configureButtonBindings();

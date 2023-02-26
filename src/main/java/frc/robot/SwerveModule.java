@@ -14,14 +14,13 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.lib.util.ModuleStateOptimizer;
 import frc.lib.util.SwerveModuleConstants;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class SwerveModule {
     public final int moduleNumber;
     private final Rotation2d angleOffset;
     private Rotation2d lastAngle = Rotation2d.fromDegrees(0);
 
-    private final CANSparkMax angleMotor;
-    private final CANSparkMax driveMotor;
+    final CANSparkMax angleMotor;
+    final CANSparkMax driveMotor;
     private final CANCoder absoluteEncoder;
 
     private final RelativeEncoder driveEncoder;
@@ -32,7 +31,7 @@ public class SwerveModule {
 
     private final SimpleMotorFeedforward feedforward =
             new SimpleMotorFeedforward(
-                    Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
+                    Constants.SwerveConstants.driveKS, Constants.SwerveConstants.driveKV, Constants.SwerveConstants.driveKA);
 
     /* Sim Caches (basically im lazy and don't want to use the rev physics sim) */
     private double simSpeedCache;
@@ -77,7 +76,7 @@ public class SwerveModule {
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
         if (isOpenLoop) {
-            double percentOutput = desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;
+            double percentOutput = desiredState.speedMetersPerSecond / Constants.SwerveConstants.maxSpeed;
             // mDriveMotor_ctre.set(ControlMode.PercentOutput, percentOutput);
             driveMotor.set(percentOutput);
         } else {
@@ -97,7 +96,7 @@ public class SwerveModule {
 
     private void setAngle(SwerveModuleState desiredState) {
         Rotation2d angle =
-                (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01))
+                (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.SwerveConstants.maxSpeed * 0.01))
                         ? lastAngle
                         : desiredState.angle; // Prevent rotating module if speed is less than 1%.
         // Prevents Jittering.
@@ -129,25 +128,25 @@ public class SwerveModule {
 
     private void configAngleMotor() {
         angleMotor.restoreFactoryDefaults();
-        angleMotor.setSmartCurrentLimit(Constants.Swerve.ANGLE_SMART_CURRENT_LIMIT);
-        angleMotor.setSecondaryCurrentLimit(Constants.Swerve.ANGLE_SECONDARY_CURRENT_LIMIT);
-        angleMotor.setInverted(Constants.Swerve.ANGLE_MOTOR_INVERT);
+        angleMotor.setSmartCurrentLimit(Constants.SwerveConstants.ANGLE_SMART_CURRENT_LIMIT);
+        angleMotor.setSecondaryCurrentLimit(Constants.SwerveConstants.ANGLE_SECONDARY_CURRENT_LIMIT);
+        angleMotor.setInverted(Constants.SwerveConstants.ANGLE_MOTOR_INVERT);
         //angleMotor.setIdleMode(Constants.Swerve.ANGLE_NEUTRAL_MODE);
         angleMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
         angleEncoder.setPositionConversionFactor(
                 (1
-                                / Constants.Swerve.chosenModule
+                                / Constants.SwerveConstants.chosenModule
                                         .angleGearRatio) // We do 1 over the gear ratio because 1
                         // rotation of the motor is < 1 rotation of
                         // the module
                         * 360); // 1/360 rotations is 1 degree, 1 rotation is 360 degrees.
         resetToAbsolute();
 
-        anglePIDController.setP(Constants.Swerve.angleKP);
-        anglePIDController.setI(Constants.Swerve.angleKI);
-        anglePIDController.setD(Constants.Swerve.angleKD);
-        anglePIDController.setFF(Constants.Swerve.angleKF);
+        anglePIDController.setP(Constants.SwerveConstants.angleKP);
+        anglePIDController.setI(Constants.SwerveConstants.angleKI);
+        anglePIDController.setD(Constants.SwerveConstants.angleKD);
+        anglePIDController.setFF(Constants.SwerveConstants.angleKF);
 
         // TODO: Adjust this latter after we know the pid loop is not crazy
         angleMotor.getPIDController().setOutputRange(-.25, .25);
@@ -155,27 +154,27 @@ public class SwerveModule {
 
     private void configDriveMotor() {
         driveMotor.restoreFactoryDefaults();
-        driveMotor.setSmartCurrentLimit(Constants.Swerve.DRIVE_SMART_CURRENT_LIMIT);
-        driveMotor.setSecondaryCurrentLimit(Constants.Swerve.DRIVE_SECONDARY_CURRENT_LIMIT);
-        driveMotor.setInverted(Constants.Swerve.DRIVE_MOTOR_INVERT);
+        driveMotor.setSmartCurrentLimit(Constants.SwerveConstants.DRIVE_SMART_CURRENT_LIMIT);
+        driveMotor.setSecondaryCurrentLimit(Constants.SwerveConstants.DRIVE_SECONDARY_CURRENT_LIMIT);
+        driveMotor.setInverted(Constants.SwerveConstants.DRIVE_MOTOR_INVERT);
         // driveMotor.setIdleMode(Constants.Swerve.DRIVE_NEUTRAL_MODE);
         driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        driveMotor.setOpenLoopRampRate(Constants.Swerve.OPEN_LOOP_RAMP);
-        driveMotor.setClosedLoopRampRate(Constants.Swerve.CLOSED_LOOP_RAMP);
+        driveMotor.setOpenLoopRampRate(Constants.SwerveConstants.OPEN_LOOP_RAMP);
+        driveMotor.setClosedLoopRampRate(Constants.SwerveConstants.CLOSED_LOOP_RAMP);
 
         driveEncoder.setVelocityConversionFactor(
-                1 / Constants.Swerve.DRIVE_GEAR_RATIO // 1/gear ratio because the wheel spins slower than
+                1 / Constants.SwerveConstants.DRIVE_GEAR_RATIO // 1/gear ratio because the wheel spins slower than
                         // the motor.
-                        * Constants.Swerve.WHEEL_CIRCUMFERENCE // Multiply by the circumference to get meters
+                        * Constants.SwerveConstants.WHEEL_CIRCUMFERENCE // Multiply by the circumference to get meters
                         // per minute
                         / 60); // Divide by 60 to get meters per second.
         driveEncoder.setPosition(0);
 
-        drivePIDController.setP(Constants.Swerve.driveKP);
-        drivePIDController.setI(Constants.Swerve.driveKI);
-        drivePIDController.setD(Constants.Swerve.driveKD);
+        drivePIDController.setP(Constants.SwerveConstants.driveKP);
+        drivePIDController.setI(Constants.SwerveConstants.driveKI);
+        drivePIDController.setD(Constants.SwerveConstants.driveKD);
         drivePIDController.setFF(
-                Constants.Swerve
+                Constants.SwerveConstants
                         .driveKF); // Not actually used because we specify our feedforward when we
         // set our speed.
 
@@ -199,7 +198,7 @@ public class SwerveModule {
     //return new SwerveModulePosition(position, angle);
 
     return new SwerveModulePosition(
-        driveEncoder.getPosition() * (Constants.Swerve.DRIVE_GEAR_RATIO) * (Constants.Swerve.WHEEL_CIRCUMFERENCE),
+        driveEncoder.getPosition() * (Constants.SwerveConstants.DRIVE_GEAR_RATIO) * (Constants.SwerveConstants.WHEEL_CIRCUMFERENCE),
             getAngle());
         // 1.0,
         // getAngle());
@@ -208,7 +207,12 @@ public class SwerveModule {
 
     public Rotation2d getCanCoder() {
         //TODO: Actually code this properly
+        // we r also not currently usong this so woohoo
         return new Rotation2d(1,1);
+    }
+
+    public void drive() {
+        driveMotor.set(0.25);
     }
 }
 

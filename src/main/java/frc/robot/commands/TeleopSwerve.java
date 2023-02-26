@@ -3,12 +3,11 @@ package frc.robot.commands;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
-import java.util.function.BooleanSupplier;
+import java.util.function.BooleanSupplier; 
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
@@ -31,7 +30,7 @@ public class TeleopSwerve extends CommandBase {
 
     @Override
     public void initialize() {
-
+        s_Swerve.zeroMotors();
     }
 
     @Override
@@ -43,8 +42,8 @@ public class TeleopSwerve extends CommandBase {
 
         /* Drive */
         s_Swerve.drive(
-            new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
-            rotationVal * Constants.Swerve.maxAngularVelocity, 
+            new Translation2d(translationVal, strafeVal).times(Constants.SwerveConstants.maxSpeed), 
+            rotationVal * Constants.SwerveConstants.maxAngularVelocity, 
             !robotCentricSup.getAsBoolean(), 
             true
         );
@@ -57,6 +56,7 @@ public class TeleopSwerve extends CommandBase {
 
   
     // Returns true when the command should end.
+    //TODO: temp changed to false
     @Override
     public boolean isFinished() {
       return true;
