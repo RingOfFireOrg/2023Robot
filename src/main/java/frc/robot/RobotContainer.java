@@ -1,15 +1,32 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot;
 
+import java.util.List;
 
-import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.Joystick;
+//import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OIConstants;
+import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import frc.robot.autos.*;
-import frc.robot.commands.*;
-import frc.robot.subsystems.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -18,63 +35,39 @@ import frc.robot.subsystems.*;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    /* Controllers */
-    private final XboxController driverController = new XboxController(0);
 
-    /* Drive Controls */
-    private final int translationAxis = XboxController.Axis.kLeftY.value;
-    private final int strafeAxis = XboxController.Axis.kLeftX.value;
-    private final int rotationAxis = XboxController.Axis.kRightX.value;
+  private static final int MathPI = 0;
 
-    /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driverController, 8);
-    private final JoystickButton robotCentric = new JoystickButton(driverController, 9);
-    
-    /* Subsystems */
-    private final Swerve s_Swerve = new Swerve();
+  public SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
+  private final XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
+  private final XboxController operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
-    public RobotContainer() {
-        // s_Swerve.setDefaultCommand(
-        //     new TeleopSwerve(s_Swerve,
-        //        () -> -(driverController.getRawAxis(translationAxis)/2),
-        //        () -> -(driverController.getRawAxis(strafeAxis)/2), 
-        //        () -> -(driverController.getRawAxis(rotationAxis)/2), 
-        //        robotCentric)
-        // );
+  public RobotContainer() {
+    swerveSubsystem.setDefaultCommand(new SwerveJoystickCommand(
+        swerveSubsystem,
+        () -> -driverController.getRawAxis(OIConstants.kDriverYAxis),
+        () -> driverController.getRawAxis(OIConstants.kDriverXAxis),
+        () -> driverController.getRawAxis(OIConstants.kDriverRotAxis),
+        () -> !driverController.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
+        () -> driverController.getRawButton(OIConstants.kAlignWithTargetButton),
+        () -> driverController.getRawButton(OIConstants.kResetDirectionButton),
 
-        //s_Swerve.mSwerveMods[0].driveMotor.set(0.25);
-        //s_Swerve.mSwerveMods[1].driveMotor.set(0.25);
-        s_Swerve.mSwerveMods[2].driveMotor.set(0.25);
-        //s_Swerve.mSwerveMods[3].driveMotor.set(0.25);
-        //s_Swerve.mSwerveMods[0].angleMotor.set(0.25);
-        //s_Swerve.mSwerveMods[1].angleMotor.set(0.25);
-        s_Swerve.mSwerveMods[2].angleMotor.set(0.25);
-        //s_Swerve.mSwerveMods[3].angleMotor.set(0.25);
+        () -> operatorController.getRawButton(OIConstants.kRotate0Button),
+        () -> operatorController.getRawButton(OIConstants.kRotate180Button),
+        () -> operatorController.getRawButton(OIConstants.kExtendFullButton),
+        () -> operatorController.getRawButton(OIConstants.kRetractButton),
+        () -> operatorController.getRawButton(OIConstants.kToggleGrabButton),
+        () -> operatorController.getRawButton(OIConstants.kReverseGrabButton),
+        () -> operatorController.getRawButton(OIConstants.kForwardGrabButton),
+        () -> operatorController.getRawButton(OIConstants.kManuelButton)
+        ));
 
-        // Configure the button bindings
-        configureButtonBindings();
-    }
+    configureButtonBindings();
+  }
 
-    /**
-     * Use this method to define your button->command mappings. Buttons can be created by
-     * instantiating a {@link GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-     */
-    private void configureButtonBindings() {
-        /* Driver Buttons */
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-    }
-
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
-        return new exampleAuto(s_Swerve);
-    }
+  private void configureButtonBindings() {
+    //new JoystickButton(driverController, 2).whenPressed(() -> swerveSubsystem.zeroHeading());
+  }
+  
 }

@@ -1,174 +1,160 @@
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.revrobotics.CANSparkMax.IdleMode;
+import java.util.Map;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-//import frc.lib.util.COTSFalconSwerveConstants;
-import frc.lib.util.SwerveModuleConstants;
-import frc.lib.util.COTSNeoSwerveConstants;
-import java.lang.Math;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class Constants {
-    public static final double stickDeadband = 0.1;
 
-    public static final class SwerveConstants {
-        public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
+    public static final class ModuleConstants {
 
-        public static final COTSNeoSwerveConstants chosenModule =  //TODO: This must be tuned to specific robot
-        COTSNeoSwerveConstants.SDSMK4i(COTSNeoSwerveConstants.driveGearRatios.SDSMK4i_L2);
-            
-        /* Drivetrain Constants */
-        public static final double trackWidth = Units.inchesToMeters(21); //TODO: This must be tuned to specific robot
-        public static final double wheelBase = Units.inchesToMeters(27); //TODO: This must be tuned to specific robot
-        public static final double wheelCircumference = chosenModule.wheelCircumference;
+        public static final double kEncoderCPR = 2048;
 
-        /* Swerve Kinematics 
-         * No need to ever change this unless you are not doing a traditional rectangular/square 4 module swerve */
-         public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
-            new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
-            new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
-            new Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
-            new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0));
-
-        /* Module Gear Ratios */
-        public static final double driveGearRatio = chosenModule.driveGearRatio;
-        public static final double angleGearRatio = chosenModule.angleGearRatio;
-
-        /* Motor Inverts */
-        public static final boolean angleMotorInvert = chosenModule.angleMotorInvert;
-        public static final boolean driveMotorInvert = chosenModule.driveMotorInvert;
-
-        /* Angle Encoder Invert */
-        public static final boolean canCoderInvert = chosenModule.canCoderInvert;
-
-        /* Swerve Current Limiting */
-        public static final int angleContinuousCurrentLimit = 25;
-        public static final int anglePeakCurrentLimit = 40;
-        public static final double anglePeakCurrentDuration = 0.1;
-        public static final boolean angleEnableCurrentLimit = true;
-
-        public static final int driveContinuousCurrentLimit = 35;
-        public static final int drivePeakCurrentLimit = 60;
-        public static final double drivePeakCurrentDuration = 0.1;
-        public static final boolean driveEnableCurrentLimit = true;
-
-        /* These values are used by the drive falcon to ramp in open loop and closed loop driving.
-         * We found a small open loop ramp (0.25) helps with tread wear, tipping, etc */
-        public static final double openLoopRamp = 0.25;
-        public static final double closedLoopRamp = 0.0;
-
-        /* Angle Motor PID Values */
-        public static final double angleKP = chosenModule.angleKP;
-        public static final double angleKI = chosenModule.angleKI;
-        public static final double angleKD = chosenModule.angleKD;
-        public static final double angleKF = chosenModule.angleKF;
-
-        /* Drive Motor PID Values */
-        public static final double driveKP = 0.05; //TODO: This must be tuned to specific robot
-        public static final double driveKI = 0.0;
-        public static final double driveKD = 0.0;
-        public static final double driveKF = 0.0;
-
-        /* Drive Motor Characterization Values 
-         * Divide SYSID values by 12 to convert from volts to percent output for CTRE */
-        public static final double driveKS = (0.32 / 12); //TODO: This must be tuned to specific robot
-        public static final double driveKV = (1.51 / 12);
-        public static final double driveKA = (0.27 / 12);
-
-        /* Swerve Profiling Values */
-        /** Meters per Second */
-        public static final double maxSpeed = 4.5; //TODO: This must be tuned to specific robot
-        /** Radians per Second */
-        public static final double maxAngularVelocity = 10.0; //TODO: This must be tuned to specific robot
-
-        /* Neutral Modes */
-        public static final NeutralMode angleNeutralMode = NeutralMode.Coast;
-        public static final NeutralMode driveNeutralMode = NeutralMode.Brake;
-        public static final int ANGLE_SMART_CURRENT_LIMIT = 0;
-        public static final double ANGLE_SECONDARY_CURRENT_LIMIT = 0;
-        public static final boolean ANGLE_MOTOR_INVERT = false;
-        public static final IdleMode ANGLE_NEUTRAL_MODE = null;
-        public static final int DRIVE_SMART_CURRENT_LIMIT = 0;
-        public static final double DRIVE_SECONDARY_CURRENT_LIMIT = 0;
-        public static final boolean DRIVE_MOTOR_INVERT = false;
-        public static final IdleMode DRIVE_NEUTRAL_MODE = null;
-        public static final double OPEN_LOOP_RAMP = 0;
-        public static final double CLOSED_LOOP_RAMP = 0;
-        public static final double DRIVE_GEAR_RATIO = COTSNeoSwerveConstants.driveGearRatios.SDSMK4i_L2;
-        public static final double WHEEL_CIRCUMFERENCE = inchesToMeters(4)*Math.PI;
-        public static final boolean CAN_CODER_INVERT = false;
-
-        /* Module Specific Constants */
-        /* Front Left Module - Module 0 */
-
-
-
-
-        //TODO: Offsets for FL FR BL BR
-        public static final class Mod0 { 
-            public static final int driveMotorID = 1;
-            public static final int angleMotorID = 2;
-            public static final int canCoderID = 12;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0.0);
-            public static final SwerveModuleConstants constants = 
-                new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
-        }
-
-        /* Front Right Module - Module 1 */
-        public static final class Mod1 { 
-            public static final int driveMotorID = 3;
-            public static final int angleMotorID = 4;
-            public static final int canCoderID = 11;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0.0);
-            public static final SwerveModuleConstants constants = 
-                new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
-            public static void driveMotorID(int i) {
-            }
-        }
-        
-        /* Back Left Module - Module 2 */
-        public static final class Mod2 { 
-            public static final int driveMotorID = 5;
-            public static final int angleMotorID = 6;
-            public static final int canCoderID = 10;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0.0);
-            public static final SwerveModuleConstants constants = 
-                new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
-        }
-
-        /* Back Right Module - Module 3 */
-        public static final class Mod3 { 
-            public static final int driveMotorID = 7;
-            public static final int angleMotorID = 8;
-            public static final int canCoderID = 9;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0.0);
-            public static final SwerveModuleConstants constants = 
-                new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
-        }
-
-        private static double inchesToMeters(int i) {
-            return i * 0.0254;
-        }
+        public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
+        public static final double kDriveMotorGearRatio = 1 / 8.14; //L1
+        public static final double kTurningMotorGearRatio = 1 / (150/7);
+        public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
+        public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
+        public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
+        public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60;
+        public static final double kPTurning = 0.5;
     }
 
-    public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
-        public static final double kMaxSpeedMetersPerSecond = 3;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-        public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-        public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
-    
-        public static final double kPXController = 1;
-        public static final double kPYController = 1;
-        public static final double kPThetaController = 1;
-    
-        /* Constraint for the motion profilied robot angle controller */
-        public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
-            new TrapezoidProfile.Constraints(
-                kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+    public static final class DriveConstants {
+
+        public static final double kTrackWidth = 0.5334; //meters //Units.inchesToMeters(21);
+        // Distance between right and left wheels
+        public static final double kWheelBase = 0.6477;//meters //Units.inchesToMeters(25.5);
+        // Distance between front and back wheels
+        public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+                new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
+                new Translation2d(kWheelBase / 2, kTrackWidth / 2),
+                new Translation2d(-kWheelBase / 2, -kTrackWidth / 2),
+                new Translation2d(-kWheelBase / 2, kTrackWidth / 2));
+        
+        public static final int kFrontLeftDriveMotorPort = 1;
+        public static final int kFrontLeftTurningMotorPort = 2;
+        public static final int kFrontLeftDriveAbsoluteEncoderPort = 12;
+
+        public static final int kFrontRightDriveMotorPort = 3;
+        public static final int kFrontRightTurningMotorPort = 4;
+        public static final int kFrontRightDriveAbsoluteEncoderPort = 11;
+
+        public static final int kBackLeftDriveMotorPort = 5;
+        public static final int kBackLeftTurningMotorPort = 6;
+        public static final int kBackLeftDriveAbsoluteEncoderPort = 10;
+
+        public static final int kBackRightDriveMotorPort = 7;
+        public static final int kBackRightTurningMotorPort = 8;
+        public static final int kBackRightDriveAbsoluteEncoderPort = 9;
+
+        public static final boolean kFrontLeftTurningEncoderReversed = false;
+        public static final boolean kBackLeftTurningEncoderReversed = false;
+        public static final boolean kFrontRightTurningEncoderReversed = false;
+        public static final boolean kBackRightTurningEncoderReversed = false;
+
+        public static final boolean kFrontLeftDriveEncoderReversed = true;
+        public static final boolean kBackLeftDriveEncoderReversed = false;
+        public static final boolean kFrontRightDriveEncoderReversed = true;
+        public static final boolean kBackRightDriveEncoderReversed = false;
+
+
+        public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = true;
+        public static final boolean kBackLeftDriveAbsoluteEncoderReversed = true;
+        public static final boolean kFrontRightDriveAbsoluteEncoderReversed = true;
+        public static final boolean kBackRightDriveAbsoluteEncoderReversed = true;
+
+        public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = ((Math.PI/6) - 0.122173 - 0.05+0.018408); //offset in radians
+        public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = (-6.280105+Math.PI/4+.67 - .02 - 0.001534+0.019942); //offset in radians
+        public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = (Math.PI+0.046019); //offset in radians
+        public static final double kBackRightDriveAbsoluteEncoderOffsetRad = (-0.05); //offset in radians
+
+        public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
+        public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
+
+        public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 2.5; //change denomenator
+        public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 4; //change denomenator
+        public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3;
+        public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
+    }
+
+    public static final class MechanismConstants {
+        public static final int kTelescopePort = 20;
+        public static final int kPivotPort = 21;
+        public static final int kPivotFollowPort = 22;
+
+        public static final int kTelescopeEncoderCPR = 2048; //count per revolution
+        public static final int kPivotEncoderCPR = 42; //counts per revolution
+
+        public static final double kReductionTelescope = 35;
+        public static final double kRotationsToFullExtentTelescope = 8;
+        public static final double kReductionPivot = 100*(56/18);
+
+        public static final double kPTelescope = 1;
+        public static final double kITelescope = 0;
+        public static final double kDTelescope = 0;
+        public static final double kFTelescope = 0;
+        public static final double kMinTelescope = -1;
+        public static final double kMaxTelescope = 1;
+        public static final int kTimeoutMsTelescope = 30;
+        public static final int kPIDLoopIdxTelescope = 0;
+        public static final int kSlotIdxTelescope = 0;
+
+        public static final double kPPivot = 1;
+        public static final double kIPivot = 0;
+        public static final double kDPivot = 0;
+        public static final double kMinPivot = -.2;
+        public static final double kMaxPivot = .2;
+        
+
+    }
+
+    public static final class AutoConstants {
+        public static final double kMaxSpeedMetersPerSecond = 0.5;
+        public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI*0.5;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 0.25;
+        public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI/4;
+        public static final double kPXController = 0.75; //multiplier for controller PID control
+        public static final double kPYController = 0.75; //multiplier for controller PID control
+        public static final double kPThetaController = 1.75; //multiplier for controller PID control
+
+        public static final TrapezoidProfile.Constraints kThetaControllerConstraints = //
+                new TrapezoidProfile.Constraints(
+                        kMaxAngularSpeedRadiansPerSecond,
+                        kMaxAngularAccelerationRadiansPerSecondSquared);
+    }
+
+    public static final class OIConstants {
+        public static final int kDriverControllerPort = 0;
+        public static final int kOperatorControllerPort = 1;
+
+        public static final int kDriverYAxis = 1;
+        public static final int kDriverXAxis = 0;
+        public static final int kDriverRotAxis = 4;
+        public static final int kDriverFieldOrientedButtonIdx = 6;
+        public static final int kAlignWithTargetButton = 5;
+        public static final int kResetDirectionButton = 4;
+
+        public static final int kRotate0Button = 3;
+        public static final int kRotate180Button = 2;
+        public static final int kExtendFullButton = 4;
+        public static final int kRetractButton = 1;
+        public static final int kToggleGrabButton = 10;
+        public static final int kReverseGrabButton = 6;
+        public static final int kForwardGrabButton = 5;
+        public static final int kManuelButton = 7;
+
+        public static final double kDeadband = 0.05;
+    }
+
+    public enum ModulePosition {
+        FRONT_LEFT,
+        FRONT_RIGHT,
+        BACK_LEFT,
+        BACK_RIGHT
     }
 }
