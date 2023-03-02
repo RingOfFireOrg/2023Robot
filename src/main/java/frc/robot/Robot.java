@@ -15,68 +15,68 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  // private static final String kDefaultAuto = "Default";
+  // private static final String kCustomAuto = "My Auto";
+  // private String m_autoSelected;
+  // private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  protected Intake intake;
-  protected DriveTrain drivetrain;
+  // protected Intake intake;
+  // protected DriveTrain drivetrain;
   protected Extender extender;
 
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
-    extender = new Extender();
-    drivetrain = new DriveTrain();
-    intake = new Intake();
-    drivetrain.robotInit();
+    // m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
+    // m_chooser.addOption("My Auto", kCustomAuto);
+    // SmartDashboard.putData("Auto choices", m_chooser);
+    // extender = new Extender();
+    // drivetrain = new DriveTrain();
+    // intake = new Intake();
+    // drivetrain.robotInit();
     
   }
 
   @Override
   public void robotPeriodic() {
-    intake.periodic();
-    drivetrain.periodic();
+    // intake.periodic();
+    // drivetrain.periodic();
     extender.periodic();
   }
 
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
+    // m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+    // System.out.println("Auto selected: " + m_autoSelected);
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
+    // switch (m_autoSelected) {
+    //   case kCustomAuto:
+    //     // Put custom auto code here
+    //     break;
+    //   case kDefaultAuto:
+    //   default:
+    //     // Put default auto code here
+    //     break;
+    // }
   }
 
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    intake.teleopInit();
-    drivetrain.teleopInit();
+    // intake.teleopInit();
+    // drivetrain.teleopInit();
     extender.teleopInit();
   }
 
 
   @Override
   public void teleopPeriodic() {
-    intake.teleopControl();
-    drivetrain.teleopControl();
+    // intake.teleopControl();
+    // drivetrain.teleopControl();
     extender.teleopControl();
   }
 
