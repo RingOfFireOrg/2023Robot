@@ -6,6 +6,14 @@ import frc.robot.subsystems.linearSlideArm;
 public class armJoystickCommand extends CommandBase {
   /** Creates a new armJoystickCommand. */
 
+
+
+
+  // delete command if it works !
+
+
+
+
   linearSlideArm arm;
   double gamepadRightYValue;
   boolean aButton;

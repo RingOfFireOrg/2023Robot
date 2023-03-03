@@ -18,8 +18,10 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.commands.armJoystickCommand;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.linearSlideArm;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -37,6 +39,7 @@ public class RobotContainer {
 
   public SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   public LimeLight limeLightSubsystem = new LimeLight();
+  public linearSlideArm armSubsystem = new linearSlideArm();
 
   private final XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final XboxController operatorController = new XboxController(OIConstants.kOperatorControllerPort);
@@ -60,8 +63,8 @@ public class RobotContainer {
         () -> operatorController.getRawButton(OIConstants.kForwardGrabButton),
         () -> operatorController.getRawButton(OIConstants.kManuelButton)
         ));
-
-    CommandScheduler.getInstance();
+    armSubsystem.setDefaultCommand(new armJoystickCommand(
+      armSubsystem, operatorController.getRawAxis(3), operatorController.getRawButton(1), operatorController.getRawButton(2)));
     configureButtonBindings();
 
   }
