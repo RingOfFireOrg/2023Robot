@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 
+
 public class SwerveSubsystem extends SubsystemBase {
     private final SwerveModule frontLeft = new SwerveModule(
             DriveConstants.kFrontLeftDriveMotorPort,
@@ -56,6 +57,8 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
     
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+
+
 
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(
         DriveConstants.kDriveKinematics, getRotation2d(),
@@ -109,6 +112,10 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     @Override
+
+
+
+
     public void periodic() {
         odometer.update(getRotation2d(), getSwerveModulePosition());
         SmartDashboard.putNumber("Robot Heading", getHeading());
@@ -154,6 +161,7 @@ public class SwerveSubsystem extends SubsystemBase {
             backRight.brake(false);
         }
     }
+    
     
 }
     

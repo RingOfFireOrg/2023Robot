@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -11,9 +7,9 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-public class Limelight2 extends SubsystemBase {
+public class LimeLight extends SubsystemBase {
   /** Creates a new Limelight2. */
-  public Limelight2() {
+  public LimeLight() {
     // Need to tune these values
     final double visionrange = 0; 
     final double lowScoringHeight = 0; 
@@ -39,7 +35,8 @@ public class Limelight2 extends SubsystemBase {
 
     double[] arr = { x, y, v };
     return arr;
-}
+  }
+  
 
   @Override
   public void periodic() {
