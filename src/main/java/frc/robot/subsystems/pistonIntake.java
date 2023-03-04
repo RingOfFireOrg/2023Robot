@@ -65,8 +65,12 @@ public class pistonIntake extends SubsystemBase {
     }
 
     if((rightStickY < -0.1 || rightStickY > 0.1)) {
-      intakeActuator.set(rightStickY);
+      intakeActuator.set(rightStickY/2);
     } 
+    else {
+      intakeActuator.set(0);
+    }
+    
     SmartDashboard.putNumber("Right Stick Y", rightStickY);
   
     // else if(intakePosition < -7 && xButton) {

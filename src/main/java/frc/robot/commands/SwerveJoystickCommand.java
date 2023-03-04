@@ -9,6 +9,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
@@ -30,6 +31,7 @@ public class SwerveJoystickCommand extends CommandBase {
     public final double cameraPitch = Units.degreesToRadians(65);// replace number with angle of camera
 
     PhotonCamera camera = new PhotonCamera("gloworm");
+    private final XboxController driveController = new XboxController(0);
 
     //pid constants
     final double linearP = 0.0;
@@ -39,6 +41,7 @@ public class SwerveJoystickCommand extends CommandBase {
     final double angularD = 0.005;
     PIDController turnController = new PIDController(angularP, 0, angularD);
     boolean manuelMode = false;
+    boolean fieldOrientTrue = true;
 
     public SwerveJoystickCommand(SwerveSubsystem swerveSubsystem, 
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
@@ -88,7 +91,7 @@ public class SwerveJoystickCommand extends CommandBase {
         // 1. Get real-time joystick inputs
         double xSpeed = xSpdFunction.get();
         double ySpeed = ySpdFunction.get();
-        double turningSpeed = turningSpdFunction.get();
+        double turningSpeed = driveController.getRawAxis(3) - driveController.getRawAxis(2);
 
         // 2. Apply deadband
         xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;
@@ -128,7 +131,7 @@ public class SwerveJoystickCommand extends CommandBase {
         //             xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
 
 
-        if(fieldOrientedFunction.get()) {
+        if(fieldOrientTrue == true) {
             // Relative to field
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
