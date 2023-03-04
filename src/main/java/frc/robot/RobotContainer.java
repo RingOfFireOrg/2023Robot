@@ -64,7 +64,10 @@ public class RobotContainer {
         () -> operatorController.getRawButton(OIConstants.kManuelButton)
         ));
     armSubsystem.setDefaultCommand(new armJoystickCommand(
-      armSubsystem, operatorController.getRawAxis(3), operatorController.getRawButton(1), operatorController.getRawButton(2)));
+      armSubsystem, 
+      () -> operatorController.getRawAxis(1), 
+      () -> operatorController.getRawButton(1), 
+      () -> operatorController.getRawButton(2)));
     configureButtonBindings();
 
   }

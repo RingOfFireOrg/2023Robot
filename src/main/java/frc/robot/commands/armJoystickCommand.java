@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.linearSlideArm;
 
@@ -15,11 +17,11 @@ public class armJoystickCommand extends CommandBase {
 
 
   linearSlideArm arm;
-  double gamepadRightYValue;
-  boolean aButton;
-  boolean bButton;
+  Supplier<Double> gamepadRightYValue;
+  Supplier<Boolean> aButton;
+  Supplier<Boolean> bButton;
 
-  public armJoystickCommand(linearSlideArm arm, double gamepadRightYValue, boolean aButton, boolean bButton) {
+  public armJoystickCommand(linearSlideArm arm, Supplier<Double> gamepadRightYValue, Supplier<Boolean> aButton, Supplier<Boolean> bButton) {
     addRequirements(arm);
     this.arm = arm;
     

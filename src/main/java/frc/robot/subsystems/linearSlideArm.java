@@ -1,13 +1,18 @@
 package frc.robot.subsystems;
 
+import java.util.function.Supplier;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.OIConstants;
 
 public class linearSlideArm extends SubsystemBase {
   /** Creates a new linearSlideArm. */
@@ -20,6 +25,7 @@ public class linearSlideArm extends SubsystemBase {
   public DutyCycleEncoder encoder;
   public MotorControllerGroup extender;
   public double encoderPosition;
+  private final XboxController operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
 
 
@@ -47,25 +53,35 @@ public class linearSlideArm extends SubsystemBase {
   }
 
 
-  public void armMovement(double gamepadRightYValue, boolean aButton, boolean bButton) {
-    if(gamepadRightYValue < -0.1 || gamepadRightYValue > 0.1) {
-      extender.set(gamepadRightYValue);
+  public void armMovement(Supplier<Double> gamepadRightYValue, Supplier<Boolean> aButton, Supplier<Boolean> bButton) {
+    
+    double stickVal = operatorController.getRawAxis(1);
+    boolean aButton1 = operatorController.getRawButton(1);
+    boolean bButton1 = operatorController.getRawButton(2);
+
+
+
+    if(stickVal < -0.1 || stickVal > 0.1) {
+      extender.set(-stickVal);
     } 
-    else if(encoderPosition > 44 && aButton == true) {
+    else if(encoderPosition > 44 && aButton1 == true) {
       extender.set(-.2);
     }
-    else if(encoderPosition < 42 && aButton == true) {
+    else if(encoderPosition < 42 && aButton1 == true) {
       extender.set(.8);
     }
-    else if(encoderPosition < 4 && bButton == true) {
+    else if(encoderPosition < 4 && bButton1 == true) {
       extender.set(.3);
     }
-    else if(encoderPosition > 6 && bButton == true) {
+    else if(encoderPosition > 6 && bButton1 == true) {
       extender.set(-0.4);
     }
     else {
       extender.set(0);
     } 
+
+
+ 
     
   }
 }
