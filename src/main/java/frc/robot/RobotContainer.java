@@ -11,7 +11,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import frc.robot.commands.autoAdjust;
-
+import frc.robot.commands.pistonIntakeGrab;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Auto.trajectoryTest;
 import frc.robot.Constants.AutoConstants;
@@ -20,6 +20,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.armJoystickCommand;
 import frc.robot.subsystems.LimeLight;
+import frc.robot.subsystems.pistonIntake;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.linearSlideArm;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -40,6 +41,8 @@ public class RobotContainer {
   public SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   public LimeLight limeLightSubsystem = new LimeLight();
   public linearSlideArm armSubsystem = new linearSlideArm();
+  public pistonIntake pistonIntakeSubsystem = new pistonIntake();
+
 
   private final XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final XboxController operatorController = new XboxController(OIConstants.kOperatorControllerPort);
@@ -68,6 +71,10 @@ public class RobotContainer {
       () -> operatorController.getRawAxis(1), 
       () -> operatorController.getRawButton(1), 
       () -> operatorController.getRawButton(2)));
+
+    pistonIntakeSubsystem.setDefaultCommand(new pistonIntakeGrab(
+      pistonIntakeSubsystem
+    ));
     configureButtonBindings();
 
   }
