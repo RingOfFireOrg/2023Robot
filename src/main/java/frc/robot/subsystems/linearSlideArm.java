@@ -62,7 +62,7 @@ public class linearSlideArm extends SubsystemBase {
 
 
     if(stickVal < -0.1 || stickVal > 0.1) {
-      extender.set(-stickVal);
+      extender.set(stickVal);
     } 
     else if(encoderPosition > 44 && aButton1 == true) {
       extender.set(-.2);
