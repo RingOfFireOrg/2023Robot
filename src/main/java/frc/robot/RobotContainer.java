@@ -69,8 +69,8 @@ public class RobotContainer {
     armSubsystem.setDefaultCommand(new armJoystickCommand(
       armSubsystem, 
       () -> operatorController.getRawAxis(1), 
-      () -> operatorController.getRawButton(1), 
-      () -> operatorController.getRawButton(2)));
+      () -> operatorController.getRawButton(4), 
+      () -> operatorController.getRawButton(5)));
 
     pistonIntakeSubsystem.setDefaultCommand(new pistonIntakeGrab(
       pistonIntakeSubsystem

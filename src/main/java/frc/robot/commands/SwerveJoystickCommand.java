@@ -124,18 +124,20 @@ public class SwerveJoystickCommand extends CommandBase {
         // 4. Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;
         
-        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
-
-
-        // if(fieldOrientedFunction.get()) {
-        //     // Relative to field
-        //     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+        // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
         //             xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
-        // } else {
-        //     // Relative to robot
-        //     chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
-        // }
+
+
+        if(fieldOrientedFunction.get()) {
+            // Relative to field
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                    xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
+        } else {
+            // Relative to robot (not anymore lol)
+            //chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
+        }
 
         // 5. Convert chassis speeds to individual module states
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
