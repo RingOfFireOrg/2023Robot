@@ -22,8 +22,7 @@ public class SwerveJoystickCommand extends CommandBase {
 
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
     //private final Supplier<Integer> manuelPivotPOV, manuelTelescopePOV;
-    private final Supplier<Boolean> fieldOrientedFunction, alignFunction, resetDirection, rotate0, rotate180, extendFull, 
-    retract, toggleGrab, reverseGrab, forwardGrab, manuel;
+    private final Supplier<Boolean> fieldOrientedFunction, alignFunction, resetDirection;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
     public final double cameraHeight = Units.inchesToMeters(5);// replace number with height of camera on robot
@@ -44,13 +43,13 @@ public class SwerveJoystickCommand extends CommandBase {
     boolean fieldOrientTrue = true;
 
     public SwerveJoystickCommand(SwerveSubsystem swerveSubsystem, 
-            Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
-            Supplier<Boolean> fieldOrientedFunction, Supplier<Boolean> alignButton, Supplier<Boolean> resetDirectionButton,
+            Supplier<Double> xSpdFunction, 
+            Supplier<Double> ySpdFunction, 
+            Supplier<Double> turningSpdFunction,
+            Supplier<Boolean> fieldOrientedFunction, 
 
-            Supplier<Boolean> rotate0Button, Supplier<Boolean> rotate180Button,
-            Supplier<Boolean> retractButton,Supplier<Boolean> extendFullButton, 
-            Supplier<Boolean> toggleGrabButton, Supplier<Boolean> reverseGrabButton, 
-            Supplier<Boolean> forwardGrabButton, Supplier<Boolean> manuelButton) {
+            Supplier<Boolean> alignButton, 
+            Supplier<Boolean> resetDirectionButton) {
         this.swerveSubsystem = swerveSubsystem;
 
         this.xSpdFunction = xSpdFunction;
@@ -60,15 +59,15 @@ public class SwerveJoystickCommand extends CommandBase {
         this.alignFunction = alignButton;
         this.resetDirection = resetDirectionButton;
 
-        this.rotate0 = rotate0Button;
-        this.rotate180 = rotate180Button;
-        this.extendFull = extendFullButton;
-        this.retract = retractButton;
-        this.toggleGrab = toggleGrabButton;
-        this.reverseGrab = reverseGrabButton;
-        this.forwardGrab = forwardGrabButton;
+        // this.rotate0 = rotate0Button;
+        // this.rotate180 = rotate180Button;
+        // this.extendFull = extendFullButton;
+        // this.retract = retractButton;
+        // this.toggleGrab = toggleGrabButton;
+        // this.reverseGrab = reverseGrabButton;
+        // this.forwardGrab = forwardGrabButton;
 
-        this.manuel = manuelButton;
+        // this.manuel = manuelButton;
 
         //this.manuelPivotPOV = manuelPivotPOV;
         //this.manuelTelescopePOV = manuelPivotPOV;
@@ -86,12 +85,15 @@ public class SwerveJoystickCommand extends CommandBase {
 
     @Override
     public void execute() {
-        //SWERVE EXECUTE
 
         // 1. Get real-time joystick inputs
         double xSpeed = xSpdFunction.get();
+        //double xSpeed = 0;
+
         double ySpeed = ySpdFunction.get();
-        double turningSpeed = driveController.getRawAxis(3) - driveController.getRawAxis(2);
+        //double ySpeed = 0;
+
+        double turningSpeed = turningSpdFunction.get();
 
         // 2. Apply deadband
         xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;
@@ -101,52 +103,130 @@ public class SwerveJoystickCommand extends CommandBase {
         // 3. Make the driving smoother
         xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
         ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
-
-        SmartDashboard.putNumber("xSpeed", xSpeed);
-        SmartDashboard.putNumber("ySpeed", ySpeed);
-
-        if(!alignFunction.get()) {
-            turningSpeed = turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-        }
-        else {
-            var result = camera.getLatestResult();
-            
-            if(result.hasTargets()) {
-                turningSpeed = turningLimiter.calculate(-turnController.calculate(result.getBestTarget().getYaw(),0)) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-            }
-            else{
-                turningSpeed = 0;
-            }
-
-        }   
-        
-        if(resetDirection.get()) {
-            swerveSubsystem.zeroHeading();
-        }
+        turningSpeed = turningLimiter.calculate(turningSpeed)
+                * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
 
         // 4. Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;
+        SmartDashboard.putNumber("Rotation 2d Number", swerveSubsystem.getRotation2dButaDouble());
         
-        // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+        
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds (
+            xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
+
+        // if (fieldOrientedFunction.get()) {
+        //     // Relative to field
+        //     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
         //             xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
-
-
-        if(fieldOrientTrue == true) {
-            // Relative to field
-            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
-        } else {
-            // Relative to robot (not anymore lol)
-            //chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
-            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
-        }
+        // } else {
+        //     // Relative to robot
+        //     chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
+        // }
 
         // 5. Convert chassis speeds to individual module states
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
         // 6. Output each module states to wheels
         swerveSubsystem.setModuleStates(moduleStates);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        // //SWERVE EXECUTE
+        // // 1. Get real-time joystick inputs
+        // double xSpeed = xSpdFunction.get();
+        // double ySpeed = ySpdFunction.get();
+        // double turningSpeed = turningSpdFunction.get();
+
+        // // 2. Apply deadband
+        // xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;
+        // ySpeed = Math.abs(ySpeed) > OIConstants.kDeadband ? ySpeed : 0.0;
+        // turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
+
+        // // 3. Make the driving smoother
+        // xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+        // ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+        // turningSpeed = turningLimiter.calculate(turningSpeed)
+        //         * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+
+
+        // // 1. Get real-time joystick inputs
+        // double xSpeed = xSpdFunction.get();
+        // double ySpeed = ySpdFunction.get();
+        // double turningSpeed = driveController.getRawAxis(3) - driveController.getRawAxis(2);
+
+        // // 2. Apply deadband
+        // xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;
+        // ySpeed = Math.abs(ySpeed) > OIConstants.kDeadband ? ySpeed : 0.0;
+        // turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
+
+        // // 3. Make the driving smoother
+        // xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+        // ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+
+        // SmartDashboard.putNumber("xSpeed", xSpeed);
+        // SmartDashboard.putNumber("ySpeed", ySpeed);
+
+        // if(!alignFunction.get()) {
+        //     turningSpeed = turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+        // }
+        // else {
+        //     var result = camera.getLatestResult();
+            
+        //     if(result.hasTargets()) {
+        //         turningSpeed = turningLimiter.calculate(-turnController.calculate(result.getBestTarget().getYaw(),0)) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+        //     }
+        //     else{
+        //         turningSpeed = 0;
+        //     }
+
+        // }   
+        
+        // if(resetDirection.get()) {
+        //     swerveSubsystem.zeroHeading();
+        // }
+
+        // 4. Construct desired chassis speeds
+       // ChassisSpeeds chassisSpeeds;
+        
+        // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+        //             xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
+
+
+        // if(5 == 5) {
+        //     // Relative to field
+        //     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+        //             xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
+        // } else {
+        //     // Relative to robot (not anymore lol)
+        //     //chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
+        //     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+        //         xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
+        // }
+
+        // // 5. Convert chassis speeds to individual module states
+        // SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+
+        // // 6. Output each module states to wheels
+        // swerveSubsystem.setModuleStates(moduleStates);
 
       
 

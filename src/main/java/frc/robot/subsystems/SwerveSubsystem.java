@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import edu.wpi.first.wpilibj.SerialPort;
+
 
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -56,7 +58,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderOffsetRad,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
     
-    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+    private final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
 
 
 
@@ -84,11 +86,20 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public double getHeading() {
-        return gyro.getAngle();
+        //return gyro.getAngle();
+        SmartDashboard.putNumber("Gyro Angle",gyro.getAngle());
+        return Math.IEEEremainder(gyro.getAngle(), 360);
+
     }
 
     public Rotation2d getRotation2d() {
+       
         return Rotation2d.fromDegrees(getHeading());
+    }
+
+    public double getRotation2dButaDouble() {
+
+        return getHeading();
     }
 
     public Pose2d getPose() {
@@ -146,6 +157,14 @@ public class SwerveSubsystem extends SubsystemBase {
             new SwerveModulePosition(backRight.getDrivePosition(), new Rotation2d(backRight.getTurningPosition())),
         };
     }
+    public void driveForward(SwerveModuleState[] desiredStates) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        frontLeft.setDesiredState(desiredStates[0]);
+        frontRight.setDesiredState(desiredStates[1]);
+        backLeft.setDesiredState(desiredStates[2]);
+        backRight.setDesiredState(desiredStates[3]);
+    }
+
 
     public void brake(boolean doBrake){
         if(doBrake){

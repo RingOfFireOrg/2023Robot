@@ -64,7 +64,7 @@ public class pistonIntake extends SubsystemBase {
       intake.set(Value.kOff);
     }
 
-    if((rightStickY < -0.1 || rightStickY > 0.1)) {
+    if(rightStickY < -0.1 || rightStickY > 0.1) {
       intakeActuator.set(rightStickY/2);
     } 
     else {

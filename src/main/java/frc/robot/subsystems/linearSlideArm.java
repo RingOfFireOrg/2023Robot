@@ -66,7 +66,7 @@ public class linearSlideArm extends SubsystemBase {
     SmartDashboard.putNumber("Encoeder Value", encoderPosition);
 
     if((stickVal < -0.1 || stickVal > 0.1)) {
-      extender.set(-stickVal/2);
+      extender.set(stickVal/2);
       encoderPosition = encoder.getDistance();
     } 
     // else if(encoderPosition > 44 && aButton1 == true) {
