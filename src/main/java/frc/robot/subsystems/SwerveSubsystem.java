@@ -85,12 +85,29 @@ public class SwerveSubsystem extends SubsystemBase {
         gyro.reset();
     }
 
+    // public double getHeading() {
+    //     if(gyro.isMoving() == true) {
+    //         SmartDashboard.putNumber("Gyro Angle",gyro.getAngle());
+    //     }
+    //     return gyro.getAngle();
+    //     //return Math.IEEEremainder(gyro.getAngle(), 360);
+
+    // }
     public double getHeading() {
-        SmartDashboard.putNumber("Gyro Angle",gyro.getAngle());
-        return gyro.getAngle();
-        //return Math.IEEEremainder(gyro.getAngle(), 360);
+        //double temp = Math.IEEEremainder(gyro.getAngle(), 360);
+        double temp = Math.abs((gyro.getAngle() % 360));
+        SmartDashboard.putNumber("Gyro Angle",temp);
+        return temp;
+        // should be the same as: return (gyro.getAngle() % 360);
 
     }
+
+    // public double gyroangle() {
+    //     while(gyro.isMoving()) {
+    //         return gyro.getAngle() % 360;
+    //     }
+    //     return gyro.getAngle();
+    // }
 
     public Rotation2d getRotation2d() {
        
