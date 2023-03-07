@@ -59,21 +59,47 @@ public class linearSlideArm extends SubsystemBase {
   }
 
 
-  public void armMovement(Supplier<Double> gamepadRightYValue) {
+  public void highConeHeight() {
+    boolean testVal = false;
+    encoderPosition = encoder.getDistance();
+    while (testVal == true && (encoderPosition - encoderPositionHold <= 45)) {
+      extender.set(.4);
+      encoderPosition = encoder.getDistance();
+    }
+    testVal = false;
+  }
+
+  public void lowConeHeight() {
+    
+  }
+
+  public void commandOrder() {
+    boolean boolVal = false;
+    if (boolVal == true) {
+      highConeHeight();
+    }
+    else {
+      armMovement();
+    }
+  }
+
+
+  public void armMovement() {
     
     double stickVal = operatorController.getRawAxis(1);
+    boolean LBumper = operatorController.getRawButton(5);
 
     encoderPosition = encoder.getDistance();
     SmartDashboard.putNumber("Encoeder Value", encoderPosition);
     SmartDashboard.putNumber("Encoeder Updated Value", encoderPosition - encoderPositionHold);
 
 
-    if(stickVal < -0.1 /*&& encoderPosition - encoderPositionHold > -.25 */) {// test to make sure the numbers work
+    if(stickVal < -0.1     && (encoderPosition - encoderPositionHold > -.25 || LBumper == true)) {// test to make sure the numbers work
       //moving down
       extender.set(stickVal/2);
       encoderPosition = encoder.getDistance();
     } 
-    else if(stickVal > 0.1 && encoderPosition - encoderPositionHold < 45) {
+    else if(stickVal > 0.1 && (encoderPosition - encoderPositionHold < 45 || LBumper == true)) {
       //moving up
       extender.set(stickVal/2);
       encoderPosition = encoder.getDistance();
