@@ -44,9 +44,9 @@ public class pistonIntake extends SubsystemBase {
   public void joystickControl() {
 
 
-
+    
     //Opening and closing intake
-    boolean aButton = operatorController.getRawButton(1);
+    boolean xButton = operatorController.getRawButton(3);
     boolean bButton = operatorController.getRawButton(2);
 
     //Transfering up and down
@@ -54,7 +54,7 @@ public class pistonIntake extends SubsystemBase {
 
 
 
-    if      (aButton) {
+    if      (xButton) {
       intake.set(Value.kForward);
     } 
     else if (bButton) {

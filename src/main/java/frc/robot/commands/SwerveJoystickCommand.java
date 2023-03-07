@@ -41,6 +41,7 @@ public class SwerveJoystickCommand extends CommandBase {
     PIDController turnController = new PIDController(angularP, 0, angularD);
     boolean manuelMode = false;
     boolean fieldOrientTrue = true;
+    
 
     public SwerveJoystickCommand(SwerveSubsystem swerveSubsystem, 
             Supplier<Double> xSpdFunction, 
@@ -86,6 +87,8 @@ public class SwerveJoystickCommand extends CommandBase {
     @Override
     public void execute() {
 
+        boolean robotOreinetation = driveController.getRawButton(5); 
+
         // 1. Get real-time joystick inputs
         double xSpeed = xSpdFunction.get();
         //double xSpeed = 0;
@@ -111,17 +114,18 @@ public class SwerveJoystickCommand extends CommandBase {
         SmartDashboard.putNumber("Rotation 2d Number", swerveSubsystem.getRotation2dButaDouble());
         
         
-        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds (
-            xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
+        // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds (
+        //     xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
 
-        // if (fieldOrientedFunction.get()) {
-        //     // Relative to field
-        //     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-        //             xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
-        // } else {
-        //     // Relative to robot
-        //     chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
-        // }
+        if (robotOreinetation != true) {
+            // Relative to field
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                    xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
+        } 
+        else {
+            // Relative to robot
+            chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
+        }
 
         // 5. Convert chassis speeds to individual module states
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);

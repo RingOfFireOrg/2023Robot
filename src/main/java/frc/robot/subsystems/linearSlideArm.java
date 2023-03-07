@@ -27,6 +27,7 @@ public class linearSlideArm extends SubsystemBase {
   public DutyCycleEncoder encoder;
   public MotorControllerGroup extender;
   public double encoderPosition;
+  public double encoderPositionHold;
   //Encoder encoderTest = new Encoder(0, 1);
   private final XboxController operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
@@ -53,42 +54,31 @@ public class linearSlideArm extends SubsystemBase {
 
   public void encoderReset() {
     encoder.reset();
+    // 3
+    encoderPositionHold = encoder.getDistance();
   }
 
 
-  public void armMovement(Supplier<Double> gamepadRightYValue, Supplier<Boolean> aButton, Supplier<Boolean> bButton) {
+  public void armMovement(Supplier<Double> gamepadRightYValue) {
     
     double stickVal = operatorController.getRawAxis(1);
-    boolean aButton1 = operatorController.getRawButton(4);
-    boolean bButton1 = operatorController.getRawButton(5);
 
     encoderPosition = encoder.getDistance();
     SmartDashboard.putNumber("Encoeder Value", encoderPosition);
+    SmartDashboard.putNumber("Encoeder Updated Value", encoderPosition - encoderPositionHold);
 
-    if((stickVal < -0.1 || stickVal > 0.1)) {
+
+    if(stickVal < -0.1 /*&& encoderPosition - encoderPositionHold > -.25 */) {// test to make sure the numbers work
+      //moving down
       extender.set(stickVal/2);
       encoderPosition = encoder.getDistance();
     } 
-    // else if(encoderPosition > 44 && aButton1 == true) {
-    //   extender.set(-.2);
-    //   encoderPosition = encoder.getDistance();
+    else if(stickVal > 0.1 && encoderPosition - encoderPositionHold < 45) {
+      //moving up
+      extender.set(stickVal/2);
+      encoderPosition = encoder.getDistance();
 
-    // } 
-    // else if(encoderPosition < 42 && aButton1 == true) {
-    //   extender.set(.8);
-    //   encoderPosition = encoder.getDistance();
-
-    // }
-    // else if(encoderPosition < 4 && bButton1 == true) {
-    //   extender.set(.3);
-    //   encoderPosition = encoder.getDistance();
-
-    // }
-    // else if(encoderPosition > 6 && bButton1 == true) {
-    //   extender.set(-0.4);
-    //   encoderPosition = encoder.getDistance();
-
-    // }
+    }
     else {
       extender.set(0);
       encoderPosition = encoder.getDistance();

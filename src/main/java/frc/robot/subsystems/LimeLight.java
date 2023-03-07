@@ -32,6 +32,7 @@ public class LimeLight extends SubsystemBase {
     // post to smart dashboard
     SmartDashboard.putNumber("LimelightX", x);
     SmartDashboard.putNumber("LimelightY", y);
+    SmartDashboard.putNumber("LimelightY", y);
 
     double[] arr = { x, y, v };
     return arr;
@@ -41,5 +42,24 @@ public class LimeLight extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+  public void limeLightDashboardVals() {
+    // https://docs.limelightvision.io/en/latest/networktables_api.html
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+
+    // Horizontal Offset From Crosshair To Target (-29.8 to 29.8deg)
+    double x = table.getEntry("tx").getDouble(0.0);
+
+    // Vertical Offset From Crosshair To Target (-24.85 to 24.85deg)
+    double y = table.getEntry("ty").getDouble(0.0);
+
+    // Valid target in vision (0 or 1)
+    double v = table.getEntry("ty").getDouble(0.0);
+
+    // post to smart dashboard
+    SmartDashboard.putNumber("LimelightX", x);
+    SmartDashboard.putNumber("LimelightY", y);
+    SmartDashboard.putNumber("LimelightY", v);
+
   }
 }

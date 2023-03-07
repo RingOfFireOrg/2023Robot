@@ -10,10 +10,9 @@ public class armJoystickCommand extends CommandBase {
 
   linearSlideArm arm;
   Supplier<Double> gamepadRightYValue;
-  Supplier<Boolean> aButton;
-  Supplier<Boolean> bButton;
 
-  public armJoystickCommand(linearSlideArm arm, Supplier<Double> gamepadRightYValue, Supplier<Boolean> aButton, Supplier<Boolean> bButton) {
+
+  public armJoystickCommand(linearSlideArm arm, Supplier<Double> gamepadRightYValue) {
     addRequirements(arm);
     this.arm = arm;
     
@@ -29,7 +28,7 @@ public class armJoystickCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.armMovement(gamepadRightYValue,aButton,bButton);
+    arm.armMovement(gamepadRightYValue);
   }
 
   // Called once the command ends or is interrupted.
