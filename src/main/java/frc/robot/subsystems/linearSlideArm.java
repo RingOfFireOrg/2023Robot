@@ -60,13 +60,13 @@ public class linearSlideArm extends SubsystemBase {
 
 
   public void highConeHeight() {
-    boolean testVal = false;
+    //boolean rBumper = operatorController.getRawButton(6);
     encoderPosition = encoder.getDistance();
-    while (testVal == true && (encoderPosition - encoderPositionHold <= 45)) {
-      extender.set(.4);
+    while (encoderPosition - encoderPositionHold <= 25) {
+      extender.set(-.4);
       encoderPosition = encoder.getDistance();
     }
-    testVal = false;
+    extender.set(0);
   }
 
   public void lowConeHeight() {
@@ -74,8 +74,8 @@ public class linearSlideArm extends SubsystemBase {
   }
 
   public void commandOrder() {
-    boolean boolVal = false;
-    if (boolVal == true) {
+    boolean rBumper = operatorController.getRawButton(6);
+    if (rBumper == true) {
       highConeHeight();
     }
     else {

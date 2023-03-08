@@ -26,6 +26,7 @@ public class pistonIntake extends SubsystemBase {
   public pistonIntake() {
     intakeActuator = new CANSparkMax(16, MotorType.kBrushless);
     intakeEncoder = intakeActuator.getEncoder();
+
     intakeActuator.setInverted(true);
     intake = new DoubleSolenoid (PneumaticsModuleType.CTREPCM, 1, 0);
 
@@ -72,6 +73,7 @@ public class pistonIntake extends SubsystemBase {
     }
     
     SmartDashboard.putNumber("Right Stick Y", rightStickY);
+    //SmartDashboard.putNumber("intake encoder: ", intakeEncoder);
   
     // else if(intakePosition < -7 && xButton) {
     //   intakeActuator.set(0.4);
