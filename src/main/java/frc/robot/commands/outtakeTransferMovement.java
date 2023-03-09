@@ -13,7 +13,7 @@ public class outtakeTransferMovement extends CommandBase {
   outtakeTransfer wheelie;
   //Supplier<Double> gamepadRightYValue;
 
-  public outtakeTransferMovement() {
+  public outtakeTransferMovement(outtakeTransfer wheelie) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(wheelie);
     this.wheelie = wheelie;

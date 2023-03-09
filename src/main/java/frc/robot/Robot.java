@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.pistonIntake;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -102,11 +103,14 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    
+  }
 
   @Override
   public void testInit() {

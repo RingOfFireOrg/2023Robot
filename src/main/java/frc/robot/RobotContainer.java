@@ -85,6 +85,10 @@ public class RobotContainer {
       limeLightSubsystem
     ));
 
+    outtakeTransferSubsystem.setDefaultCommand(new outtakeTransferMovement(
+      outtakeTransferSubsystem
+    ));
+
     configureButtonBindings();
 
   }

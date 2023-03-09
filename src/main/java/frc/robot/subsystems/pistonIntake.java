@@ -34,20 +34,23 @@ public class pistonIntake extends SubsystemBase {
     intakeActuator.setInverted(true);
     intake = new DoubleSolenoid (PneumaticsModuleType.CTREPCM, 1, 0);
   }
-  //final DigitalInput limitSwitch = new DigitalInput(Constants.LimitSwitchDIO);
+  final DigitalInput limitSwitch = new DigitalInput(Constants.LimitSwitchDIO);
   
-  // private void digitalInput() {
-  //   if(limitSwitch.get() == true) {
-  //   intakeActuator.set(0);
-  // }
+  private void digitalInput() {
+    if(limitSwitch.get() == true) {
+    intakeActuator.set(0);
+  }
   
-//   SmartDashboard.putBoolean("LimitSwitch: ", limitSwitch.get());
+  SmartDashboard.putBoolean("LimitSwitch: ", limitSwitch.get());
 
-// }
+}
+public boolean getLimitSwitchBoolean() {
+  return SmartDashboard.putBoolean("LimitSwitch: ", limitSwitch.get());
+}
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("LimitSwitch: ", limitSwitch.get());
   }
 
 
@@ -57,6 +60,7 @@ public class pistonIntake extends SubsystemBase {
 
   public void joystickControl() {
 
+    SmartDashboard.putBoolean("LimitSwitch: ", limitSwitch.get());
 
     
     //Opening and closing intake
@@ -64,7 +68,7 @@ public class pistonIntake extends SubsystemBase {
     boolean bButton = operatorController.getRawButton(2);
 
     //Transfering up and down
-    double rightStickY = operatorController.getRawAxis(5);
+    double rightStickY = -operatorController.getRawAxis(5);
 
 
     if(xButton) {
@@ -76,10 +80,13 @@ public class pistonIntake extends SubsystemBase {
     else {
       intake.set(Value.kOff);
     }
-    // if(limitSwitch.get() == true) {
-    //   intakeActuator.stopMotor();
-    // }
-    if((rightStickY < -0.1 || rightStickY > 0.1)/* && limitSwitch.get() == false*/) {
+    if(rightStickY < 0.1) {
+      intakeActuator.set(rightStickY/2);
+    }
+    else if(limitSwitch.get() == false && rightStickY > 0.1) {
+      intakeActuator.stopMotor();
+    }
+    else if((rightStickY < -0.1 || rightStickY > 0.1) && limitSwitch.get() == true) {
       intakeActuator.set(rightStickY/2);
     } 
     else {

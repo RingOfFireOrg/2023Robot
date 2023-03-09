@@ -155,5 +155,6 @@ public final class Constants {
         BACK_LEFT,
         BACK_RIGHT
     }
-    public static final int LimitSwitchDIO = 0;
+    public static final int LimitSwitchDIO = 1;
+    public static final int WheeliePWM = 0;
 }
