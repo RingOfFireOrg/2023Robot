@@ -69,7 +69,7 @@ public final class Constants {
         public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = ((Math.PI/6) - 0.122173 - 0.05+0.018408); //offset in radians
         public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = (-6.280105+Math.PI/4+.67 - .02 - 0.001534+0.019942); //offset in radians
         public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = (Math.PI+0.046019); //offset in radians
-        public static final double kBackRightDriveAbsoluteEncoderOffsetRad = (-0.05); //offset in radians
+        public static final double kBackRightDriveAbsoluteEncoderOffsetRad = (-2.757-5.319+Math.PI/4+Math.PI/6+Math.PI); //offset in radians
 
         public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
@@ -155,4 +155,5 @@ public final class Constants {
         BACK_LEFT,
         BACK_RIGHT
     }
+    public static final int LimitSwitchDIO = 0;
 }

@@ -9,7 +9,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimeLight extends SubsystemBase {
   /** Creates a new Limelight2. */
-  public LimeLight() {
+  public LimeLight( ) {
     // Need to tune these values
     final double visionrange = 0; 
     final double lowScoringHeight = 0; 

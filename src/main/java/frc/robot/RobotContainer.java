@@ -15,7 +15,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import frc.robot.commands.autoAdjust;
-import frc.robot.commands.LimeLightValues;
+import frc.robot.commands.LimeLightVals;
 import frc.robot.commands.outtakeTransferMovement;
 import frc.robot.commands.pistonIntakeGrab;
 import edu.wpi.first.wpilibj.XboxController;
@@ -81,7 +81,9 @@ public class RobotContainer {
     // outtakeTransferSubsystem.setDefaultCommand(new outtakeTransferMovement(
       
     // ));
-    limeLightSubsystem.setDefaultCommand(new LimeLightValues());
+    limeLightSubsystem.setDefaultCommand(new LimeLightVals(
+      limeLightSubsystem
+    ));
 
     configureButtonBindings();
 

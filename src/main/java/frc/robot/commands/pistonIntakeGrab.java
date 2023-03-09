@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.pistonIntake;
 
 public class pistonIntakeGrab extends CommandBase {
-  /** Creates a new pistonIntake. */
 
   pistonIntake pistonIntake;
 

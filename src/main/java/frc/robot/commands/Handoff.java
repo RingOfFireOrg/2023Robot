@@ -5,15 +5,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.LimeLight;
 
-public class LimeLightValues extends CommandBase {
-
-  LimeLight limelightsubsystem = new LimeLight();
-  public limeLightValues() {
-
-    addRequirements(limelightsubsystem);
-    // this.limelightsubsystem = limelightsubsystem;
+public class Handoff extends CommandBase {
+  /** Creates a new Handoff. */
+  public Handoff() {
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -22,9 +18,7 @@ public class LimeLightValues extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    limelightsubsystem.limeLightDashboardVals();
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
