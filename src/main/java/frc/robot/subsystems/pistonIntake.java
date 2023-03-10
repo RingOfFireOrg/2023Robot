@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
@@ -14,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 
 public class pistonIntake extends SubsystemBase {
   CANSparkMax intakeActuator;
@@ -94,22 +92,7 @@ public boolean getLimitSwitchBoolean() {
     }
     
     SmartDashboard.putNumber("Right Stick Y", rightStickY);
-    //SmartDashboard.putNumber("intake encoder: ", intakeEncoder);
-  
-    // else if(intakePosition < -7 && xButton) {
-    //   intakeActuator.set(0.4);
-    // } 
-    // else if (intakePosition > -5 && xButton) {
-    //   intakeActuator.set(-0.4);
-    // }
-    // else if(intakePosition < -60 && yButton) {
-    //   intakeActuator.set(0.4);
-    // } 
-    // else if (intakePosition > -58 && yButton) {
-    //   intakeActuator.set(-0.6);
-    // }
 
-  
   
   intakePosition = intakeEncoder.getPosition();
   SmartDashboard.putNumber("Intake Position", intakePosition);

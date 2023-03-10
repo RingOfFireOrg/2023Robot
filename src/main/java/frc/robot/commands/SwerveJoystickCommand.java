@@ -20,8 +20,7 @@ public class SwerveJoystickCommand extends CommandBase {
 
     private final SwerveSubsystem swerveSubsystem;
 
-    private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
-    //private final Supplier<Integer> manuelPivotPOV, manuelTelescopePOV;
+    private final Supplier<Double> xSpdFunctionField, ySpdFunctionField, xSpdFunctionRobot, ySpdFunctionRobot, turningSpdFunctionLeft, turningSpdFunctionRight;
     private final Supplier<Boolean> fieldOrientedFunction, alignFunction, resetDirection;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
@@ -44,18 +43,30 @@ public class SwerveJoystickCommand extends CommandBase {
     
 
     public SwerveJoystickCommand(SwerveSubsystem swerveSubsystem, 
-            Supplier<Double> xSpdFunction, 
-            Supplier<Double> ySpdFunction, 
-            Supplier<Double> turningSpdFunction,
+            Supplier<Double> xSpdFunctionField, 
+            Supplier<Double> ySpdFunctionField, 
+
+            Supplier<Double> xSpdFunctionRobot,
+            Supplier<Double> ySpdFunctionRobot,
+
+            Supplier<Double> turningSpdFunctionLeft,
+            Supplier<Double> turningSpdFunctionRight,
             Supplier<Boolean> fieldOrientedFunction, 
 
             Supplier<Boolean> alignButton, 
             Supplier<Boolean> resetDirectionButton) {
+
         this.swerveSubsystem = swerveSubsystem;
 
-        this.xSpdFunction = xSpdFunction;
-        this.ySpdFunction = ySpdFunction;
-        this.turningSpdFunction = turningSpdFunction;
+        this.xSpdFunctionField = xSpdFunctionField;
+        this.ySpdFunctionField = ySpdFunctionField;
+
+        this.xSpdFunctionRobot = xSpdFunctionRobot;
+        this.ySpdFunctionRobot = ySpdFunctionRobot;
+
+        this.turningSpdFunctionLeft = turningSpdFunctionLeft;
+        this.turningSpdFunctionRight = turningSpdFunctionRight;
+
         this.fieldOrientedFunction = fieldOrientedFunction;
         this.alignFunction = alignButton;
         this.resetDirection = resetDirectionButton;
@@ -87,172 +98,100 @@ public class SwerveJoystickCommand extends CommandBase {
     @Override
     public void execute() {
 
-        boolean robotOreinetation = driveController.getRawButton(6); 
 
-        // 1. Get real-time joystick inputs
-        double xSpeed = xSpdFunction.get();
-        //double xSpeed = 0;
-        double ySpeed = ySpdFunction.get();
-        //double ySpeed = 0;
-        double turningSpeed = turningSpdFunction.get();
+        if (xSpdFunctionField.get() >= 0.1 || xSpdFunctionField.get() <= -0.1 || ySpdFunctionField.get() >= 0.1 || ySpdFunctionField.get() <= -0.1) 
+        {
+            // 1. Get real-time joystick inputs
+            double xSpeed = xSpdFunctionField.get();
+            double ySpeed = ySpdFunctionField.get();
+            double turningSpeed = turningSpdFunctionLeft.get() - turningSpdFunctionRight.get();
 
-        // 2. Apply deadband
-        xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;
-        ySpeed = Math.abs(ySpeed) > OIConstants.kDeadband ? ySpeed : 0.0;
-        turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
+            // 2. Apply deadband
+            xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;
+            ySpeed = Math.abs(ySpeed) > OIConstants.kDeadband ? ySpeed : 0.0;
+            turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
 
-        // 3. Make the driving smoother
-        xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
-        ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
-        turningSpeed = turningLimiter.calculate(turningSpeed)
-                * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+            // 3. Make the driving smoother
+            xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+            ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+            turningSpeed = turningLimiter.calculate(turningSpeed)
+                    * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
 
-        // 4. Construct desired chassis speeds
-        ChassisSpeeds chassisSpeeds;
-        SmartDashboard.putNumber("Rotation 2d Number", swerveSubsystem.getRotation2dButaDouble());
-        
-        
-        // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds (
-        //     xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
-
-        if (!alignFunction.get()) {
-            // Relative to field
-            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
-        } 
-        else {
-            // Relative to robot
-            chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
-        }
-
-        // 5. Convert chassis speeds to individual module states
-        SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
-
-        // 6. Output each module states to wheels
-        swerveSubsystem.setModuleStates(moduleStates);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-        // //SWERVE EXECUTE
-        // // 1. Get real-time joystick inputs
-        // double xSpeed = xSpdFunction.get();
-        // double ySpeed = ySpdFunction.get();
-        // double turningSpeed = turningSpdFunction.get();
-
-        // // 2. Apply deadband
-        // xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;
-        // ySpeed = Math.abs(ySpeed) > OIConstants.kDeadband ? ySpeed : 0.0;
-        // turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
-
-        // // 3. Make the driving smoother
-        // xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
-        // ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
-        // turningSpeed = turningLimiter.calculate(turningSpeed)
-        //         * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-
-
-        // // 1. Get real-time joystick inputs
-        // double xSpeed = xSpdFunction.get();
-        // double ySpeed = ySpdFunction.get();
-        // double turningSpeed = driveController.getRawAxis(3) - driveController.getRawAxis(2);
-
-        // // 2. Apply deadband
-        // xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;
-        // ySpeed = Math.abs(ySpeed) > OIConstants.kDeadband ? ySpeed : 0.0;
-        // turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
-
-        // // 3. Make the driving smoother
-        // xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
-        // ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
-
-        // SmartDashboard.putNumber("xSpeed", xSpeed);
-        // SmartDashboard.putNumber("ySpeed", ySpeed);
-
-        // if(!alignFunction.get()) {
-        //     turningSpeed = turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-        // }
-        // else {
-        //     var result = camera.getLatestResult();
+            // 4. Construct desired chassis speeds
+            ChassisSpeeds chassisSpeeds;
+            SmartDashboard.putNumber("Rotation 2d Number", swerveSubsystem.getRotation2dButaDouble());
             
-        //     if(result.hasTargets()) {
-        //         turningSpeed = turningLimiter.calculate(-turnController.calculate(result.getBestTarget().getYaw(),0)) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-        //     }
-        //     else{
-        //         turningSpeed = 0;
-        //     }
+            
+            // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds (
+            //     xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
 
-        // }   
+            if (!alignFunction.get()) {
+                // Relative to field
+                chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                        xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
+            } 
+            else {
+                // Relative to robot
+                chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
+            }
+
+            // 5. Convert chassis speeds to individual module states
+            SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+
+            // 6. Output each module states to wheels
+            swerveSubsystem.setModuleStates(moduleStates);
+        }
+        else 
+        {
+            // 1. Get real-time joystick inputs
+            double xSpeed = xSpdFunctionRobot.get();
+            double ySpeed = ySpdFunctionRobot.get();
+            double turningSpeed = turningSpdFunctionLeft.get() - turningSpdFunctionRight.get();
+
+            // 2. Apply deadband
+            xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;
+            ySpeed = Math.abs(ySpeed) > OIConstants.kDeadband ? ySpeed : 0.0;
+            turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
+
+            // 3. Make the driving smoother
+            xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+            ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+            turningSpeed = turningLimiter.calculate(turningSpeed)
+                    * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+
+            // 4. Construct desired chassis speeds
+            ChassisSpeeds chassisSpeeds;
+            SmartDashboard.putNumber("Rotation 2d Number", swerveSubsystem.getRotation2dButaDouble());
+
+            chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
+
+            // 5. Convert chassis speeds to individual module states
+            SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+
+            // 6. Output each module states to wheels
+            swerveSubsystem.setModuleStates(moduleStates);
+        }
         
-        // if(resetDirection.get()) {
-        //     swerveSubsystem.zeroHeading();
-        // }
-
-        // 4. Construct desired chassis speeds
-       // ChassisSpeeds chassisSpeeds;
-        
-        // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-        //             xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
 
 
-        // if(5 == 5) {
-        //     // Relative to field
-        //     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-        //             xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
-        // } else {
-        //     // Relative to robot (not anymore lol)
-        //     //chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
-        //     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-        //         xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
-        // }
 
-        // // 5. Convert chassis speeds to individual module states
-        // SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
-        // // 6. Output each module states to wheels
-        // swerveSubsystem.setModuleStates(moduleStates);
 
-      
 
-           
-        
 
-        /*
-        if(manuelPivotPOV.get()==90){
-            armSubsystem.manuelPivot(manuelPivotPOV.get()*.15);
-        }
-        else if(manuelPivotPOV.get()==270){
-            armSubsystem.manuelPivot(manuelPivotPOV.get()*-.15);
-        }
 
-        if(manuelTelescopePOV.get()==0){
-            armSubsystem.manuelTelescope(manuelTelescopePOV.get()*.3);
-        }
-        else if(manuelTelescopePOV.get()==180){
-            armSubsystem.manuelTelescope(manuelTelescopePOV.get()*-.3);
-        }
-        else {
-            armSubsystem.telescopeOff();
-        }
-        */
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     @Override
