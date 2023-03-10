@@ -34,11 +34,11 @@ public class outtakeTransfer extends SubsystemBase {
     direction = operatorController.getPOV(0);
     
     if(direction == 0) {
-      outtakeMotor.set(.55);
+      outtakeMotor.set(.15);
     } 
 
     else if(direction == 180) {
-      outtakeMotor.set(-.55);
+      outtakeMotor.set(-.15);
     } 
 
     else {
@@ -47,11 +47,11 @@ public class outtakeTransfer extends SubsystemBase {
 
     if(direction == 270) {
 
-      wheelieSpinner.set(.75);
+      wheelieSpinner.set(.5);
     } 
 
     else if(direction == 90) {
-      wheelieSpinner.set(-.75);
+      wheelieSpinner.set(-.5);
     } 
 
     else {

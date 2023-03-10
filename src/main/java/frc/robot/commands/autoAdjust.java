@@ -46,7 +46,7 @@ public class autoAdjust extends CommandBase {
 
 
 
-    double xDiffrence  = crosshairVals[0];
+    double xDifference  = crosshairVals[0];
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
       AutoConstants.kMaxSpeedMetersPerSecond,
       AutoConstants.kMaxAccelerationMetersPerSecondSquared)
@@ -54,12 +54,9 @@ public class autoAdjust extends CommandBase {
 
       Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(0)), 
-        List.of(
-          new Translation2d(xDiffrence,0)
-          
-          ),
-        new Pose2d(xDiffrence, 0, Rotation2d.fromDegrees(0)),
-      trajectoryConfig);
+        List.of(new Translation2d(xDifference,0)),
+        new Pose2d(xDifference, 0, Rotation2d.fromDegrees(0)),
+        trajectoryConfig);
         
       PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
       PIDController yController = new PIDController(AutoConstants.kPXController, 0, 0);

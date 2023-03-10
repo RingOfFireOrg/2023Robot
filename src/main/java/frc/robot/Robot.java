@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
   private AutoModes previousSelectedAuto;
 
   public enum AutoModes {
-    AUTO1
+    AUTO1, AUTO2, AUTO3, AUTO4, AUTO5, AUTO6
   }
   
   @Override
@@ -48,7 +48,11 @@ public class Robot extends TimedRobot {
 
     autoChooser = new SendableChooser<>();
     autoChooser.setDefaultOption("AUTO1", AutoModes.AUTO1);
-    autoChooser.addOption("AUTO1", AutoModes.AUTO1);
+    autoChooser.addOption("AUTO2", AutoModes.AUTO2);
+    autoChooser.addOption("AUTO3", AutoModes.AUTO3);
+    autoChooser.addOption("AUTO4", AutoModes.AUTO4);
+    autoChooser.addOption("AUTO5", AutoModes.AUTO5);
+    autoChooser.addOption("AUTO6", AutoModes.AUTO6);
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
     previousSelectedAuto = autoChooser.getSelected();

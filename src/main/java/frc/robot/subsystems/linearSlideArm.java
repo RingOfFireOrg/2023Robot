@@ -99,7 +99,7 @@ public class linearSlideArm extends SubsystemBase {
       extender.set(stickVal/2);
       encoderPosition = encoder.getDistance();
     } 
-    else if(stickVal > 0.1 && (encoderPosition - encoderPositionHold < 45 || LBumper == true)) {
+    else if(stickVal > 0.1 && (encoderPosition - encoderPositionHold < 43 || LBumper == true)) {
       //moving up
       extender.set(stickVal/2);
       encoderPosition = encoder.getDistance();
