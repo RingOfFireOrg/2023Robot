@@ -17,6 +17,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import frc.robot.commands.autoAdjust;
 import frc.robot.commands.outtakeTransferMovement;
 import frc.robot.commands.pistonIntakeGrab;
+import frc.robot.commands.robotOriented;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -58,8 +59,28 @@ public class RobotContainer {
   private final XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final XboxController operatorController = new XboxController(OIConstants.kOperatorControllerPort);
   public RobotContainer() {
-    swerveSubsystem.setDefaultCommand(new OrientationSchedular(
-    swerveSubsystem));
+
+    if (driverController.getRawAxis(0) >= 0.1 || driverController.getRawAxis(0) <= -0.1 || driverController.getRawAxis(1) >= 0.1 || driverController.getRawAxis(1) <= -0.1) {
+      swerveSubsystem.setDefaultCommand(new SwerveJoystickCommand(
+        swerveSubsystem, 
+        () -> -driverController.getRawAxis(OIConstants.kDriverYAxis),
+        () -> driverController.getRawAxis(OIConstants.kDriverXAxis),
+        () -> driverController.getRawAxis(OIConstants.kDriverRotAxis),
+        () -> !driverController.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
+        () -> driverController.getRawButton(OIConstants.kAlignWithTargetButton),
+        () -> driverController.getRawButton(OIConstants.kResetDirectionButton)));
+    }
+    else {
+      swerveSubsystem.setDefaultCommand(new robotOriented(
+        swerveSubsystem, 
+        () -> -driverController.getRawAxis(5),
+        () -> driverController.getRawAxis(4),
+        () -> driverController.getRawAxis(OIConstants.kDriverRotAxis),
+        () -> !driverController.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
+        () -> driverController.getRawButton(OIConstants.kAlignWithTargetButton),
+        () -> driverController.getRawButton(OIConstants.kResetDirectionButton)));
+    }
+    
 
 
 
