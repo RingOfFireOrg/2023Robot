@@ -4,11 +4,27 @@
 
 package frc.robot;
 
+import java.util.List;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.pistonIntake;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -23,7 +39,7 @@ public class Robot extends TimedRobot {
   private AutoModes previousSelectedAuto;
 
   public enum AutoModes {
-    AUTO1
+    AUTO1, AUTO2, AUTO3, AUTO4, AUTO5, AUTO6
   }
   
   @Override
@@ -32,7 +48,11 @@ public class Robot extends TimedRobot {
 
     autoChooser = new SendableChooser<>();
     autoChooser.setDefaultOption("AUTO1", AutoModes.AUTO1);
-    autoChooser.addOption("AUTO1", AutoModes.AUTO1);
+    autoChooser.addOption("AUTO2", AutoModes.AUTO2);
+    autoChooser.addOption("AUTO3", AutoModes.AUTO3);
+    autoChooser.addOption("AUTO4", AutoModes.AUTO4);
+    autoChooser.addOption("AUTO5", AutoModes.AUTO5);
+    autoChooser.addOption("AUTO6", AutoModes.AUTO6);
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
     previousSelectedAuto = autoChooser.getSelected();
@@ -67,6 +87,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     if (m_autonomousCommand != null) {
         m_autonomousCommand.schedule();
@@ -86,11 +107,14 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    
+  }
 
   @Override
   public void testInit() {
@@ -100,7 +124,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+
+  
+  }
 
   /** This function is called once when the robot is first started up. */
   @Override
@@ -109,4 +136,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
+
+  
+
 }

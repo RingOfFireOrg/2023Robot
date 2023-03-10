@@ -22,7 +22,21 @@ public class AutoBuilder {
             case AUTO1:
                 auto1();
                 break;
-
+            case AUTO2:
+                auto2();
+                break;
+            case AUTO3:
+                auto3();
+                break;
+            case AUTO4:
+                auto4();
+                break;
+            case AUTO5:
+                auto5();
+                break;
+            case AUTO6:
+                auto6();
+                break;
         }
 
         //autoCommand.beforeStarting(startPath.odometryReset());
@@ -49,5 +63,66 @@ public class AutoBuilder {
             )
         );
     }
+    private void auto2() {
+        startPath = new AutoPath(robotContainer.swerveSubsystem, "AUTO2");
+
+        autoCommand.addCommands(
+            new ParallelCommandGroup(
+                //startPath.zeroHeading(),
+                startPath.setBrake(),
+                startPath.odometryReset(),
+                startPath.getAutoPath()
+            )
+        );
+    }
+    private void auto3() {
+        startPath = new AutoPath(robotContainer.swerveSubsystem, "AUTO3");
+
+        autoCommand.addCommands(
+            new ParallelCommandGroup(
+                //startPath.zeroHeading(),
+                startPath.setBrake(),
+                startPath.odometryReset(),
+                startPath.getAutoPath()
+            )
+        );
+    }
+    private void auto4() {
+        startPath = new AutoPath(robotContainer.swerveSubsystem, "AUTO4");
+
+        autoCommand.addCommands(
+            new ParallelCommandGroup(
+                //startPath.zeroHeading(),
+                startPath.setBrake(),
+                startPath.odometryReset(),
+                startPath.getAutoPath()
+            )
+        );
+    }
+    private void auto5() {
+        startPath = new AutoPath(robotContainer.swerveSubsystem, "AUTO5");
+
+        autoCommand.addCommands(
+            new ParallelCommandGroup(
+                //startPath.zeroHeading(),
+                startPath.setBrake(),
+                startPath.odometryReset(),
+                startPath.getAutoPath()
+            )
+        );
+    }
+    private void auto6() {
+        startPath = new AutoPath(robotContainer.swerveSubsystem, "AUTO6");
+
+        autoCommand.addCommands(
+            new ParallelCommandGroup(
+                //startPath.zeroHeading(),
+                startPath.setBrake(),
+                startPath.odometryReset(),
+                startPath.getAutoPath()
+            )
+        );
+    }
+
 
 }

@@ -17,6 +17,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import edu.wpi.first.wpilibj.SerialPort;
+
+
 
 public class SwerveSubsystem extends SubsystemBase {
     private final SwerveModule frontLeft = new SwerveModule(
@@ -55,7 +58,9 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderOffsetRad,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
     
-    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+    private final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
+
+
 
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(
         DriveConstants.kDriveKinematics, getRotation2d(),
@@ -80,12 +85,41 @@ public class SwerveSubsystem extends SubsystemBase {
         gyro.reset();
     }
 
+    // public double getHeading() {
+    //     if(gyro.isMoving() == true) {
+    //         SmartDashboard.putNumber("Gyro Angle",gyro.getAngle());
+    //     }
+    //     return gyro.getAngle();
+    //     //return Math.IEEEremainder(gyro.getAngle(), 360);
+
+    // }
     public double getHeading() {
-        return gyro.getAngle();
+        //double temp = Math.IEEEremainder(gyro.getAngle(), 360);
+        double temp = (gyro.getAngle() % 360);
+        if(temp < 0) {
+            temp = temp + 360; 
+        }
+        SmartDashboard.putNumber("Gyro Angle",temp);
+        return temp;
+        // should be the same as: return (gyro.getAngle() % 360);
+
     }
 
+    // public double gyroangle() {
+    //     while(gyro.isMoving()) {
+    //         return gyro.getAngle() % 360;
+    //     }
+    //     return gyro.getAngle();
+    // }
+
     public Rotation2d getRotation2d() {
+       
         return Rotation2d.fromDegrees(getHeading());
+    }
+
+    public double getRotation2dButaDouble() {
+
+        return getHeading();
     }
 
     public Pose2d getPose() {
@@ -109,6 +143,10 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     @Override
+
+
+
+
     public void periodic() {
         odometer.update(getRotation2d(), getSwerveModulePosition());
         SmartDashboard.putNumber("Robot Heading", getHeading());
@@ -139,6 +177,14 @@ public class SwerveSubsystem extends SubsystemBase {
             new SwerveModulePosition(backRight.getDrivePosition(), new Rotation2d(backRight.getTurningPosition())),
         };
     }
+    public void driveForward(SwerveModuleState[] desiredStates) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        frontLeft.setDesiredState(desiredStates[0]);
+        frontRight.setDesiredState(desiredStates[1]);
+        backLeft.setDesiredState(desiredStates[2]);
+        backRight.setDesiredState(desiredStates[3]);
+    }
+
 
     public void brake(boolean doBrake){
         if(doBrake){
@@ -154,6 +200,7 @@ public class SwerveSubsystem extends SubsystemBase {
             backRight.brake(false);
         }
     }
+    
     
 }
     
