@@ -41,12 +41,13 @@ public class autoAdjust extends CommandBase {
   @Override
   public void execute() {
 
+
+    //Get the x y and z of the limelight dedection 
     double[] crosshairVals = limelight3.getVisionVals();
+    //Seperate the x coordinatine into its own variable
+    double xDiffrence  = crosshairVals[0];
 
-
-
-
-    double xDifference  = crosshairVals[0];
+    //Genereate a trajectory that moves the robot based on the reflective tape
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
       AutoConstants.kMaxSpeedMetersPerSecond,
       AutoConstants.kMaxAccelerationMetersPerSecondSquared)
@@ -54,9 +55,9 @@ public class autoAdjust extends CommandBase {
 
       Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(0)), 
-        List.of(new Translation2d(xDifference,0)),
-        new Pose2d(xDifference, 0, Rotation2d.fromDegrees(0)),
-        trajectoryConfig);
+        List.of(new Translation2d(0,xDiffrence)),
+        new Pose2d(0, xDiffrence, Rotation2d.fromDegrees(0)),
+      trajectoryConfig);
         
       PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
       PIDController yController = new PIDController(AutoConstants.kPXController, 0, 0);

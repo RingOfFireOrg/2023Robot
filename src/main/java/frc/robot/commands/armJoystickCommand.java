@@ -40,4 +40,7 @@ public class armJoystickCommand extends CommandBase {
   public boolean isFinished() {
     return false;
   }
+
+  public void encoderReset() {
+  }
 }

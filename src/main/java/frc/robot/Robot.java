@@ -23,8 +23,8 @@ import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.armJoystickCommand;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.pistonIntake;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -34,6 +34,7 @@ import frc.robot.subsystems.pistonIntake;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  private armJoystickCommand armJostickCMD;
   private RobotContainer m_robotContainer;
   private static SendableChooser<AutoModes> autoChooser;
   private AutoModes previousSelectedAuto;
@@ -54,10 +55,12 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("AUTO5", AutoModes.AUTO5);
     autoChooser.addOption("AUTO6", AutoModes.AUTO6);
 
+
+
     SmartDashboard.putData("Auto Chooser", autoChooser);
     previousSelectedAuto = autoChooser.getSelected();
 
-
+    
     
   }
 
@@ -107,14 +110,11 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {
-    
-  }
+  public void teleopPeriodic() {}
 
   @Override
   public void testInit() {
@@ -124,10 +124,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {
-
-  
-  }
+  public void testPeriodic() {}
 
   /** This function is called once when the robot is first started up. */
   @Override
