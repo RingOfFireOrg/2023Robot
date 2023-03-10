@@ -16,7 +16,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class SwerveJoystickCommand extends CommandBase {
+public class robotOriented extends CommandBase {
 
     private final SwerveSubsystem swerveSubsystem;
 
@@ -43,7 +43,7 @@ public class SwerveJoystickCommand extends CommandBase {
     boolean fieldOrientTrue = true;
     
 
-    public SwerveJoystickCommand(SwerveSubsystem swerveSubsystem, 
+    public robotOriented(SwerveSubsystem swerveSubsystem, 
             Supplier<Double> xSpdFunction, 
             Supplier<Double> ySpdFunction, 
             Supplier<Double> turningSpdFunction,
@@ -112,18 +112,17 @@ public class SwerveJoystickCommand extends CommandBase {
         SmartDashboard.putNumber("Rotation 2d Number", swerveSubsystem.getRotation2dButaDouble());
         
         
-        // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds (
-        //     xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
+        chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
 
-        if (!alignFunction.get()) {
-            // Relative to field
-            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
-        } 
-        else {
-            // Relative to robot
-            chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
-        }
+        // if (robotOreinetation) {
+        //     // Relative to field
+        //     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+        //             xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
+        // } 
+        // else {
+        //     // Relative to robot
+        //     chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
+        // }
 
         // 5. Convert chassis speeds to individual module states
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);

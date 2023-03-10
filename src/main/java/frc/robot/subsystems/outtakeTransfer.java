@@ -47,7 +47,7 @@ public class outtakeTransfer extends SubsystemBase {
 
     if(direction == 270) {
 
-      wheelieSpinner.set(.5);
+      wheelieSpinner.set(1);
     } 
 
     else if(direction == 90) {

@@ -14,10 +14,10 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import frc.robot.commands.autoAdjust;
 import frc.robot.commands.LimeLightVals;
 import frc.robot.commands.outtakeTransferMovement;
 import frc.robot.commands.pistonIntakeGrab;
+import frc.robot.commands.robotOriented;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -82,8 +82,17 @@ public class RobotContainer {
         ));
     }
     else {
-      swerveSubsystem.setDefaultCommand(new autoAdjust(swerveSubsystem, limeLightSubsystem));
+      swerveSubsystem.setDefaultCommand(new robotOriented(
+        swerveSubsystem,
+        () -> -driverController.getRawAxis(OIConstants.kDriverYAxis),
+        () -> driverController.getRawAxis(OIConstants.kDriverXAxis),
+        () -> driverController.getRawAxis(OIConstants.kDriverRotAxis),
+        () -> !driverController.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
+        () -> driverController.getRawButton(OIConstants.kAlignWithTargetButton),
+        () -> driverController.getRawButton(OIConstants.kResetDirectionButton)
+        ));
     }
+
     
         
 
@@ -112,7 +121,7 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     //new JoystickButton(driverController, 2).whenPressed(() -> swerveSubsystem.zeroHeading());
-    new JoystickButton(driverController, OIConstants.kAlignWithTargetButton).onTrue(new autoAdjust(swerveSubsystem,limeLightSubsystem));
+
     
 
   }
