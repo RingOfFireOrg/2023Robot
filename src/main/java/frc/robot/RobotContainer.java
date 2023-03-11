@@ -1,30 +1,11 @@
 package frc.robot;
 
-import java.util.List;
 
-import com.kauailabs.navx.frc.AHRS;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import frc.robot.commands.LimeLightVals;
 import frc.robot.commands.outtakeTransferMovement;
 import frc.robot.commands.pistonIntakeGrab;
-import frc.robot.commands.robotOriented;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Auto.trajectoryTest;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.armJoystickCommand;
@@ -34,18 +15,9 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.linearSlideArm;
 import frc.robot.subsystems.outtakeTransfer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and button mappings) should be declared here.
- */
+
+
 public class RobotContainer {
 
   public SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
@@ -58,11 +30,7 @@ public class RobotContainer {
 
   private final XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final XboxController operatorController = new XboxController(OIConstants.kOperatorControllerPort);
-  // private final Command m_simpleAuto = "Simple Auto";
 
-  // private final Command m_complexAuto = "Complex Auto";
-
-// A chooser for autonomous commands
   SendableChooser<Command> m_chooser = new SendableChooser<>(
 
   );
@@ -70,43 +38,37 @@ public class RobotContainer {
 
   public RobotContainer() {
 
-    if (driverController.getRawButton(5) != true) {
-      swerveSubsystem.setDefaultCommand(new SwerveJoystickCommand(
-        swerveSubsystem,
-        () -> -driverController.getRawAxis(OIConstants.kDriverYAxis),
-        () -> driverController.getRawAxis(OIConstants.kDriverXAxis),
-        () -> driverController.getRawAxis(OIConstants.kDriverRotAxis),
-        () -> !driverController.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
-        () -> driverController.getRawButton(OIConstants.kAlignWithTargetButton),
-        () -> driverController.getRawButton(OIConstants.kResetDirectionButton)
-        ));
-    }
-    else {
-      swerveSubsystem.setDefaultCommand(new robotOriented(
-        swerveSubsystem,
-        () -> -driverController.getRawAxis(OIConstants.kDriverYAxis),
-        () -> driverController.getRawAxis(OIConstants.kDriverXAxis),
-        () -> driverController.getRawAxis(OIConstants.kDriverRotAxis),
-        () -> !driverController.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
-        () -> driverController.getRawButton(OIConstants.kAlignWithTargetButton),
-        () -> driverController.getRawButton(OIConstants.kResetDirectionButton)
-        ));
-    }
+    swerveSubsystem.setDefaultCommand(new SwerveJoystickCommand(
+      swerveSubsystem,
+      // Left Joystick Field Oriented
+      () -> -driverController.getRawAxis(OIConstants.kDriverYAxis),
+      () -> driverController.getRawAxis(OIConstants.kDriverXAxis),
 
-    
-        
+      //Right Joystick For Robot Centic
+      () -> -driverController.getRawAxis(5),
+      () -> driverController.getRawAxis(4),
+
+      // Triggers for turning
+      () -> driverController.getRawAxis(3),
+      () -> driverController.getRawAxis(2),
+
+      //Varied Assortment of Buttons to click
+      () -> !driverController.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
+      () -> driverController.getRawButton(OIConstants.kAlignWithTargetButton),
+      () -> driverController.getRawButton(OIConstants.kResetDirectionButton)
+    ));
+     
 
     armSubsystem.setDefaultCommand(new armJoystickCommand(
       armSubsystem, 
       //Left Stick Y Axis
-      () -> operatorController.getRawAxis(1)));
+      () -> operatorController.getRawAxis(1)
+    ));
 
     pistonIntakeSubsystem.setDefaultCommand(new pistonIntakeGrab(
       pistonIntakeSubsystem
     ));
-    // outtakeTransferSubsystem.setDefaultCommand(new outtakeTransferMovement(
-      
-    // ));
+
     limeLightSubsystem.setDefaultCommand(new LimeLightVals(
       limeLightSubsystem
     ));
