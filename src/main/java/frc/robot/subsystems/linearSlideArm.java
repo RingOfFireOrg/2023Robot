@@ -64,6 +64,24 @@ public class linearSlideArm extends SubsystemBase {
     }
     extender.set(0);
   }
+  public void midConeHeight() {
+    //    WE NEED TO TEST NUMEBERS!!!!!!!!!!!
+    encoderPosition = encoder.getDistance();
+    while (encoderPosition - encoderPositionHold <= 15) {
+      extender.set(-.4);
+      encoderPosition = encoder.getDistance();
+    }
+    extender.set(0);
+  }
+  public void resetHeight() {
+    //boolean rBumper = operatorController.getRawButton(6);
+    encoderPosition = encoder.getDistance();
+    while (encoderPosition - encoderPositionHold >= 0) {
+      extender.set(.4);
+      encoderPosition = encoder.getDistance();
+    }
+    extender.set(0);
+  }
 
   public void lowConeHeight() {
     
