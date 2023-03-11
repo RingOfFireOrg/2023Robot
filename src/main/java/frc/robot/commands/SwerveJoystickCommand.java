@@ -21,7 +21,7 @@ public class SwerveJoystickCommand extends CommandBase {
     private final SwerveSubsystem swerveSubsystem;
 
     private final Supplier<Double> xSpdFunctionField, ySpdFunctionField, xSpdFunctionRobot, ySpdFunctionRobot, turningSpdFunctionLeft, turningSpdFunctionRight;
-    private final Supplier<Boolean> fieldOrientedFunction, alignFunction, resetDirection;
+    private final Supplier<Boolean> fieldOrientedFunction, alignFunction, resetDirection, aButton, bButton, xButton;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
     public final double cameraHeight = Units.inchesToMeters(5);// replace number with height of camera on robot
@@ -40,6 +40,7 @@ public class SwerveJoystickCommand extends CommandBase {
     PIDController turnController = new PIDController(angularP, 0, angularD);
     boolean manuelMode = false;
     boolean fieldOrientTrue = true;
+    double speedDivide = 2;
     
 
     public SwerveJoystickCommand(SwerveSubsystem swerveSubsystem, 
@@ -52,6 +53,10 @@ public class SwerveJoystickCommand extends CommandBase {
             Supplier<Double> turningSpdFunctionLeft,
             Supplier<Double> turningSpdFunctionRight,
             Supplier<Boolean> fieldOrientedFunction, 
+
+            Supplier<Boolean> aButton,
+            Supplier<Boolean> bButton,
+            Supplier<Boolean> xButton,
 
             Supplier<Boolean> alignButton, 
             Supplier<Boolean> resetDirectionButton) {
@@ -66,6 +71,10 @@ public class SwerveJoystickCommand extends CommandBase {
 
         this.turningSpdFunctionLeft = turningSpdFunctionLeft;
         this.turningSpdFunctionRight = turningSpdFunctionRight;
+
+        this.aButton = aButton;
+        this.bButton = bButton;
+        this.xButton = xButton;
 
         this.fieldOrientedFunction = fieldOrientedFunction;
         this.alignFunction = alignButton;
@@ -99,11 +108,31 @@ public class SwerveJoystickCommand extends CommandBase {
     public void execute() {
 
 
+
+        if (aButton.get() == true) 
+        {
+            speedDivide = 2;
+            //50%
+        }
+        else if (xButton.get() == true) 
+        {
+            speedDivide = 4;
+
+            //25%
+        }
+        else if (bButton.get() == true)
+        {
+            speedDivide = 1.33333;
+
+            //70%
+        }
+
+
         if (xSpdFunctionField.get() >= 0.1 || xSpdFunctionField.get() <= -0.1 || ySpdFunctionField.get() >= 0.1 || ySpdFunctionField.get() <= -0.1) 
         {
             // 1. Get real-time joystick inputs
-            double xSpeed = xSpdFunctionField.get();
-            double ySpeed = ySpdFunctionField.get();
+            double xSpeed = xSpdFunctionField.get()/speedDivide;
+            double ySpeed = ySpdFunctionField.get()/speedDivide;
             double turningSpeed = turningSpdFunctionLeft.get() - turningSpdFunctionRight.get();
 
             // 2. Apply deadband

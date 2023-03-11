@@ -68,6 +68,13 @@ public class RobotContainer {
 
       //Varied Assortment of Buttons to click
       () -> !driverController.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
+
+
+      () -> driverController.getRawButton(1),
+      () -> driverController.getRawButton(2),
+      () -> driverController.getRawButton(3),
+
+
       () -> driverController.getRawButton(OIConstants.kAlignWithTargetButton),
       () -> driverController.getRawButton(OIConstants.kResetDirectionButton)
     ));
