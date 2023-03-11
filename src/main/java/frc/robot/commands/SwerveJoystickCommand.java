@@ -40,6 +40,10 @@ public class SwerveJoystickCommand extends CommandBase {
     PIDController turnController = new PIDController(angularP, 0, angularD);
     boolean manuelMode = false;
     boolean fieldOrientTrue = true;
+
+    //drive constants
+    double xDriveSpeed = 0;
+    double yDriveSpeed = 0;  
     
 
     public SwerveJoystickCommand(SwerveSubsystem swerveSubsystem, 
@@ -97,8 +101,16 @@ public class SwerveJoystickCommand extends CommandBase {
 
     @Override
     public void execute() {
-
-
+        if (driveController.getRawButton(0) == true) {
+            xDriveSpeed = .75;
+            yDriveSpeed = .75;
+        } else if(driveController.getRawButton(2) == true) {
+            xDriveSpeed = .5;
+            yDriveSpeed = .5;
+        } else if(driveController.getRawButton(3) == true) {
+            xDriveSpeed = .25; 
+            yDriveSpeed = .25;
+        }
         if (xSpdFunctionField.get() >= 0.1 || xSpdFunctionField.get() <= -0.1 || ySpdFunctionField.get() >= 0.1 || ySpdFunctionField.get() <= -0.1) 
         {
             // 1. Get real-time joystick inputs
