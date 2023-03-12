@@ -75,13 +75,13 @@ public final class Constants {
         public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = (Math.PI+0.046019-0.036937+1.040037+Math.PI+0.058291-.122297-.052156); //offset in radians #11
         // 11
         
-        public static final double kBackRightDriveAbsoluteEncoderOffsetRad = (-2.757-5.319+Math.PI/4+Math.PI/6+Math.PI-0.267-0.034552-0.161001-.185612-.222426+.42798); //offset in radians #9
+        public static final double kBackRightDriveAbsoluteEncoderOffsetRad = (0); //offset in radians #9
         // 9
 
         public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
-        public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 1.1313241; //change denomenator
+        public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond ; //change denomenator
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 4; //change denomenator
         public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3;
         public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;

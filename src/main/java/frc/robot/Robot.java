@@ -10,6 +10,8 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
@@ -32,6 +34,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private static SendableChooser<AutoModes> autoChooser;
   private AutoModes previousSelectedAuto;
+
 
   public enum AutoModes {
     AUTO1, AUTO2, AUTO3, AUTO4, AUTO5, AUTO6

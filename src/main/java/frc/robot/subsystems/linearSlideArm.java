@@ -108,12 +108,12 @@ public class linearSlideArm extends SubsystemBase {
     SmartDashboard.putNumber("Encoeder Updated Value", encoderPosition - encoderPositionHold);
 
 
-    if(stickVal < -0.1     && (encoderPosition - encoderPositionHold > -.25 || LBumper == true)) {// test to make sure the numbers work
+    if(stickVal < -0.1) {// test to make sure the numbers work
       //moving down
       extender.set(stickVal/2);
       encoderPosition = encoder.getDistance();
     } 
-    else if(stickVal > 0.1 && (encoderPosition - encoderPositionHold < 36.89 || LBumper == true)) {
+    else if(stickVal > 0.1) {
       //moving up
       extender.set(stickVal/2);
       encoderPosition = encoder.getDistance();

@@ -145,10 +145,11 @@ public class RobotContainer {
 
 
     //return m_chooser.getSelected();
+        //return m_chooser.getSelected();
     // 1. Create trajectory settings
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-      6,
-      55)
+      .65,
+      .55)
         .setKinematics(DriveConstants.kDriveKinematics);
 
     // 2. Generate trajectory
@@ -156,9 +157,9 @@ public class RobotContainer {
       new Pose2d(0, 0, new Rotation2d(0)),
       List.of
         (
-        new Translation2d(1.65, 0)
+        new Translation2d(1.7, 0)
         ),
-      new Pose2d(1.65, 0, Rotation2d.fromDegrees(0)),
+      new Pose2d(1.7, 0, Rotation2d.fromDegrees(0)),
       trajectoryConfig);
 
       // 3. Define PID controllers for tracking trajectory
