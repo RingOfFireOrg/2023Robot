@@ -30,11 +30,11 @@ public class outtakeTransfer extends SubsystemBase {
     direction = operatorController.getPOV(0);
     
     if(direction == 0) {
-      outtakeMotor.set(.15);
+      outtakeMotor.set(-.15);
     } 
 
     else if(direction == 180) {
-      outtakeMotor.set(-.15);
+      outtakeMotor.set(.15);
     } 
 
     else {
