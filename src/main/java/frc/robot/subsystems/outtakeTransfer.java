@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class outtakeTransfer extends SubsystemBase {
   VictorSP wheelieSpinner;
-  CANSparkMax outtakeMotor;
+  public CANSparkMax outtakeMotor;
   double direction;
   private final XboxController operatorController = new XboxController(1);
 

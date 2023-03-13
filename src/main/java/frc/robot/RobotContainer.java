@@ -119,16 +119,14 @@ public class RobotContainer {
     //armSubsystem.resetHeight();
 
     // go to postion using odometry
-
-
-
-
-
-
-
-
-
-
+    outtakeTransferSubsystem.outtakeMotor.set(.15);
+    armSubsystem.highConeHeight();
+    outtakeTransferSubsystem.outtakeMotor.set(-.15); 
+    armSubsystem.resetHeight();
+    outtakeTransferSubsystem.outtakeMotor.set(0);
+    new Pose2d(0,0,Rotation2d.fromDegrees(180));
+    swerveSubsystem.zeroHeading();
+    new Translation2d(1.5,0);
 
 
 
