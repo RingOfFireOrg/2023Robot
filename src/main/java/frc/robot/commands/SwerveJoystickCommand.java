@@ -21,7 +21,7 @@ public class SwerveJoystickCommand extends CommandBase {
     private final SwerveSubsystem swerveSubsystem;
 
     private final Supplier<Double> xSpdFunctionField, ySpdFunctionField, xSpdFunctionRobot, ySpdFunctionRobot, turningSpdFunctionLeft, turningSpdFunctionRight;
-    private final Supplier<Boolean> fieldOrientedFunction, alignFunction, resetDirection, aButton, bButton, xButton;
+    private final Supplier<Boolean> fieldOrientedFunction, alignFunction, resetDirection, aButton, bButton, xButton, yButton;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
     public final double cameraHeight = Units.inchesToMeters(5);// replace number with height of camera on robot
@@ -58,6 +58,7 @@ public class SwerveJoystickCommand extends CommandBase {
             Supplier<Boolean> aButton,
             Supplier<Boolean> bButton,
             Supplier<Boolean> xButton,
+            Supplier<Boolean> yButton,
 
             Supplier<Boolean> alignButton, 
             Supplier<Boolean> resetDirectionButton) {
@@ -76,6 +77,7 @@ public class SwerveJoystickCommand extends CommandBase {
         this.aButton = aButton;
         this.bButton = bButton;
         this.xButton = xButton;
+        this.yButton = yButton;
 
         this.fieldOrientedFunction = fieldOrientedFunction;
         this.alignFunction = alignButton;
@@ -110,6 +112,9 @@ public class SwerveJoystickCommand extends CommandBase {
     public void execute() {
 
 
+        if(driveController.getRawButton(7) == true) {
+            swerveSubsystem.fieldCentricReset();
+        }
 
         if (aButton.get() == true) 
         {
@@ -221,8 +226,8 @@ public class SwerveJoystickCommand extends CommandBase {
         else 
         {
             // 1. Get real-time joystick inputs
-            double xSpeed = xSpdFunctionRobot.get();
-            double ySpeed = ySpdFunctionRobot.get();
+            double xSpeed = xSpdFunctionRobot.get()/speedDivide;
+            double ySpeed = ySpdFunctionRobot.get()/speedDivide;
 
             double turningSpeed = turningSpdFunctionLeft.get() - turningSpdFunctionRight.get();
 

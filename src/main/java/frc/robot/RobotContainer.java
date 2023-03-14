@@ -79,6 +79,7 @@ public class RobotContainer {
       () -> driverController.getRawButton(1),
       () -> driverController.getRawButton(2),
       () -> driverController.getRawButton(3),
+      () -> driverController.getRawButton(4),
 
 
       () -> driverController.getRawButton(OIConstants.kAlignWithTargetButton),

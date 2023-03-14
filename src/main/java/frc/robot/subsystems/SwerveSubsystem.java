@@ -111,6 +111,9 @@ public class SwerveSubsystem extends SubsystemBase {
     //     return gyro.getAngle();
     // }
 
+    public void fieldCentricReset() {
+        gyro.reset();
+    }
     public Rotation2d getRotation2d() {
        
         return Rotation2d.fromDegrees(getHeading());
