@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.SerialPort;
 
 
 /**
@@ -34,6 +35,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private static SendableChooser<AutoModes> autoChooser;
   private AutoModes previousSelectedAuto;
+  private final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
 
 
   public enum AutoModes {
@@ -141,6 +143,10 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     
+    SmartDashboard.putNumber("Roll", gyro.getRoll());
+    SmartDashboard.putNumber("Yaw", gyro.getYaw());
+    SmartDashboard.putNumber("Pitch", gyro.getPitch());
+
   }
 
   @Override

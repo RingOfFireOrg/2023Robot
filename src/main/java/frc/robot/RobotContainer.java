@@ -7,6 +7,8 @@ import frc.robot.commands.pistonIntakeGrab;
 
 import java.util.List;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -16,6 +18,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -30,7 +33,9 @@ import frc.robot.subsystems.outtakeTransfer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj.SerialPort;
 
 
 
@@ -42,6 +47,7 @@ public class RobotContainer {
   public pistonIntake pistonIntakeSubsystem = new pistonIntake();
   public outtakeTransfer outtakeTransferSubsystem = new outtakeTransfer();
   
+  private final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
 
 
   private final XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -121,53 +127,45 @@ public class RobotContainer {
     // go to postion using odometry
 
     //high auto
-    outtakeTransferSubsystem.outtakeMotor.set(.15);
-    //fix high cone encoder
-    armSubsystem.highCubeHeight();
-    outtakeTransferSubsystem.outtakeMotor.set(-.15); 
+    // outtakeTransferSubsystem.outtakeMotor.set(.15); //TODO: Abhis mid code will break the robot this needs a time stop or an encoder position
 
-    armSubsystem.resetHeight();
-    outtakeTransferSubsystem.outtakeMotor.set(0);
-    new Pose2d(0,0,Rotation2d.fromDegrees(180));
-    swerveSubsystem.zeroHeading();
-    new Translation2d(1.5,0);
+    // armSubsystem.highCubeHeight();
+    // outtakeTransferSubsystem.outtakeMotor.set(-.15);  //TODO: Abhis mid code will break the robot this needs a time stop or an encoder position
 
-    //mid auto
-        outtakeTransferSubsystem.outtakeMotor.set(.15);
-        //fix high cone encoder
-        armSubsystem.midCubeHeight();
-        outtakeTransferSubsystem.outtakeMotor.set(-.15); 
+
+    // armSubsystem.resetHeight();
+    // outtakeTransferSubsystem.outtakeMotor.set(0); //TODO: Abhis mid code will break the robot this needs a time stop or an encoder position
+
+    // new Pose2d(0,0,Rotation2d.fromDegrees(180));
+    // swerveSubsystem.zeroHeading();
+    // new Translation2d(1.5,0);
+
+    // //mid auto
+    //     outtakeTransferSubsystem.outtakeMotor.set(.15); //TODO: Abhis mid code will break the robot this needs a time stop or an encoder position
+
+    //     //fix high cone encoder
+    //     armSubsystem.midCubeHeight();
+    //     outtakeTransferSubsystem.outtakeMotor.set(-.15);  //TODO: Abhis mid code will break the robot this needs a time stop or an encoder position
+
     
-        armSubsystem.resetHeight();
-        outtakeTransferSubsystem.outtakeMotor.set(0);
-        new Pose2d(0,0,Rotation2d.fromDegrees(180));
-        swerveSubsystem.zeroHeading();
-        new Translation2d(1.5,0);
+    //     armSubsystem.resetHeight();
+    //     outtakeTransferSubsystem.outtakeMotor.set(0); //TODO: Abhis mid code will break the robot this needs a time stop or an encoder position
 
-    //low auto
-    pistonIntakeSubsystem.intakeDown();
-    pistonIntakeSubsystem.intakeOut();
-    pistonIntakeSubsystem.intakeUp();
-    new Pose2d(0,0,Rotation2d.fromDegrees(180));
-    new Translation2d(1.5,0);
+    //     new Pose2d(0,0,Rotation2d.fromDegrees(180));
+    //     swerveSubsystem.zeroHeading();
+    //     new Translation2d(1.5,0);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // //low auto
+    // pistonIntakeSubsystem.intakeDown();
+    // pistonIntakeSubsystem.intakeOut();
+    // pistonIntakeSubsystem.intakeUp();
+    // new Pose2d(0,0,Rotation2d.fromDegrees(180));
+    // new Translation2d(1.5,0);
 
 
     //return m_chooser.getSelected();
         //return m_chooser.getSelected();
+
     // 1. Create trajectory settings
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
       .65,
@@ -175,37 +173,98 @@ public class RobotContainer {
         .setKinematics(DriveConstants.kDriveKinematics);
 
     // 2. Generate trajectory
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory
+    (
       new Pose2d(0, 0, new Rotation2d(0)),
-      List.of
-        (
-        new Translation2d(1.65, 0)
-        ),
-      new Pose2d(1.65, 0, Rotation2d.fromDegrees(0)),
-      trajectoryConfig);
+      List.of (new Translation2d(1.4, 0)),
 
-      // 3. Define PID controllers for tracking trajectory
-      PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
-      PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
-      ProfiledPIDController thetaController = new ProfiledPIDController(
-        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-      thetaController.enableContinuousInput(-Math.PI, Math.PI);
+      new Pose2d(1.64, 0, Rotation2d.fromDegrees(0)),
+      trajectoryConfig
+    );
 
-      // 4. Construct command to follow trajectory
-      SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        trajectory,
+
+    Trajectory trajectory2 = TrajectoryGenerator.generateTrajectory
+    (
+      new Pose2d(0, 0, new Rotation2d(0)),
+      List.of (new Translation2d(1.4, 0)),
+
+      new Pose2d(1.64, 0, Rotation2d.fromDegrees(0)),
+      trajectoryConfig
+    );
+
+
+
+
+    // 3. Define PID controllers for tracking trajectory
+    PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
+    PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
+    ProfiledPIDController thetaController = new ProfiledPIDController(
+      AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+    // 4. Construct command to follow trajectory
+    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+      trajectory,
+      swerveSubsystem::getPose,
+      DriveConstants.kDriveKinematics,
+      xController,
+      yController,
+      thetaController,
+      swerveSubsystem::setModuleStates,
+      swerveSubsystem);
+
+
+      SwerveControllerCommand swerveControllerCommand2 = new SwerveControllerCommand(
+        trajectory2,
         swerveSubsystem::getPose,
         DriveConstants.kDriveKinematics,
         xController,
         yController,
         thetaController,
         swerveSubsystem::setModuleStates,
-        swerveSubsystem);
+        swerveSubsystem);      
 
       // 5. Add some init and wrap-up, and return everything
     return new SequentialCommandGroup(
       new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
       swerveControllerCommand,
+      new WaitCommand(4),
+      swerveControllerCommand2,
       new InstantCommand(() -> swerveSubsystem.stopModules()));
+
+
+
+
+
+    // while (gyro.getRoll() > 0) {
+
+    // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   }
 }

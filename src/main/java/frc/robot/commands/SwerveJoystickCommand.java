@@ -176,8 +176,6 @@ public class SwerveJoystickCommand extends CommandBase {
             turningSpeed = turningLimiter.calculate(turningSpeed)
                     * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
         }
-
-
         if (xSpdFunctionField.get() >= 0.1 || xSpdFunctionField.get() <= -0.1 || ySpdFunctionField.get() >= 0.1 || ySpdFunctionField.get() <= -0.1) 
         {
             // 1. Get real-time joystick inputs
