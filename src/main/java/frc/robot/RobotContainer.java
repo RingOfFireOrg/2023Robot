@@ -178,15 +178,15 @@ public class RobotContainer {
       new Pose2d(0, 0, new Rotation2d(0)),
       List.of (new Translation2d(1.4, 0)),
 
-      new Pose2d(1.64, 0, Rotation2d.fromDegrees(0)),
+      new Pose2d(1.4, 0, Rotation2d.fromDegrees(0)),
       trajectoryConfig
     );
 
 
     Trajectory trajectory2 = TrajectoryGenerator.generateTrajectory
     (
-      new Pose2d(0, 0, new Rotation2d(0)),
-      List.of (new Translation2d(1.4, 0)),
+      new Pose2d(1.4, 0, new Rotation2d(0)),
+      List.of (new Translation2d(1.64, 0)),
 
       new Pose2d(1.64, 0, Rotation2d.fromDegrees(0)),
       trajectoryConfig
