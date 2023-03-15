@@ -81,12 +81,14 @@ public boolean getLimitSwitchBoolean() {
     }
     if(rightStickY < 0.1) {
       intakeActuator.set(rightStickY/2);
+      //intakeUp();
     }
     else if(limitSwitch.get() == false && rightStickY > 0.1) {
       intakeActuator.stopMotor();
     }
     else if((rightStickY < -0.1 || rightStickY > 0.1) && limitSwitch.get() == true) {
       intakeActuator.set(rightStickY/2);
+      //intakeDown();
     } 
     else {
       intakeActuator.stopMotor();

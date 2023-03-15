@@ -20,6 +20,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -54,9 +55,13 @@ public class RobotContainer {
   private final XboxController operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
-  
 
   public RobotContainer() {
+
+    m_chooser.setDefaultOption("Autonomus 1 (Just Moves straight forward to get out of Community)", auto1());
+    m_chooser.addOption("Autonomus 2 ", auto2());
+    SmartDashboard.putData(m_chooser);
+
 
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCommand(
       swerveSubsystem,
@@ -116,62 +121,55 @@ public class RobotContainer {
 
   }
 
+  private final Command auto1(){
+    //1. Create trajectory settings
+    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
+      .65,
+      .55)
+        .setKinematics(DriveConstants.kDriveKinematics);
 
-  public Command getAutonomousCommand() {
+    // 2. Generate trajectory
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory
+    (
+      new Pose2d(0, 0, new Rotation2d(0)),
+      List.of (new Translation2d(1.7, 0)),
 
-    // armSubsystem.midConeHeight();
-
-    // Wheelie Should open
-
-    //armSubsystem.resetHeight();
-
-    // go to postion using odometry
-
-    //high auto
-    // outtakeTransferSubsystem.outtakeMotor.set(.15); //TODO: Abhis mid code will break the robot this needs a time stop or an encoder position
-
-    // armSubsystem.highCubeHeight();
-    // outtakeTransferSubsystem.outtakeMotor.set(-.15);  //TODO: Abhis mid code will break the robot this needs a time stop or an encoder position
-
-
-    // armSubsystem.resetHeight();
-    // outtakeTransferSubsystem.outtakeMotor.set(0); //TODO: Abhis mid code will break the robot this needs a time stop or an encoder position
-
-    // new Pose2d(0,0,Rotation2d.fromDegrees(180));
-    // swerveSubsystem.zeroHeading();
-    // new Translation2d(1.5,0);
-
-    // //mid auto
-    //     outtakeTransferSubsystem.outtakeMotor.set(.15); //TODO: Abhis mid code will break the robot this needs a time stop or an encoder position
-
-    //     //fix high cone encoder
-    //     armSubsystem.midCubeHeight();
-    //     outtakeTransferSubsystem.outtakeMotor.set(-.15);  //TODO: Abhis mid code will break the robot this needs a time stop or an encoder position
-
-    
-    //     armSubsystem.resetHeight();
-    //     outtakeTransferSubsystem.outtakeMotor.set(0); //TODO: Abhis mid code will break the robot this needs a time stop or an encoder position
-
-    //     new Pose2d(0,0,Rotation2d.fromDegrees(180));
-    //     swerveSubsystem.zeroHeading();
-    //     new Translation2d(1.5,0);
-
-    // //low auto
-    // pistonIntakeSubsystem.intakeDown();
-    // pistonIntakeSubsystem.intakeOut();
-    // pistonIntakeSubsystem.intakeUp();
-    // new Pose2d(0,0,Rotation2d.fromDegrees(180));
-    // new Translation2d(1.5,0);
-
-
-    //return m_chooser.getSelected();
-        //return m_chooser.getSelected();
+      new Pose2d(1.7, 0, Rotation2d.fromDegrees(0)),
+      trajectoryConfig
+    );
 
 
 
 
+    // 3. Define PID controllers for tracking trajectory
+    PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
+    PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
+    ProfiledPIDController thetaController = new ProfiledPIDController(
+      AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
+    // 4. Construct command to follow trajectory
+    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+      trajectory,
+      swerveSubsystem::getPose,
+      DriveConstants.kDriveKinematics,
+      xController,
+      yController,
+      thetaController,
+      swerveSubsystem::setModuleStates,
+      swerveSubsystem);
 
+     
+
+      // 5. Add some init and wrap-up, and return everything
+    return new SequentialCommandGroup(
+      new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
+      swerveControllerCommand,
+      new WaitCommand(4),
+      new InstantCommand(() -> swerveSubsystem.stopModules()));    
+  }
+
+  private final Command auto2() {
     //1. Create trajectory settings
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
       .65,
@@ -237,40 +235,18 @@ public class RobotContainer {
       new WaitCommand(4),
       swerveControllerCommand2,
       new InstantCommand(() -> swerveSubsystem.stopModules()));
-
-
-
-
-
-    // while (gyro.getPitch() > 0) {
-    //   swerveSubsystem.
-    // }
+  }
 
 
 
 
 
 
+  
+  
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  public Command getAutonomousCommand() {
+    return m_chooser.getSelected();
   }
 }
