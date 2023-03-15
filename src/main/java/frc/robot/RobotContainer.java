@@ -119,7 +119,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
 
-    //armSubsystem.midConeHeight();
+    // armSubsystem.midConeHeight();
 
     // Wheelie Should open
 
@@ -167,7 +167,12 @@ public class RobotContainer {
     //return m_chooser.getSelected();
         //return m_chooser.getSelected();
 
-    // 1. Create trajectory settings
+
+
+
+
+
+    //1. Create trajectory settings
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
       .65,
       .55)
@@ -237,8 +242,8 @@ public class RobotContainer {
 
 
 
-    // while (gyro.getRoll() > 0) {
-
+    // while (gyro.getPitch() > 0) {
+    //   swerveSubsystem.
     // }
 
 

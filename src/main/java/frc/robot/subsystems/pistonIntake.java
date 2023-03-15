@@ -98,12 +98,15 @@ public boolean getLimitSwitchBoolean() {
   intakePosition = intakeEncoder.getPosition();
   SmartDashboard.putNumber("Intake Position", intakePosition);
   }
-  public void intakeUp() {
-    while(limitSwitch.get() == true && operatorController.getRawButtonPressed(9)) {
-      intakeActuator.set(.5);
-    }
-  }
+  // public void intakeUp() {
+  //   while(limitSwitch.get() == true && operatorController.getRawButtonPressed(9)) {
+  //     intakeActuator.set(.5);
+  //   }
+  // }
   public void intakeDown() {
+    intakeEncoder.setPosition(30); //TODO: add a value fr
+  }
+  public void intakeUp() {
     intakeEncoder.setPosition(30); //TODO: add a value fr
   }
   public void intakeOut() {
