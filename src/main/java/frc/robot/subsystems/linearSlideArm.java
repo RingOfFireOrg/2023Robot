@@ -54,11 +54,10 @@ public class linearSlideArm extends SubsystemBase {
     encoderPositionHold = encoder.getDistance();
   }
 
-
   public void highCubeHeight() {
     //boolean rBumper = operatorController.getRawButton(6);
     encoderPosition = encoder.getDistance();
-    while (encoderPosition - encoderPositionHold <= 29.5) {
+    while (encoderPosition - encoderPositionHold <= 38.1) {
       extender.set(-.4);
       encoderPosition = encoder.getDistance();
     }
@@ -107,22 +106,26 @@ public class linearSlideArm extends SubsystemBase {
     if(stickVal < -0.1) {// test to make sure the numbers work
       //moving down
       extender.set(stickVal/2);
-      encoderPosition = encoder.getDistance();
+      //encoderPosition = encoder.getDistance();
     } 
     else if(stickVal > 0.1) {
       //moving up
-      extender.set(stickVal/2);
-      encoderPosition = encoder.getDistance();
+      if(encoder.getDistance() > 38.15) {
+        extender.set(0);
+      } else {
+        extender.set(stickVal/2);
+      }
+      //encoderPosition = encoder.getDistance();
 
     }
     else {
       extender.set(0);
-      encoderPosition = encoder.getDistance();
+      //encoderPosition = encoder.getDistance();
 
     } 
     encoderPosition = encoder.getDistance();
 
- 
     
   }
+
 }
