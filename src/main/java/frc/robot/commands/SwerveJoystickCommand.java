@@ -113,7 +113,7 @@ public class SwerveJoystickCommand extends CommandBase {
 
 
         if(driveController.getRawButton(7) == true) {
-            swerveSubsystem.fieldCentricReset();
+            //swerveSubsystem.fieldCentricReset();
         }
 
         if (aButton.get() == true) 
