@@ -181,6 +181,28 @@ public class SwerveJoystickCommand extends CommandBase {
             turningSpeed = turningLimiter.calculate(turningSpeed)
                     * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
         }
+        else if (yButton.get() == true)
+        {
+            speedDivide = 1;
+            SmartDashboard.putNumber("speed", speedDivide);
+
+            //70%
+            // 1. Get real-time joystick inputs
+            double xSpeed = xSpdFunctionField.get()/speedDivide;
+            double ySpeed = ySpdFunctionField.get()/speedDivide;
+            double turningSpeed = turningSpdFunctionLeft.get() - turningSpdFunctionRight.get();
+
+            // 2. Apply deadband
+            xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;
+            ySpeed = Math.abs(ySpeed) > OIConstants.kDeadband ? ySpeed : 0.0;
+            turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
+
+            // 3. Make the driving smoother
+            xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+            ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+            turningSpeed = turningLimiter.calculate(turningSpeed)
+                    * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+        }
         if (xSpdFunctionField.get() >= 0.1 || xSpdFunctionField.get() <= -0.1 || ySpdFunctionField.get() >= 0.1 || ySpdFunctionField.get() <= -0.1) 
         {
             // 1. Get real-time joystick inputs

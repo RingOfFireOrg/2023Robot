@@ -142,10 +142,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    
-    SmartDashboard.putNumber("Roll", gyro.getRoll());
-    SmartDashboard.putNumber("Yaw", gyro.getYaw());
-    SmartDashboard.putNumber("Pitch", gyro.getPitch());
+
 
   }
 
