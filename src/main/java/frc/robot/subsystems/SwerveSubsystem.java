@@ -7,6 +7,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -116,6 +117,15 @@ public class SwerveSubsystem extends SubsystemBase {
     public void fieldCentricReset() {
         //gyro.reset();
     }
+    public double pitchVals() {
+        return gyro.getPitch();
+    }
+    public double yawVals() {
+        return gyro.getYaw();
+    }
+    public double rollVals() {
+        return gyro.getRoll();
+    }
     public Rotation2d getRotation2d() {
        
         return Rotation2d.fromDegrees(getHeading());
@@ -202,6 +212,15 @@ public class SwerveSubsystem extends SubsystemBase {
             frontRight.brake(false);
             backLeft.brake(false);
             backRight.brake(false);
+        }
+    }
+
+    public void whilePitch() {
+        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.3, 0, 0);
+        SwerveModuleState[] moduleStates1 = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+    
+        while (pitchVals() < -5 || pitchVals() > 5) {
+          driveForward(moduleStates1);
         }
     }
     
