@@ -20,7 +20,9 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Auto.ArmExtend;
 import frc.robot.Auto.PIDAutoBalancer;
+import frc.robot.Auto.REVERSEPIDAutoBalancer;
 import frc.robot.Auto.whilePitchCMD;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -259,9 +261,61 @@ public class RobotContainer {
       new InstantCommand(() -> swerveSubsystem.stopModules())
       );
 
+  }
+
+
+  private final Command auto3() {
+
+
+    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
+      .65,
+      .55)
+        .setKinematics(DriveConstants.kDriveKinematics);
+
+    Trajectory reverseTrajectory1 = TrajectoryGenerator.generateTrajectory
+    (
+      new Pose2d(0, 0, new Rotation2d(0)),
+      List.of (new Translation2d(-1.4, 0)),
+
+      new Pose2d(-1.4, 0, Rotation2d.fromDegrees(0)),
+      trajectoryConfig
+    );
+
+
+    PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
+    PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
+    ProfiledPIDController thetaController = new ProfiledPIDController(
+      AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+    // 4. Construct command to follow trajectory
+    SwerveControllerCommand undershoot = new SwerveControllerCommand(
+      reverseTrajectory1,
+      swerveSubsystem::getPose,
+      DriveConstants.kDriveKinematics,
+      xController,
+      yController,
+      thetaController,
+      swerveSubsystem::setModuleStates,
+      swerveSubsystem);
+
+    
 
 
 
+
+
+
+    return new SequentialCommandGroup(
+      new InstantCommand(() -> swerveSubsystem.resetOdometry(reverseTrajectory1.getInitialPose())),
+      new ArmExtend(armSubsystem, "high"),
+      //wait command
+      //wheeliedrop
+      //wait command
+      new ArmExtend(armSubsystem, "reset"),
+      undershoot,
+      new REVERSEPIDAutoBalancer(swerveSubsystem),
+      new InstantCommand(() -> swerveSubsystem.stopModules()));
   }
 
 
