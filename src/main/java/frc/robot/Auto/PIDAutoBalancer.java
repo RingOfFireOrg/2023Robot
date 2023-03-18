@@ -18,7 +18,7 @@ public class PIDAutoBalancer extends CommandBase {
     public PIDAutoBalancer(SwerveSubsystem drivetrainSubsystem) {
         this.drivetrainSubsystem = drivetrainSubsystem;
         this.pidController = new PIDController(
-                /*AutoConstants.PITCH_P*/ 0.05,
+                /*AutoConstants.PITCH_P*/ 0.045,
                 /*AutoConstants.PITCH_I*/0.0,
                 /*AutoConstants.PITCH_D*/0.005
         );
