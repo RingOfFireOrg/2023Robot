@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 
@@ -219,24 +220,24 @@ public class RobotContainer {
       swerveSubsystem::setModuleStates,
       swerveSubsystem);
 
-      Trajectory trajectory2 = TrajectoryGenerator.generateTrajectory
-      (
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of (new Translation2d(1.4, 0)),
+      // Trajectory trajectory2 = TrajectoryGenerator.generateTrajectory
+      // (
+      //   new Pose2d(0, 0, new Rotation2d(0)),
+      //   List.of (new Translation2d(0, 1.5)),
   
-        new Pose2d(0, 1.5, Rotation2d.fromDegrees(180)),
-        trajectoryConfig
-      );
+      //   new Pose2d(0, 1.5, Rotation2d.fromDegrees(0)),
+      //   trajectoryConfig
+      // );
 
-      SwerveControllerCommand questionableShoot = new SwerveControllerCommand(
-        trajectory1,
-        swerveSubsystem::getPose,
-        DriveConstants.kDriveKinematics,
-        xController,
-        yController,
-        thetaController,
-        swerveSubsystem::setModuleStates,
-        swerveSubsystem);
+      // SwerveControllerCommand questionableShoot = new SwerveControllerCommand(
+      //   trajectory2,
+      //   swerveSubsystem::getPose,
+      //   DriveConstants.kDriveKinematics,
+      //   xController,
+      //   yController,
+      //   thetaController,
+      //   swerveSubsystem::setModuleStates,
+      //   swerveSubsystem);
   
 
     // return new SequentialCommandGroup(
@@ -251,9 +252,10 @@ public class RobotContainer {
     return new SequentialCommandGroup(
       new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory1.getInitialPose())),
       undershoot,
-      new WaitCommand(5),
-      new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory1.getInitialPose())),
-      questionableShoot,
+      new PIDAutoBalancer(swerveSubsystem),
+      // new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory2.getInitialPose())),
+      // new WaitCommand(10),
+      // questionableShoot,
       new InstantCommand(() -> swerveSubsystem.stopModules())
       );
 

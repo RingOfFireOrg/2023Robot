@@ -4,6 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -19,7 +20,7 @@ public class PIDAutoBalancer extends CommandBase {
         this.pidController = new PIDController(
                 /*AutoConstants.PITCH_P*/ 0.04,
                 /*AutoConstants.PITCH_I*/0.0,
-                /*AutoConstants.PITCH_D*/0.005
+                /*AutoConstants.PITCH_D*/0.001
         );
 
         timer = new Timer();
@@ -41,6 +42,7 @@ public class PIDAutoBalancer extends CommandBase {
 
         if (Math.abs(drivetrainSubsystem.getPose().getRotation().getDegrees()) >= 90.0) {
             val = -val;
+            SmartDashboard.putNumber("Auto Val", val);
         }
         drivetrainSubsystem.drive(DriveConstants.kDriveKinematics.toSwerveModuleStates(
                 ChassisSpeeds.fromFieldRelativeSpeeds(val, 0.0, 0.0, drivetrainSubsystem.getPose().getRotation())));
