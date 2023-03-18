@@ -20,6 +20,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Auto.PIDbalancer;
 import frc.robot.Auto.whilePitchCMD;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -226,7 +227,7 @@ public class RobotContainer {
       new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory1.getInitialPose())),
       undershoot,
       new WaitCommand(4),
-      new whilePitchCMD(swerveSubsystem),
+      new PIDbalancer(swerveSubsystem),
       new InstantCommand(() -> swerveSubsystem.stopModules())
       );
   }
@@ -242,6 +243,8 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     //return m_chooser.getSelected();
-    return auto2();
+    //return auto2();
+    return new InstantCommand();
+
   }
 }

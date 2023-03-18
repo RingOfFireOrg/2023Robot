@@ -5,12 +5,21 @@
 package frc.robot;
 
 
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
@@ -36,56 +45,56 @@ public class Robot extends TimedRobot {
   private static SendableChooser<AutoModes> autoChooser;
   private AutoModes previousSelectedAuto;
   SwerveSubsystem swerveSubsystem;
+  private Command autonomousCommand;
+  @Inject
+  SwerveAutoBuilder autoBuilder;
 
+  public enum AutoModes 
+  {
+    LeaveCommunity
+    (
+      "",
+      new PathConstraints(0.9, 0.5)
+    ), 
+    DistanceBasedChargeStation    
+    (
+      "",
+      new PathConstraints(0.9, 0.7)
+    ), 
+    PIDAutoBalance    
+    (
+      "",
+      new PathConstraints(0.75, 0.4)
+    );
+    
+    public final String name;
+    public final PathConstraints initConstraint;
+    public final PathConstraints[] pathConstraints;
 
-  public enum AutoModes {
-    AUTO1, AUTO2, AUTO3, AUTO4, AUTO5, AUTO6
+    AutoModes(String name, PathConstraints initConstraint, PathConstraints... pathConstraints) {
+        this.name = name;
+        this.initConstraint = initConstraint;
+        this.pathConstraints = pathConstraints;
+    }
   }
   
   @Override
   public void robotInit() {
-    //     Thread m_visionThread = new Thread(
-    //     () -> {
-    //       UsbCamera camera = CameraServer.startAutomaticCapture();
 
-    //       camera.setResolution(640, 480);
-        
-
-    //       CvSink cvSink = CameraServer.getVideo();
-
-    //       CvSource outputStream = CameraServer.putVideo("Rectangle", 640, 480);
-
-    //       Mat mat = new Mat();
-          
-    //       while (!Thread.interrupted()) {
-    //         if (cvSink.grabFrame(mat) == 0) {
-
-    //           outputStream.notifyError(cvSink.getError());
-   
-    //           continue;
-    //         }
-     
-    //         Imgproc.rectangle(
-    //             mat, new Point(100, 100), new Point(400, 400), new Scalar(255, 255, 255), 5);
-
-    //         outputStream.putFrame(mat);
-    //       }
-    //     });
-    // m_visionThread.setDaemon(true);
-    // m_visionThread.start();
     m_robotContainer = new RobotContainer();
 
     autoChooser = new SendableChooser<>();
-    autoChooser.setDefaultOption("AUTO1", AutoModes.AUTO1);
-    autoChooser.addOption("AUTO2", AutoModes.AUTO2);
-    autoChooser.addOption("AUTO3", AutoModes.AUTO3);
-    autoChooser.addOption("AUTO4", AutoModes.AUTO4);
-    autoChooser.addOption("AUTO5", AutoModes.AUTO5);
-    autoChooser.addOption("AUTO6", AutoModes.AUTO6);
+    autoChooser.setDefaultOption("Leave Community", AutoModes.LeaveCommunity);
+    autoChooser.addOption("Distance Based Charge Station", AutoModes.DistanceBasedChargeStation);
+    autoChooser.addOption("PID Auto Balance", AutoModes.PIDAutoBalance);
+
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
     previousSelectedAuto = autoChooser.getSelected();
 
+    List<PathPlannerTrajectory> trajectory = PathPlanner.loadPathGroup(
+      "ChargeStation", previousSelectedAuto.initConstraint, previousSelectedAuto.pathConstraints);
+    autonomousCommand = autoBuilder.fullAuto(trajectory);
 
     
   }
