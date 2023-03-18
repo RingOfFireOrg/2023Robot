@@ -7,9 +7,24 @@ package frc.robot.Auto;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveSubsystem;
 
+
+
+
+
+
+
+
+
+
+///           I KNOW THIS SAYS PITCH BUT ITS ACTUUALY ROLL
+
+
+
+
 public class whilePitchCMD extends CommandBase {
   SwerveSubsystem swerveSubsystem;
-  public whilePitchCMD() {
+  public whilePitchCMD( SwerveSubsystem swerveSubsystem) {
+    this.swerveSubsystem = swerveSubsystem;
     addRequirements(swerveSubsystem);
   }
 
@@ -24,6 +39,13 @@ public class whilePitchCMD extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
+
+
+
+
+///           I KNOW THIS SAYS PITCH BUT ITS ACTUUALY ROLL
+
+
 
   // Returns true when the command should end.
   @Override

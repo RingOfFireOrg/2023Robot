@@ -163,6 +163,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void periodic() {
         odometer.update(getRotation2d(), getSwerveModulePosition());
+        SmartDashboard.putNumber("Pitch in random file idk what this is ", gyro.getPitch());
+        SmartDashboard.putNumber("Roll in random file idk what this is ", gyro.getRoll());
+        SmartDashboard.putNumber("Yaw in random file idk what this is ", gyro.getYaw());
+        
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putNumber("Robot Theta", getPose().getRotation().getDegrees());
 
@@ -219,7 +223,7 @@ public class SwerveSubsystem extends SubsystemBase {
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.3, 0, 0);
         SwerveModuleState[] moduleStates1 = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
     
-        while (pitchVals() < -5 || pitchVals() > 5) {
+        while (rollVals() < -5 || rollVals() > 5) {
           driveForward(moduleStates1);
         }
     }

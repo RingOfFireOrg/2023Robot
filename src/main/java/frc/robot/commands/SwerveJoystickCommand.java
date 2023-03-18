@@ -111,6 +111,8 @@ public class SwerveJoystickCommand extends CommandBase {
     @Override
     public void execute() {
 
+        //SmartDashboard.putNumber("pitch in smart dashboard", swerveSubsystem.pitchVals());
+
 
         if(driveController.getRawButton(7) == true) {
             //swerveSubsystem.fieldCentricReset();
@@ -249,7 +251,8 @@ public class SwerveJoystickCommand extends CommandBase {
         {
             // 1. Get real-time joystick inputs
             double xSpeed = xSpdFunctionRobot.get()/speedDivide;
-            double ySpeed = ySpdFunctionRobot.get()/speedDivide;
+            //double ySpeed = ySpdFunctionRobot.get()/speedDivide;
+            double ySpeed = 0;
 
             double turningSpeed = turningSpdFunctionLeft.get() - turningSpdFunctionRight.get();
 

@@ -57,10 +57,10 @@ public class RobotContainer {
 
   public RobotContainer() {
     
- 
 
-    m_chooser.setDefaultOption("Move Straight", auto1());
-    m_chooser.addOption("Charge Station", auto2());
+
+    // m_chooser.setDefaultOption("Move Straight", auto1());
+    // m_chooser.addOption("Charge Station", auto2());
     SmartDashboard.putData(m_chooser);
 
 
@@ -132,7 +132,7 @@ public class RobotContainer {
 
 
 
-  
+
   private final Command auto1(){
     //1. Create trajectory settings
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
@@ -226,7 +226,7 @@ public class RobotContainer {
       new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory1.getInitialPose())),
       undershoot,
       new WaitCommand(4),
-      new whilePitchCMD(),
+      new whilePitchCMD(swerveSubsystem),
       new InstantCommand(() -> swerveSubsystem.stopModules())
       );
   }
@@ -241,6 +241,7 @@ public class RobotContainer {
 
 
   public Command getAutonomousCommand() {
-    return m_chooser.getSelected();
+    //return m_chooser.getSelected();
+    return auto2();
   }
 }
