@@ -219,17 +219,47 @@ public class RobotContainer {
       swerveSubsystem::setModuleStates,
       swerveSubsystem);
 
+      Trajectory trajectory2 = TrajectoryGenerator.generateTrajectory
+      (
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of (new Translation2d(1.4, 0)),
+  
+        new Pose2d(0, 1.5, Rotation2d.fromDegrees(180)),
+        trajectoryConfig
+      );
 
-
+      SwerveControllerCommand questionableShoot = new SwerveControllerCommand(
+        trajectory1,
+        swerveSubsystem::getPose,
+        DriveConstants.kDriveKinematics,
+        xController,
+        yController,
+        thetaController,
+        swerveSubsystem::setModuleStates,
+        swerveSubsystem);
   
 
+    // return new SequentialCommandGroup(
+    //   new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory1.getInitialPose())),
+    //   undershoot,
+    //   new WaitCommand(2),
+    //   new PIDAutoBalancer(swerveSubsystem),
+    //   new InstantCommand(() -> swerveSubsystem.stopModules())
+    //   );
+
+    //use thiss to test if its actually working
     return new SequentialCommandGroup(
       new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory1.getInitialPose())),
       undershoot,
-      new WaitCommand(4),
-      new PIDAutoBalancer(swerveSubsystem),
+      new WaitCommand(5),
+      new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory1.getInitialPose())),
+      questionableShoot,
       new InstantCommand(() -> swerveSubsystem.stopModules())
       );
+
+
+
+
   }
 
 
