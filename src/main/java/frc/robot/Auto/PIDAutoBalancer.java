@@ -18,9 +18,9 @@ public class PIDAutoBalancer extends CommandBase {
     public PIDAutoBalancer(SwerveSubsystem drivetrainSubsystem) {
         this.drivetrainSubsystem = drivetrainSubsystem;
         this.pidController = new PIDController(
-                /*AutoConstants.PITCH_P*/ 0.04,
+                /*AutoConstants.PITCH_P*/ 0.05,
                 /*AutoConstants.PITCH_I*/0.0,
-                /*AutoConstants.PITCH_D*/0.001
+                /*AutoConstants.PITCH_D*/0.005
         );
 
         timer = new Timer();
@@ -45,7 +45,7 @@ public class PIDAutoBalancer extends CommandBase {
             SmartDashboard.putNumber("Auto Val", val);
         }
         drivetrainSubsystem.drive(DriveConstants.kDriveKinematics.toSwerveModuleStates(
-                ChassisSpeeds.fromFieldRelativeSpeeds(val, 0.0, 0.0, drivetrainSubsystem.getPose().getRotation())));
+                ChassisSpeeds.fromFieldRelativeSpeeds(-val, 0.0, 0.0, drivetrainSubsystem.getPose().getRotation())));
 
     }
 
