@@ -219,6 +219,19 @@ public class SwerveSubsystem extends SubsystemBase {
         }
     }
 
+    public Rotation2d getPitchAsRotation2d() {
+        // i know it gets roll and it says pitch but i kinda dont care
+        return Rotation2d.fromDegrees(gyro.getRoll());
+    }
+
+
+    public void drive(SwerveModuleState... desiredStates) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        frontLeft.setDesiredState(desiredStates[0]);
+        frontRight.setDesiredState(desiredStates[1]);
+        backLeft.setDesiredState(desiredStates[2]);
+        backRight.setDesiredState(desiredStates[3]);
+    }
     public void whilePitch() {
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.3, 0, 0);
         SwerveModuleState[] moduleStates1 = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
