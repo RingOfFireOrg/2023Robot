@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.OIConstants;
 
 public class linearSlideArm extends SubsystemBase {
   /** Creates a new linearSlideArm. */
@@ -25,7 +24,7 @@ public class linearSlideArm extends SubsystemBase {
   public double encoderPosition;
   public double encoderPositionHold;
   //Encoder encoderTest = new Encoder(0, 1);
-  private final XboxController operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+  private final XboxController operatorController = new XboxController(frc.robot.Constants.DriveConstants.OIConstants.kOperatorControllerPort);
 
 
 

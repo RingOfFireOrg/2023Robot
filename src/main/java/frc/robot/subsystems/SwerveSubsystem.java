@@ -1,10 +1,15 @@
 
 package frc.robot.subsystems;
 
+import java.util.Map;
+
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
-
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -14,9 +19,12 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.DriveConstants.AutoConstants;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SerialPort;
 
 
@@ -60,6 +68,12 @@ public class SwerveSubsystem extends SubsystemBase {
     
     private final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
 
+    private final SwerveDrivePoseEstimator m_poseEstimator;
+
+    private double previousTime = 0;
+    private double currentPitch = 0;
+    private double previousPitch = 0;
+
 
 
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(
@@ -67,9 +81,9 @@ public class SwerveSubsystem extends SubsystemBase {
         getSwerveModulePosition(),
         new Pose2d(1, 3, new Rotation2d()));
 
-    private final PIDController yController = new PIDController(AutoConstants.kPYController, 0.0, 0.0);
-    private final PIDController xController = new PIDController(AutoConstants.kPXController, 0.0, 0.0);
-    private final PIDController thetaController = new PIDController(AutoConstants.kPThetaController,0.0, 0.0);
+    private final PIDController yController = new PIDController(frc.robot.Constants.DriveConstants.AutoConstants.kPYController, 0.0, 0.0);
+    private final PIDController xController = new PIDController(frc.robot.Constants.DriveConstants.AutoConstants.kPXController, 0.0, 0.0);
+    private final PIDController thetaController = new PIDController(frc.robot.Constants.DriveConstants.AutoConstants.kPThetaController,0.0, 0.0);
 
     public SwerveSubsystem() {
         new Thread(() -> {
@@ -79,6 +93,14 @@ public class SwerveSubsystem extends SubsystemBase {
             } catch (Exception e) {
             }
         }).start();
+        m_poseEstimator = new SwerveDrivePoseEstimator(
+                Constants.DriveConstants.kDriveKinematics,
+                getGyroYaw(),
+                getSwerveModulePosition(),
+                new Pose2d(),
+                new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.1, 0.1, 0.1),
+                new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.5, 0.5, 0.5)
+        );
     }
 
     public void zeroHeading() {
@@ -122,6 +144,25 @@ public class SwerveSubsystem extends SubsystemBase {
     }
     public double yawVals() {
         return gyro.getYaw();
+    }
+    public Rotation2d getGyroYaw() {
+        return gyro.getRotation2d();
+    }
+    public Rotation2d getGyroPitch() {
+        return Rotation2d.fromDegrees(gyro.getPitch());
+    }
+
+    public Rotation2d getGyroRoll() {
+        return Rotation2d.fromDegrees(gyro.getRoll());
+    }
+    public double getGyroPitchRate() {
+        //Account for initail boot time
+        if (previousTime == 0) {
+            previousTime = RobotController.getFPGATime();
+        }
+        // Return the rate of falling
+        double fpgaElapsedTime = RobotController.getFPGATime() - previousTime;
+        return (currentPitch - previousPitch) / fpgaElapsedTime;
     }
     public double rollVals() {
         return gyro.getRoll();
@@ -224,13 +265,19 @@ public class SwerveSubsystem extends SubsystemBase {
         return Rotation2d.fromDegrees(gyro.getRoll());
     }
 
+    private boolean fieldOriented = true;
+    public void drive(double xTranslation, double yTranslation, double zRotation) {
+        SwerveModuleState[] states = DriveConstants.kDriveKinematics.toSwerveModuleStates(
+                fieldOriented ? ChassisSpeeds.fromFieldRelativeSpeeds(
+                        xTranslation,
+                        yTranslation,
+                        zRotation,
+                        getGyroYaw()
+                )
+                : new ChassisSpeeds(xTranslation, yTranslation, zRotation)
+        );
 
-    public void drive(SwerveModuleState... desiredStates) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-        frontLeft.setDesiredState(desiredStates[0]);
-        frontRight.setDesiredState(desiredStates[1]);
-        backLeft.setDesiredState(desiredStates[2]);
-        backRight.setDesiredState(desiredStates[3]);
+        setModuleStates(states);
     }
 
     
@@ -242,8 +289,25 @@ public class SwerveSubsystem extends SubsystemBase {
           driveForward(moduleStates1);
         }
     }
-    
-    
+    public void resetPose(Pose2d newPose) {
+        m_poseEstimator.resetPosition(getGyroYaw(), getSwerveModulePosition(), newPose);
+    }
+    public SwerveAutoBuilder getAutoBuilder(Map<String, Command> eventMap) {
+        return new SwerveAutoBuilder(
+                this::getPose,
+                this::resetPose,
+                DriveConstants.kDriveKinematics,
+                AutoConstants.CONSTANTS_X,
+                AutoConstants.THETA_CONSTANTS,
+                this::setModuleStates,
+                eventMap,
+                true,
+                this
+        );
+    }
+    public void setFieldRelative(boolean relative) {
+        fieldOriented = relative;
+    }
 }
     
     

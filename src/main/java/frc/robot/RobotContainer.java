@@ -30,9 +30,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Auto.PistonEncoderMovement;
 import frc.robot.Auto.pistonOpenClose;
-import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.DriveConstants.OIConstants;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.pistonIntake;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -55,6 +54,7 @@ public class RobotContainer {
   public linearSlideArm armSubsystem = new linearSlideArm();
   public pistonIntake pistonIntakeSubsystem = new pistonIntake();
   public outtakeTransfer outtakeTransferSubsystem = new outtakeTransfer();
+  private final AutoFactory m_autoFactory;
   
 
 
@@ -162,10 +162,10 @@ public class RobotContainer {
 
 
     // 3. Define PID controllers for tracking trajectory
-    PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
-    PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
+    PIDController xController = new PIDController(frc.robot.Constants.DriveConstants.AutoConstants.kPXController, 0, 0);
+    PIDController yController = new PIDController(frc.robot.Constants.DriveConstants.AutoConstants.kPYController, 0, 0);
     ProfiledPIDController thetaController = new ProfiledPIDController(
-      AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+      frc.robot.Constants.DriveConstants.AutoConstants.kPThetaController, 0, 0, frc.robot.Constants.DriveConstants.AutoConstants.kThetaControllerConstraints);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
     // 4. Construct command to follow trajectory
@@ -209,10 +209,10 @@ public class RobotContainer {
     );
 
 
-    PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
-    PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
+    PIDController xController = new PIDController(frc.robot.Constants.DriveConstants.AutoConstants.kPXController, 0, 0);
+    PIDController yController = new PIDController(frc.robot.Constants.DriveConstants.AutoConstants.kPYController, 0, 0);
     ProfiledPIDController thetaController = new ProfiledPIDController(
-      AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+      frc.robot.Constants.DriveConstants.AutoConstants.kPThetaController, 0, 0, frc.robot.Constants.DriveConstants.AutoConstants.kThetaControllerConstraints);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
     // 4. Construct command to follow trajectory
@@ -289,10 +289,10 @@ public class RobotContainer {
     );
 
 
-    PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
-    PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
+    PIDController xController = new PIDController(frc.robot.Constants.DriveConstants.AutoConstants.kPXController, 0, 0);
+    PIDController yController = new PIDController(frc.robot.Constants.DriveConstants.AutoConstants.kPYController, 0, 0);
     ProfiledPIDController thetaController = new ProfiledPIDController(
-      AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+      frc.robot.Constants.DriveConstants.AutoConstants.kPThetaController, 0, 0, frc.robot.Constants.DriveConstants.AutoConstants.kThetaControllerConstraints);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
     // 4. Construct command to follow trajectory
@@ -355,7 +355,7 @@ public class RobotContainer {
 
 
   public Command getAutonomousCommand() {
-    //return m_chooser.getSelected();
-    return auto3();
+    return new InstantCommand(() ->
+            m_drive.resetGyro(180).andThen(m_autoFactory.getAutoRoutine()));
   }
 }

@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class SwerveJoystickCommand extends CommandBase {
@@ -129,9 +128,9 @@ public class SwerveJoystickCommand extends CommandBase {
             double turningSpeed = turningSpdFunctionLeft.get() - turningSpdFunctionRight.get();
 
             // 2. Apply deadband
-            xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;
-            ySpeed = Math.abs(ySpeed) > OIConstants.kDeadband ? ySpeed : 0.0;
-            turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
+            xSpeed = Math.abs(xSpeed) > frc.robot.Constants.DriveConstants.OIConstants.kDeadband ? xSpeed : 0.0;
+            ySpeed = Math.abs(ySpeed) > frc.robot.Constants.DriveConstants.OIConstants.kDeadband ? ySpeed : 0.0;
+            turningSpeed = Math.abs(turningSpeed) > frc.robot.Constants.DriveConstants.OIConstants.kDeadband ? turningSpeed : 0.0;
 
             // 3. Make the driving smoother
             xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
@@ -151,9 +150,9 @@ public class SwerveJoystickCommand extends CommandBase {
             double turningSpeed = turningSpdFunctionLeft.get() - turningSpdFunctionRight.get();
 
             // 2. Apply deadband
-            xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;
-            ySpeed = Math.abs(ySpeed) > OIConstants.kDeadband ? ySpeed : 0.0;
-            turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
+            xSpeed = Math.abs(xSpeed) > frc.robot.Constants.DriveConstants.OIConstants.kDeadband ? xSpeed : 0.0;
+            ySpeed = Math.abs(ySpeed) > frc.robot.Constants.DriveConstants.OIConstants.kDeadband ? ySpeed : 0.0;
+            turningSpeed = Math.abs(turningSpeed) > frc.robot.Constants.DriveConstants.OIConstants.kDeadband ? turningSpeed : 0.0;
 
             // 3. Make the driving smoother
             xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
@@ -173,9 +172,9 @@ public class SwerveJoystickCommand extends CommandBase {
             double turningSpeed = turningSpdFunctionLeft.get() - turningSpdFunctionRight.get();
 
             // 2. Apply deadband
-            xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;
-            ySpeed = Math.abs(ySpeed) > OIConstants.kDeadband ? ySpeed : 0.0;
-            turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
+            xSpeed = Math.abs(xSpeed) > frc.robot.Constants.DriveConstants.OIConstants.kDeadband ? xSpeed : 0.0;
+            ySpeed = Math.abs(ySpeed) > frc.robot.Constants.DriveConstants.OIConstants.kDeadband ? ySpeed : 0.0;
+            turningSpeed = Math.abs(turningSpeed) > frc.robot.Constants.DriveConstants.OIConstants.kDeadband ? turningSpeed : 0.0;
 
             // 3. Make the driving smoother
             xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
@@ -195,9 +194,9 @@ public class SwerveJoystickCommand extends CommandBase {
             double turningSpeed = turningSpdFunctionLeft.get() - turningSpdFunctionRight.get();
 
             // 2. Apply deadband
-            xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;
-            ySpeed = Math.abs(ySpeed) > OIConstants.kDeadband ? ySpeed : 0.0;
-            turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
+            xSpeed = Math.abs(xSpeed) > frc.robot.Constants.DriveConstants.OIConstants.kDeadband ? xSpeed : 0.0;
+            ySpeed = Math.abs(ySpeed) > frc.robot.Constants.DriveConstants.OIConstants.kDeadband ? ySpeed : 0.0;
+            turningSpeed = Math.abs(turningSpeed) > frc.robot.Constants.DriveConstants.OIConstants.kDeadband ? turningSpeed : 0.0;
 
             // 3. Make the driving smoother
             xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
@@ -213,9 +212,9 @@ public class SwerveJoystickCommand extends CommandBase {
             double turningSpeed = turningSpdFunctionLeft.get() - turningSpdFunctionRight.get();
 
             // 2. Apply deadband
-            xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;
-            ySpeed = Math.abs(ySpeed) > OIConstants.kDeadband ? ySpeed : 0.0;
-            turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
+            xSpeed = Math.abs(xSpeed) > frc.robot.Constants.DriveConstants.OIConstants.kDeadband ? xSpeed : 0.0;
+            ySpeed = Math.abs(ySpeed) > frc.robot.Constants.DriveConstants.OIConstants.kDeadband ? ySpeed : 0.0;
+            turningSpeed = Math.abs(turningSpeed) > frc.robot.Constants.DriveConstants.OIConstants.kDeadband ? turningSpeed : 0.0;
 
             // 3. Make the driving smoother
             xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
@@ -257,9 +256,9 @@ public class SwerveJoystickCommand extends CommandBase {
             double turningSpeed = turningSpdFunctionLeft.get() - turningSpdFunctionRight.get();
 
             // 2. Apply deadband
-            xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;
-            ySpeed = Math.abs(ySpeed) > OIConstants.kDeadband ? ySpeed : 0.0;
-            turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
+            xSpeed = Math.abs(xSpeed) > frc.robot.Constants.DriveConstants.OIConstants.kDeadband ? xSpeed : 0.0;
+            ySpeed = Math.abs(ySpeed) > frc.robot.Constants.DriveConstants.OIConstants.kDeadband ? ySpeed : 0.0;
+            turningSpeed = Math.abs(turningSpeed) > frc.robot.Constants.DriveConstants.OIConstants.kDeadband ? turningSpeed : 0.0;
 
             // 3. Make the driving smoother
             xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;

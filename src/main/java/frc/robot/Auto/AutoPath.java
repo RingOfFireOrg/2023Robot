@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -22,8 +21,8 @@ public class AutoPath {
     private PPSwerveControllerCommand swerveControllerCommand;
     private double startVel = 0.0;
     private double endVel = 0.0;
-    private double maxVel = AutoConstants.kMaxSpeedMetersPerSecond;
-    private double maxAccel = AutoConstants.kMaxAccelerationMetersPerSecondSquared;
+    private double maxVel = frc.robot.Constants.DriveConstants.AutoConstants.kMaxSpeedMetersPerSecond;
+    private double maxAccel = frc.robot.Constants.DriveConstants.AutoConstants.kMaxAccelerationMetersPerSecondSquared;
 
     public AutoPath(SwerveSubsystem swerveSubsystem, String trajectoryFile) {
         this.swerveSubsystem = swerveSubsystem;
