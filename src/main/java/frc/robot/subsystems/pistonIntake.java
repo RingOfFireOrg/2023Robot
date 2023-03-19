@@ -71,10 +71,10 @@ public boolean getLimitSwitchBoolean() {
 
 
     if(xButton) {
-      intake.set(Value.kForward);
+      intake.set(Value.kReverse);
     } 
     else if (bButton) {
-      intake.set(Value.kReverse);
+      intake.set(Value.kForward);
     } 
     else {
       intake.set(Value.kOff);
