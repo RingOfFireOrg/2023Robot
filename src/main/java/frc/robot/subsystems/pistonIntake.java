@@ -68,7 +68,8 @@ public boolean getLimitSwitchBoolean() {
 
     //Transfering up and down
     double rightStickY = -operatorController.getRawAxis(5);
-
+    intakePosition = intakeEncoder.getPosition();
+    SmartDashboard.putNumber("Intake Encoder Position", intakePosition);
 
     if(xButton) {
       intake.set(Value.kForward);
@@ -81,13 +82,19 @@ public boolean getLimitSwitchBoolean() {
     }
     if(rightStickY < 0.1) {
       intakeActuator.set(rightStickY/2);
+      intakePosition = intakeEncoder.getPosition();
+      SmartDashboard.putNumber("Intake Encoder Position", intakePosition);
       //intakeUp();
     }
     else if(limitSwitch.get() == false && rightStickY > 0.1) {
       intakeActuator.stopMotor();
+      intakePosition = intakeEncoder.getPosition();
+      SmartDashboard.putNumber("Intake Encoder Position", intakePosition);
     }
     else if((rightStickY < -0.1 || rightStickY > 0.1) && limitSwitch.get() == true) {
       intakeActuator.set(rightStickY/2);
+      intakePosition = intakeEncoder.getPosition();
+      SmartDashboard.putNumber("Intake Encoder Position", intakePosition);
       //intakeDown();
     } 
     else {
@@ -97,8 +104,7 @@ public boolean getLimitSwitchBoolean() {
     SmartDashboard.putNumber("Right Stick Y", rightStickY);
 
   
-  intakePosition = intakeEncoder.getPosition();
-  SmartDashboard.putNumber("Intake Position", intakePosition);
+
   }
   // public void intakeUp() {
   //   while(limitSwitch.get() == true && operatorController.getRawButtonPressed(9)) {

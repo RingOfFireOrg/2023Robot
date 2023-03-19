@@ -2,14 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.Auto;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.outtakeTransfer;
 
-public class Handoff extends CommandBase {
-  /** Creates a new Handoff. */
-  public Handoff() {
-    // Use addRequirements() here to declare subsystem dependencies.
+public class wheelieGripSet extends CommandBase {
+  outtakeTransfer wheelie;
+  double setPower;
+  public wheelieGripSet(outtakeTransfer wheelie, double setPower) {
+    this.wheelie = wheelie;
+    this.setPower = setPower;
+    addRequirements(wheelie);
+
   }
 
   // Called when the command is initially scheduled.
@@ -18,7 +23,9 @@ public class Handoff extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    wheelie.setWheelieGrip(setPower);
+  }
 
   // Called once the command ends or is interrupted.
   @Override

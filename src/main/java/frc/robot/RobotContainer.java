@@ -21,8 +21,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Auto.ArmExtend;
+import frc.robot.Auto.AutoCommandBuffer;
 import frc.robot.Auto.PIDAutoBalancer;
 import frc.robot.Auto.REVERSEPIDAutoBalancer;
+import frc.robot.Auto.wheelieGripSet;
 import frc.robot.Auto.whilePitchCMD;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -265,19 +267,21 @@ public class RobotContainer {
 
 
   private final Command auto3() {
-
-
-    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
+    TrajectoryConfig trajectoryConfig = new TrajectoryConfig
+    (
       .65,
-      .55)
+      .55
+      
+    )
         .setKinematics(DriveConstants.kDriveKinematics);
+    trajectoryConfig.setReversed(true);
+        
 
     Trajectory reverseTrajectory1 = TrajectoryGenerator.generateTrajectory
     (
       new Pose2d(0, 0, new Rotation2d(0)),
-      List.of (new Translation2d(-1.4, 0)),
-
-      new Pose2d(-1.4, 0, Rotation2d.fromDegrees(0)),
+      List.of (new Translation2d(1.4, 0)),
+      new Pose2d(1.4, 0, Rotation2d.fromDegrees(0)),
       trajectoryConfig
     );
 
@@ -289,7 +293,7 @@ public class RobotContainer {
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
     // 4. Construct command to follow trajectory
-    SwerveControllerCommand undershoot = new SwerveControllerCommand(
+    SwerveControllerCommand REVERSEundershoot = new SwerveControllerCommand(
       reverseTrajectory1,
       swerveSubsystem::getPose,
       DriveConstants.kDriveKinematics,
@@ -307,13 +311,31 @@ public class RobotContainer {
 
 
     return new SequentialCommandGroup(
-      new InstantCommand(() -> swerveSubsystem.resetOdometry(reverseTrajectory1.getInitialPose())),
+
+      // Grip the Cube
+      new wheelieGripSet(outtakeTransferSubsystem, -1),
+
+      // remove piston intake
+
+      //Move Arm to high position
       new ArmExtend(armSubsystem, "high"),
-      //wait command
-      //wheeliedrop
-      //wait command
+      new AutoCommandBuffer(),
+
+      //Open Wheelie
+      new wheelieGripSet(outtakeTransferSubsystem, 1),
+      new AutoCommandBuffer(),
+
+      //After wheelie is loose, set it to 0 so it does not rotate forever ongong
+      new wheelieGripSet(outtakeTransferSubsystem, 0),
+      new AutoCommandBuffer(),
+
+      //Move the arm back down
       new ArmExtend(armSubsystem, "reset"),
-      undershoot,
+      new AutoCommandBuffer(),
+
+      // Startup Trajectory and then PID loop balence on charge station
+      new InstantCommand(() -> swerveSubsystem.resetOdometry(reverseTrajectory1.getInitialPose())),
+      REVERSEundershoot,
       new REVERSEPIDAutoBalancer(swerveSubsystem),
       new InstantCommand(() -> swerveSubsystem.stopModules()));
   }
@@ -329,6 +351,6 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     //return m_chooser.getSelected();
-    return auto2();
+    return auto3();
   }
 }

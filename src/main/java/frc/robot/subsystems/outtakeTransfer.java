@@ -25,6 +25,10 @@ public class outtakeTransfer extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+  public void setWheelieGrip(double power) {
+    outtakeMotor.set(power);
+  }
+
   public void wheelMovement() {
 
     direction = operatorController.getPOV(0);
