@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.commands.pistonIntakeGrab;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -52,8 +51,15 @@ public boolean getLimitSwitchBoolean() {
     SmartDashboard.putBoolean("LimitSwitch: ", limitSwitch.get());
   }
 
-
-
+  public void openPiston() {
+    intake.set(Value.kReverse);
+  }
+  public void closePiston() {
+    intake.set(Value.kForward);
+  }
+  public void pistonEncoder(double intakeEncoderPos) {
+    intakeEncoder.setPosition(intakeEncoderPos);  
+  }
 
 
 

@@ -1,7 +1,15 @@
 package frc.robot;
 
 
+import frc.robot.Auto.ArmExtend;
+import frc.robot.Auto.AutoCommandBuffer;
+import frc.robot.Auto.PIDAutoBalancer;
+import frc.robot.Auto.REVERSEPIDAutoBalancer;
+import frc.robot.Auto.wheelieGripSet;
+import frc.robot.Auto.whilePitchCMD;
 import frc.robot.commands.LimeLightVals;
+import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.commands.armJoystickCommand;
 import frc.robot.commands.outtakeTransferMovement;
 import frc.robot.commands.pistonIntakeGrab;
 
@@ -20,17 +28,11 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Auto.ArmExtend;
-import frc.robot.Auto.AutoCommandBuffer;
-import frc.robot.Auto.PIDAutoBalancer;
-import frc.robot.Auto.REVERSEPIDAutoBalancer;
-import frc.robot.Auto.wheelieGripSet;
-import frc.robot.Auto.whilePitchCMD;
+import frc.robot.Auto.PistonEncoderMovement;
+import frc.robot.Auto.pistonOpenClose;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.SwerveJoystickCommand;
-import frc.robot.commands.armJoystickCommand;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.pistonIntake;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -267,6 +269,7 @@ public class RobotContainer {
 
 
   private final Command auto3() {
+
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig
     (
       .65,
@@ -314,6 +317,8 @@ public class RobotContainer {
 
       // Grip the Cube
       new wheelieGripSet(outtakeTransferSubsystem, -1),
+      new pistonOpenClose(pistonIntakeSubsystem, "open"),
+      new PistonEncoderMovement(pistonIntakeSubsystem, 0),
 
       // remove piston intake
 
