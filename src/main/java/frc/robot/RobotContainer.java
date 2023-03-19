@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Auto.PistonEncoderMovement;
 import frc.robot.Auto.pistonOpenClose;
+import frc.robot.Auto.robotRotation;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -67,8 +68,11 @@ public class RobotContainer {
     
 
 
-    // m_chooser.setDefaultOption("Move Straight", auto1());
-    // m_chooser.addOption("Charge Station", auto2());
+    m_chooser.setDefaultOption("Taxi/Charge Station", auto2());
+    m_chooser.addOption       ("Score High then leave community", scoreHighTaxi());
+    m_chooser.addOption       ("Score High then goto Charge Station", scoreHighBalance());
+    m_chooser.addOption  ("Rotation Test (don't use)", turnTest());
+
     SmartDashboard.putData(m_chooser);
 
 
@@ -268,7 +272,7 @@ public class RobotContainer {
   }
 
 
-  private final Command auto3() {
+  private final Command scoreHighBalance() {
 
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig
     (
@@ -346,8 +350,90 @@ public class RobotContainer {
   }
 
 
+  private final Command scoreHighTaxi() {
+
+    TrajectoryConfig trajectoryConfig = new TrajectoryConfig
+    (
+      .7,
+      .65
+      
+    )
+        .setKinematics(DriveConstants.kDriveKinematics);
+    trajectoryConfig.setReversed(true);
+        
+
+    Trajectory reverseTrajectory1 = TrajectoryGenerator.generateTrajectory
+    (
+      new Pose2d(0, 0, new Rotation2d(0)),
+      List.of (new Translation2d(3, 0)),
+      new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
+      trajectoryConfig
+    );
 
 
+    PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
+    PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
+    ProfiledPIDController thetaController = new ProfiledPIDController(
+      AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+    // 4. Construct command to follow trajectory
+    SwerveControllerCommand REVERSEundershoot = new SwerveControllerCommand(
+      reverseTrajectory1,
+      swerveSubsystem::getPose,
+      DriveConstants.kDriveKinematics,
+      xController,
+      yController,
+      thetaController,
+      swerveSubsystem::setModuleStates,
+      swerveSubsystem);
+
+    
+
+
+
+
+
+
+    return new SequentialCommandGroup(
+
+      // Grip the Cube
+      new wheelieGripSet(outtakeTransferSubsystem, -1),
+      new pistonOpenClose(pistonIntakeSubsystem, "open"),
+      new PistonEncoderMovement(pistonIntakeSubsystem, 0),
+
+      // remove piston intake
+
+      //Move Arm to high position
+      new ArmExtend(armSubsystem, "high"),
+      new AutoCommandBuffer(),
+
+      //Open Wheelie
+      new wheelieGripSet(outtakeTransferSubsystem, 1),
+      new AutoCommandBuffer(),
+      new AutoCommandBuffer(),
+
+      //After wheelie is loose, set it to 0 so it does not rotate forever ongong
+      new wheelieGripSet(outtakeTransferSubsystem, 0),
+      new AutoCommandBuffer(),
+
+      //Move the arm back down
+      new ArmExtend(armSubsystem, "reset"),
+      new AutoCommandBuffer(),
+
+      // Startup Trajectory and then PID loop balence on charge station
+      new InstantCommand(() -> swerveSubsystem.resetOdometry(reverseTrajectory1.getInitialPose())),
+      REVERSEundershoot,
+      new InstantCommand(() -> swerveSubsystem.stopModules()));
+  }
+
+  private final Command turnTest() {
+    return new SequentialCommandGroup
+    (
+      new robotRotation(swerveSubsystem)
+    );
+
+  }
 
 
   
@@ -355,7 +441,7 @@ public class RobotContainer {
 
 
   public Command getAutonomousCommand() {
-    //return m_chooser.getSelected();
-    return auto3();
+    return m_chooser.getSelected();
+    //return scoreHighBalance();
   }
 }

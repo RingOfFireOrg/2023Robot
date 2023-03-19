@@ -12,7 +12,7 @@ public class AutoCommandBuffer extends CommandBase {
 
   @Override
   public void execute() {
-    new WaitCommand(1.3);
+    new WaitCommand(.8);
   }
 
   @Override
