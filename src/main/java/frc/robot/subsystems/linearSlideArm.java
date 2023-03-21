@@ -52,7 +52,9 @@ public class linearSlideArm extends SubsystemBase {
     // 3
     encoderPositionHold = encoder.getDistance();
   }
-
+  public double getArmEncoderPosition() {
+    return encoderPosition;
+  }
   public void highCubeHeight() {
     //boolean rBumper = operatorController.getRawButton(6);
     encoderPosition = encoder.getDistance();

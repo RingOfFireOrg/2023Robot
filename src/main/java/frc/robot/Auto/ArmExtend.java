@@ -24,7 +24,9 @@ public class ArmExtend extends CommandBase {
     if (position == "high") {
       arm.highCubeHeight();
     }
-    else if (position == "reset") {
+    else if (position == "mid") {
+      arm.midCubeHeight();
+    } else if(position == "reset") {
       arm.resetHeight();
     }
   }
@@ -34,6 +36,13 @@ public class ArmExtend extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return false;
+    if(arm.getArmEncoderPosition() < 24 && position == "high") {
+      return false;
+    } else if(arm.getArmEncoderPosition() < 12 && position == "mid") {
+      return false;
+    } 
+    else {
+      return true; 
+    }
   }
 }
