@@ -3,18 +3,17 @@ package frc.robot;
 
 import frc.robot.Auto.ArmExtend;
 import frc.robot.Auto.AutoCommandBuffer;
-import frc.robot.Auto.PIDAutoBalancer;
-import frc.robot.Auto.REVERSEPIDAutoBalancer;
 import frc.robot.Auto.wheelieGripSet;
 import frc.robot.Auto.whilePitchCMD;
+import frc.robot.commands.AutoFactory;
 import frc.robot.commands.LimeLightVals;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.armJoystickCommand;
 import frc.robot.commands.outtakeTransferMovement;
 import frc.robot.commands.pistonIntakeGrab;
-
 import java.util.List;
 
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -26,6 +25,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Auto.PistonEncoderMovement;
@@ -54,7 +54,7 @@ public class RobotContainer {
   public linearSlideArm armSubsystem = new linearSlideArm();
   public pistonIntake pistonIntakeSubsystem = new pistonIntake();
   public outtakeTransfer outtakeTransferSubsystem = new outtakeTransfer();
-  private final AutoFactory m_autoFactory;
+  public AutoFactory autoFactory;
   
 
 
@@ -258,7 +258,6 @@ public class RobotContainer {
     return new SequentialCommandGroup(
       new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory1.getInitialPose())),
       undershoot,
-      new PIDAutoBalancer(swerveSubsystem),
       // new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory2.getInitialPose())),
       // new WaitCommand(10),
       // questionableShoot,
@@ -341,7 +340,6 @@ public class RobotContainer {
       // Startup Trajectory and then PID loop balence on charge station
       new InstantCommand(() -> swerveSubsystem.resetOdometry(reverseTrajectory1.getInitialPose())),
       REVERSEundershoot,
-      new REVERSEPIDAutoBalancer(swerveSubsystem),
       new InstantCommand(() -> swerveSubsystem.stopModules()));
   }
 
@@ -352,10 +350,10 @@ public class RobotContainer {
 
   
   
-
-
   public Command getAutonomousCommand() {
-    return new InstantCommand(() ->
-            m_drive.resetGyro(180).andThen(m_autoFactory.getAutoRoutine()));
-  }
+
+        return new InstantCommand(() ->
+        swerveSubsystem.resetAndSetAngle(180)).andThen(autoFactory.getAutoRoutine());  
+
+ }
 }

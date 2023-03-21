@@ -264,7 +264,13 @@ public class SwerveSubsystem extends SubsystemBase {
         // i know it gets roll and it says pitch but i kinda dont care
         return Rotation2d.fromDegrees(gyro.getRoll());
     }
-
+    public void resetAndSetAngle(double angle) {
+        // Reset gyro angle to 0 degrees
+        gyro.reset();
+        
+        // Set the gyro angle to the specified angle
+        gyro.setAngleAdjustment(angle);
+      }
     private boolean fieldOriented = true;
     public void drive(double xTranslation, double yTranslation, double zRotation) {
         SwerveModuleState[] states = DriveConstants.kDriveKinematics.toSwerveModuleStates(
@@ -289,6 +295,8 @@ public class SwerveSubsystem extends SubsystemBase {
           driveForward(moduleStates1);
         }
     }
+
+    
     public void resetPose(Pose2d newPose) {
         m_poseEstimator.resetPosition(getGyroYaw(), getSwerveModulePosition(), newPose);
     }

@@ -12,7 +12,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
-
+    public static final int LimitSwitchDIO = 1;
     public static final class ModuleConstants {
 
         public static final double kEncoderCPR = 2048;
@@ -189,7 +189,6 @@ public final class Constants {
             BACK_LEFT,
             BACK_RIGHT
         }
-        public static final int LimitSwitchDIO = 1;
         public static final int WheeliePWM = 0;
         }
 

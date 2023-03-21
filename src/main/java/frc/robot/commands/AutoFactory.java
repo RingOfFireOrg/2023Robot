@@ -1,22 +1,16 @@
-package frc.robot.commands.autonomous;
-
+package frc.robot.commands;
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import frc.robot.commands.autonomous.AutoUtils.ScoringHeights;
-import frc.robot.commands.autonomous.AutoUtils.StartingZones;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.linearSlideArm;
 import frc.robot.subsystems.outtakeTransfer;
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-import frc.robot.subsystems.pistonIntake;
-
 
 public class AutoFactory {
 
     private final LoggedDashboardChooser<AutoMode> m_modeChooser;
-    private final LoggedDashboardChooser<ScoringHeights> m_heightChooser;
-    private final LoggedDashboardChooser<StartingZones> m_locationChooser;
+    private final LoggedDashboardChooser<frc.robot.commands.AutoUtils.ScoringHeights> m_heightChooser;
+    private final LoggedDashboardChooser<frc.robot.commands.AutoUtils.StartingZones> m_locationChooser;
     public enum AutoMode {
         MOBILITY,
         ENGAGE,
@@ -36,25 +30,26 @@ public class AutoFactory {
     private final outtakeTransfer transfer;
     private final linearSlideArm arrow;
 
-    public AutoFactory(ArmSupersystem m_super, SwerveDrivetrain m_drive, WristSubsystem m_wrist) {
-        this.m_super = m_super;
-        this.m_swerve = m_drive;
-        this.m_wrist = m_wrist;
+    public AutoFactory(linearSlideArm arrow, SwerveSubsystem drive, outtakeTransfer wheelie, frc.robot.subsystems.pistonIntake pistonIntake) {
+        this.arrow = arrow;
+        this.swerve = drive;
+        this.transfer = wheelie;
+        this.pistonIntake = pistonIntake;
         m_modeChooser = new LoggedDashboardChooser<>("Auto Mode");
         m_heightChooser = new LoggedDashboardChooser<>("Scoring Height");
         m_locationChooser = new LoggedDashboardChooser<>("Starting Location");
 
         // Initialize dashboard choosers
-        m_locationChooser.addDefaultOption("LEFT", StartingZones.LEFT);
-        for (StartingZones start : StartingZones.values()) {
-            if (start != StartingZones.LEFT) {
+        m_locationChooser.addDefaultOption("LEFT", frc.robot.commands.AutoUtils.StartingZones.LEFT);
+        for (frc.robot.commands.AutoUtils.StartingZones start : frc.robot.commands.AutoUtils.StartingZones.values()) {
+            if (start != frc.robot.commands.AutoUtils.StartingZones.LEFT) {
                 m_locationChooser.addOption(start.toString(), start);
             }
         }
 
-        m_heightChooser.addDefaultOption("LOW", ScoringHeights.LOW);
-        for (ScoringHeights height : ScoringHeights.values()) {
-            if (height != ScoringHeights.LOW) {
+        m_heightChooser.addDefaultOption("LOW", frc.robot.commands.AutoUtils.ScoringHeights.LOW);
+        for (frc.robot.commands.AutoUtils.ScoringHeights height : frc.robot.commands.AutoUtils.ScoringHeights.values()) {
+            if (height != frc.robot.commands.AutoUtils.ScoringHeights.LOW) {
                 m_heightChooser.addOption(height.toString(), height);
             }
         }
@@ -69,24 +64,21 @@ public class AutoFactory {
     }
 
     public Command getAutoRoutine() {
-        StartingZones start = m_locationChooser.get();
-        ScoringHeights height = m_heightChooser.get();
+        frc.robot.commands.AutoUtils.StartingZones start = m_locationChooser.get();
+        // frc.robot.commands.AutoUtils.ScoringHeights height = m_heightChooser.get();
         AutoMode mode = m_modeChooser.get();
         switch (mode) {
             case MOBILITY:
-                return new MobilityCommandGroup(m_swerve, start);
+                return new MobilityCommandGroup(swerve, start);
             case ENGAGE:
-                return new BalanceCommandGroup(m_swerve, start);
+                return new BalanceCommandGroup(swerve, start);
             case SINGLE_SCORE_CONE:
-                return new OneConeCommandGroup(m_super, m_swerve, m_wrist, start, height);
             case SINGE_SCORE_CUBE:
-                return new OneCubeCommandGroup(m_super, m_swerve, m_wrist, start, height);
             case SINGLE_CONE_ENGAGE:
             case SINGLE_CUBE_ENGAGE:
-                return new ScoreOneEngageCommandGroup(m_swerve, m_super, m_wrist, start, height);
             case DOUBLE_SCORE_CONE:
             case DOUBLE_SCORE_CUBE:
-                return new ScoreTwoCommandGroup(m_swerve, m_super, height, start);
+
         }
 
         return new InstantCommand();
