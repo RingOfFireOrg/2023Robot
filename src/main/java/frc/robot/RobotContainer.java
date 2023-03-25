@@ -2,8 +2,13 @@ package frc.robot;
 
 
 import frc.robot.commands.LimeLightVals;
-import frc.robot.commands.outtakeTransferMovement;
-import frc.robot.commands.pistonIntakeGrab;
+import frc.robot.commands.AutoCommands.ArmAutoMovement;
+import frc.robot.commands.AutoCommands.TransferGrip;
+import frc.robot.commands.CommandGroups.MidCubeDrop;
+import frc.robot.commands.TeleopCommands.SwerveJoystickCommand;
+import frc.robot.commands.TeleopCommands.armJoystickCommand;
+import frc.robot.commands.TeleopCommands.outtakeTransferMovement;
+import frc.robot.commands.TeleopCommands.pistonIntakeGrab;
 
 import java.util.List;
 
@@ -17,16 +22,14 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Auto.PIDAutoBalancer;
-import frc.robot.Auto.whilePitchCMD;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.SwerveJoystickCommand;
-import frc.robot.commands.armJoystickCommand;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.pistonIntake;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -36,7 +39,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 
@@ -312,7 +314,15 @@ private final Command auto3() {
 
 
   public Command getAutonomousCommand() {
+    SmartDashboard.putNumber("arrow encoder value: ", armSubsystem.encoderPosition);
     //return m_chooser.getSelected();
-    return auto2();
+    return new SequentialCommandGroup(
+      new TransferGrip(outtakeTransferSubsystem, "close"),
+      new ArmAutoMovement(armSubsystem, "mid"),
+      new TransferGrip(outtakeTransferSubsystem, "open"),
+      new ArmAutoMovement(armSubsystem, "reset"),
+      new InstantCommand(() -> swerveSubsystem.stopModules())
+      );
+    //return auto2();
   }
 }

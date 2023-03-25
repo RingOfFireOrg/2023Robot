@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.commands.pistonIntakeGrab;
+import frc.robot.commands.TeleopCommands.pistonIntakeGrab;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -54,8 +54,24 @@ public boolean getLimitSwitchBoolean() {
 
 
 
+  public boolean open() {
+    intake.set(Value.kReverse);
+    return true;
+  }
 
+  public boolean close() {
+    intake.set(Value.kForward);
+    return true;
+  }
 
+  public boolean intakeDown() {
+    intakeEncoder.setPosition(-12); //TODO: add a value 
+    return true;
+  }
+  public boolean intakeUp() {
+    intakeEncoder.setPosition(0); //TODO: add a value 
+    return true;
+  }
 
   public void joystickControl() {
 
@@ -97,26 +113,12 @@ public boolean getLimitSwitchBoolean() {
     SmartDashboard.putNumber("Right Stick Y", rightStickY);
 
   
-  intakePosition = intakeEncoder.getPosition();
-  SmartDashboard.putNumber("Intake Position", intakePosition);
+    intakePosition = intakeEncoder.getPosition();
+    SmartDashboard.putNumber("Intake Position", intakePosition);
   }
-  // public void intakeUp() {
-  //   while(limitSwitch.get() == true && operatorController.getRawButtonPressed(9)) {
-  //     intakeActuator.set(.5);
-  //   }
-  // }
-  public void intakeDown() {
-    intakeEncoder.setPosition(30); //TODO: add a value fr
-  }
-  public void intakeUp() {
-    intakeEncoder.setPosition(30); //TODO: add a value fr
-  }
-  public void intakeOut() {
-    intake.set(Value.kReverse);
-  }
-  public void intakeIn() {
-    intake.set(Value.kForward);
-  }
+
+  
+
 }
 
 

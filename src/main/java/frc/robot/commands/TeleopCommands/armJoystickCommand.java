@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.TeleopCommands;
 
 import java.util.function.Supplier;
 
@@ -18,24 +18,20 @@ public class armJoystickCommand extends CommandBase {
     
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     arm.encoderReset();
 
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     arm.commandOrder();
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

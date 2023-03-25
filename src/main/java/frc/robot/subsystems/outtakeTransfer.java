@@ -25,6 +25,15 @@ public class outtakeTransfer extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+  public void wheelieSetSpeedOpen() {
+    wheelieSpinner.set(-0.2);
+  }
+  
+  public void wheelieSetSpeedClose() {
+    wheelieSpinner.set(0.2);
+  }
+
+
   public void wheelMovement() {
 
     direction = operatorController.getPOV(0);
@@ -42,7 +51,6 @@ public class outtakeTransfer extends SubsystemBase {
     }
 
     if(direction == 270) {
-
       wheelieSpinner.set(1);
     } 
 

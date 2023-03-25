@@ -82,6 +82,52 @@ public class linearSlideArm extends SubsystemBase {
     extender.set(0);
   }
 
+
+
+  public boolean highCubeHeightReturn() {
+    encoderPosition = encoder.getDistance();
+    while (encoderPosition - encoderPositionHold <= 15) {
+      extender.set(-.4);
+      encoderPosition = encoder.getDistance();
+    }
+    extender.set(0);
+    return true;
+  }
+  
+  public boolean midCubeHeightReturn() {
+    encoderPosition = encoder.getDistance();
+    while (encoderPosition - encoderPositionHold <= 24) {
+      extender.set(-.4);
+      encoderPosition = encoder.getDistance();
+    }
+    extender.set(0);
+    return true;
+  }
+  public boolean resetHeightReturn() {
+    encoderPosition = encoder.getDistance();
+    while (encoderPosition - encoderPositionHold >= 1) {
+      extender.set(.2);
+      encoderPosition = encoder.getDistance();
+    }
+    extender.set(0);
+    return true;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   public void commandOrder() {
     boolean rBumper = operatorController.getRawButton(6);
     if (rBumper == true) {

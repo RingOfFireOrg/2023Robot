@@ -1,11 +1,9 @@
 package frc.robot.Auto;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants.AutoConstants;
+
 import frc.robot.Robot.AutoModes;
 import frc.robot.RobotContainer;
 
@@ -52,7 +50,7 @@ public class AutoBuilder {
     }
 
     private void auto1() {
-        startPath = new AutoPath(robotContainer.swerveSubsystem, "AUTO1");
+        startPath = new AutoPath(robotContainer.swerveSubsystem, "");
 
         autoCommand.addCommands(
             new ParallelCommandGroup(
