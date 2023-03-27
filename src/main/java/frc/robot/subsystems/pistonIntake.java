@@ -65,7 +65,7 @@ public boolean getLimitSwitchBoolean() {
   }
 
   public boolean intakeDown() {
-    intakeEncoder.setPosition(-12); //TODO: add a value 
+    intakeEncoder.setPosition(-18.95); //TODO: add a value 
     return true;
   }
   public boolean intakeUp() {
