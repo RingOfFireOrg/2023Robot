@@ -26,11 +26,11 @@ public class outtakeTransfer extends SubsystemBase {
   }
 
   public void wheelieSetSpeedOpen() {
-    wheelieSpinner.set(-0.2);
+    outtakeMotor.set(-0.2);
   }
   
   public void wheelieSetSpeedClose() {
-    wheelieSpinner.set(0.2);
+    outtakeMotor.set(0.2);
   }
 
 

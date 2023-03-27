@@ -3,6 +3,8 @@ package frc.robot;
 
 import frc.robot.commands.LimeLightVals;
 import frc.robot.commands.AutoCommands.ArmAutoMovement;
+import frc.robot.commands.AutoCommands.PistonIntakeMovement;
+import frc.robot.commands.AutoCommands.PistonIntakeStatus;
 import frc.robot.commands.AutoCommands.TransferGrip;
 import frc.robot.commands.CommandGroups.MidCubeDrop;
 import frc.robot.commands.TeleopCommands.SwerveJoystickCommand;
@@ -317,8 +319,10 @@ private final Command auto3() {
     SmartDashboard.putNumber("arrow encoder value: ", armSubsystem.encoderPosition);
     //return m_chooser.getSelected();
     return new SequentialCommandGroup(
+      new PistonIntakeStatus(pistonIntakeSubsystem, "open"),
+      new PistonIntakeMovement(pistonIntakeSubsystem, "down"),
       new TransferGrip(outtakeTransferSubsystem, "close"),
-      new ArmAutoMovement(armSubsystem, "mid"),
+      new ArmAutoMovement(armSubsystem, "high"),
       new TransferGrip(outtakeTransferSubsystem, "open"),
       new ArmAutoMovement(armSubsystem, "reset"),
       new InstantCommand(() -> swerveSubsystem.stopModules())

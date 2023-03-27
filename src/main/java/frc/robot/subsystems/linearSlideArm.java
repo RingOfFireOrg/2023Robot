@@ -86,7 +86,7 @@ public class linearSlideArm extends SubsystemBase {
 
   public boolean highCubeHeightReturn() {
     encoderPosition = encoder.getDistance();
-    while (encoderPosition - encoderPositionHold <= 15) {
+    while (encoderPosition - encoderPositionHold <= 38.15) {
       extender.set(-.4);
       encoderPosition = encoder.getDistance();
     }
