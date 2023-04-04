@@ -65,13 +65,20 @@ public boolean getLimitSwitchBoolean() {
   }
 
   public boolean intakeDown() {
-    intakeEncoder.setPosition(-18.95); //TODO: add a value 
+    while (intakeEncoder.getPosition() > -22 ) {
+      intakeActuator.set(-.4);
+    }
+    intakeActuator.set(0);
     return true;
   }
   public boolean intakeUp() {
-    intakeEncoder.setPosition(0); //TODO: add a value 
+    while(intakeEncoder.getPosition() < 1) {
+      intakeActuator.set(.4);
+    }
+    intakeActuator.set(0);
     return true;
   }
+
 
   public void joystickControl() {
 
@@ -82,6 +89,8 @@ public boolean getLimitSwitchBoolean() {
     boolean xButton = operatorController.getRawButton(3);
     boolean bButton = operatorController.getRawButton(2);
 
+    boolean yButton = operatorController.getRawButton(4);
+    boolean aButton = operatorController.getRawButton(1);
     //Transfering up and down
     double rightStickY = -operatorController.getRawAxis(5);
 
@@ -95,6 +104,7 @@ public boolean getLimitSwitchBoolean() {
     else {
       intake.set(Value.kOff);
     }
+
     if(rightStickY < 0.1) {
       intakeActuator.set(rightStickY/2);
       //intakeUp();
@@ -109,7 +119,21 @@ public boolean getLimitSwitchBoolean() {
     else {
       intakeActuator.stopMotor();
     }
-    
+    if (yButton) {
+      while ( intakeEncoder.getPosition() < -12) {
+        intakeActuator.set(.4);
+      }
+      intakeActuator.set(0);
+
+      //intakeActuator.set(.2);
+    }
+    else if (aButton) {
+      while ( intakeEncoder.getPosition() > 5) {
+        intakeActuator.set(-.4);
+      }
+      intakeActuator.set(0);
+
+    }
     SmartDashboard.putNumber("Right Stick Y", rightStickY);
 
   

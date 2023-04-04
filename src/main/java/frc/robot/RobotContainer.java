@@ -6,6 +6,7 @@ import frc.robot.commands.AutoCommands.ArmAutoMovement;
 import frc.robot.commands.AutoCommands.PistonIntakeMovement;
 import frc.robot.commands.AutoCommands.PistonIntakeStatus;
 import frc.robot.commands.AutoCommands.TransferGrip;
+import frc.robot.commands.CommandGroups.HighCubeDrop;
 import frc.robot.commands.CommandGroups.MidCubeDrop;
 import frc.robot.commands.TeleopCommands.SwerveJoystickCommand;
 import frc.robot.commands.TeleopCommands.armJoystickCommand;
@@ -14,7 +15,7 @@ import frc.robot.commands.TeleopCommands.pistonIntakeGrab;
 
 import java.util.List;
 
-
+import frc.robot.commands.CommandGroups.HighCubeDrop;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -318,15 +319,15 @@ private final Command auto3() {
   public Command getAutonomousCommand() {
     SmartDashboard.putNumber("arrow encoder value: ", armSubsystem.encoderPosition);
     //return m_chooser.getSelected();
-    return new SequentialCommandGroup(
-      new PistonIntakeStatus(pistonIntakeSubsystem, "open"),
-      new PistonIntakeMovement(pistonIntakeSubsystem, "down"),
-      new TransferGrip(outtakeTransferSubsystem, "close"),
-      new ArmAutoMovement(armSubsystem, "high"),
-      new TransferGrip(outtakeTransferSubsystem, "open"),
-      new ArmAutoMovement(armSubsystem, "reset"),
-      new InstantCommand(() -> swerveSubsystem.stopModules())
-      );
-    //return auto2();
+    // return new SequentialCommandGroup(
+    //   new PistonIntakeStatus(pistonIntakeSubsystem, "open"),
+    //   new PistonIntakeMovement(pistonIntakeSubsystem, "down"),
+    //   new TransferGrip(outtakeTransferSubsystem, "close"),
+    //   new ArmAutoMovement(armSubsystem, "high"),
+    //   new TransferGrip(outtakeTransferSubsystem, "open"),
+    //   new ArmAutoMovement(armSubsystem, "reset"),
+    //   new InstantCommand(() -> swerveSubsystem.stopModules())
+    //   );
+    return new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem);
   }
 }

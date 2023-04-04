@@ -58,7 +58,7 @@ public class linearSlideArm extends SubsystemBase {
     //boolean rBumper = operatorController.getRawButton(6);
     encoderPosition = encoder.getDistance();
     while (encoderPosition - encoderPositionHold <= 38.1) {
-      extender.set(-.4);
+      extender.set(-1);
       encoderPosition = encoder.getDistance();
     }
     extender.set(0);
@@ -67,7 +67,7 @@ public class linearSlideArm extends SubsystemBase {
     //    WE NEED TO TEST NUMEBERS!!!!!!!!!!!
     encoderPosition = encoder.getDistance();
     while (encoderPosition - encoderPositionHold <= 15) {
-      extender.set(-.4);
+      extender.set(-1);
       encoderPosition = encoder.getDistance();
     }
     extender.set(0);
@@ -76,7 +76,7 @@ public class linearSlideArm extends SubsystemBase {
     //boolean rBumper = operatorController.getRawButton(6);
     encoderPosition = encoder.getDistance();
     while (encoderPosition - encoderPositionHold >= 0) {
-      extender.set(.4);
+      extender.set(1);
       encoderPosition = encoder.getDistance();
     }
     extender.set(0);
@@ -87,7 +87,7 @@ public class linearSlideArm extends SubsystemBase {
   public boolean highCubeHeightReturn() {
     encoderPosition = encoder.getDistance();
     while (encoderPosition - encoderPositionHold <= 38.15) {
-      extender.set(-.4);
+      extender.set(-1);
       encoderPosition = encoder.getDistance();
     }
     extender.set(0);
@@ -97,7 +97,7 @@ public class linearSlideArm extends SubsystemBase {
   public boolean midCubeHeightReturn() {
     encoderPosition = encoder.getDistance();
     while (encoderPosition - encoderPositionHold <= 24) {
-      extender.set(-.4);
+      extender.set(-1);
       encoderPosition = encoder.getDistance();
     }
     extender.set(0);
@@ -106,7 +106,7 @@ public class linearSlideArm extends SubsystemBase {
   public boolean resetHeightReturn() {
     encoderPosition = encoder.getDistance();
     while (encoderPosition - encoderPositionHold >= 1) {
-      extender.set(.2);
+      extender.set(1);
       encoderPosition = encoder.getDistance();
     }
     extender.set(0);

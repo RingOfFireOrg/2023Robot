@@ -17,7 +17,9 @@ public class outtakeTransferMovement extends CommandBase {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    wheelie.EncoderPositionReturn();
+  }
 
   @Override
   public void execute() {
