@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.SwerveSubsystem;
-
+import frc.robot.Auto.AutoBuilder;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -24,6 +24,7 @@ public class Robot extends TimedRobot {
   private static SendableChooser<AutoModes> autoChooser;
   private AutoModes previousSelectedAuto;
   SwerveSubsystem swerveSubsystem;
+  private AutoBuilder autoBuilder;
 
 
   public enum AutoModes {
@@ -104,11 +105,16 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
+    AutoBuilder autoBuilder = new AutoBuilder();
+    autoBuilder.setRobotContainer(m_robotContainer);
+    autoBuilder.setAutoMode(autoChooser.getSelected());
     if (m_autonomousCommand != null) {
         m_autonomousCommand.schedule();
     }
+
+    m_autonomousCommand = autoBuilder.build();
+
   }
 
   /** This function is called periodically during autonomous. */

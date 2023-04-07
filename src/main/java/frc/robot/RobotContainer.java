@@ -15,6 +15,9 @@ import frc.robot.commands.TeleopCommands.pistonIntakeGrab;
 
 import java.util.List;
 
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+
 import frc.robot.commands.CommandGroups.HighCubeDrop;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -29,6 +32,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Auto.AutoBuilder;
 import frc.robot.Auto.PIDAutoBalancer;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -66,9 +70,9 @@ public class RobotContainer {
     
 
 
-    // m_chooser.setDefaultOption("Move Straight", auto1());
-    // m_chooser.addOption("Charge Station", auto2());
-    SmartDashboard.putData(m_chooser);
+    //m_chooser.setDefaultOption("Autonomus~~~~", AutoBuilder.auto11());
+    //m_chooser.addOption("Charge Station", auto2());
+    SmartDashboard.putData("Goooheeeheeheehee",m_chooser);
 
 
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCommand(
@@ -317,7 +321,6 @@ private final Command auto3() {
 
 
   public Command getAutonomousCommand() {
-    SmartDashboard.putNumber("arrow encoder value: ", armSubsystem.encoderPosition);
     //return m_chooser.getSelected();
     // return new SequentialCommandGroup(
     //   new PistonIntakeStatus(pistonIntakeSubsystem, "open"),
@@ -328,6 +331,8 @@ private final Command auto3() {
     //   new ArmAutoMovement(armSubsystem, "reset"),
     //   new InstantCommand(() -> swerveSubsystem.stopModules())
     //   );
-    return new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem);
+    return m_chooser.getSelected();
+    //return auto2();
+    //return new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem);
   }
 }

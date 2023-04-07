@@ -55,6 +55,7 @@ public class AutoPath {
      * Use getAutoPath() instead
 
     */
+    
     public Command initializeCmd() {
         return new ScheduleCommand(swerveControllerCommand.beforeStarting(
             new ParallelCommandGroup(

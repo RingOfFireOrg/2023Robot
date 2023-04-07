@@ -113,9 +113,16 @@ public class SwerveSubsystem extends SubsystemBase {
     //     }
     //     return gyro.getAngle();
     // }
+    // public void setModuleStates(SwerveModuleState[] desiredStates) {
+    //     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+    //     frontLeft.setDesiredState(desiredStates[0]);
+    //     frontRight.setDesiredState(desiredStates[1]);
+    //     backLeft.setDesiredState(desiredStates[2]);
+    //     backRight.setDesiredState(desiredStates[3]);
+    // }
 
     public void fieldCentricReset() {
-        //gyro.reset();
+        gyro.reset();
     }
     public double pitchVals() {
         return gyro.getPitch();
@@ -140,6 +147,17 @@ public class SwerveSubsystem extends SubsystemBase {
         return odometer.getPoseMeters();
     }
 
+    void setModuleStates2(SwerveModuleState[] desiredStates) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        frontLeft.setDesiredState(desiredStates[0]);
+        frontRight.setDesiredState(desiredStates[1]);
+        backLeft.setDesiredState(desiredStates[2]);
+        backRight.setDesiredState(desiredStates[3]);
+    }
+  
+    public void resetPose(Pose2d pose) {
+        odometer.resetPosition(getRotation2d(),getSwerveModulePosition(),pose);
+    }
     public void resetOdometry(Pose2d pose) {
         odometer.resetPosition(getRotation2d(),getSwerveModulePosition(),pose);
     }

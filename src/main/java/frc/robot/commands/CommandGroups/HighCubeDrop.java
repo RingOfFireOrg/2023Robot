@@ -16,7 +16,6 @@ public class HighCubeDrop extends SequentialCommandGroup {
   public HighCubeDrop
   (
     linearSlideArm arm,
-    outtakeTransfer wheelie,
     outtakeTransfer outtakeTransferSubsystem,
     pistonIntake pistonIntakeSubsystem,
     SwerveSubsystem swerveSubsystem
