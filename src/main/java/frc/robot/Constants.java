@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class Constants {
 
@@ -66,16 +67,16 @@ public final class Constants {
         public static final boolean kFrontRightDriveAbsoluteEncoderReversed = true;
         public static final boolean kBackRightDriveAbsoluteEncoderReversed = true;
 
-        public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = ((Math.PI/6) - 0.122173 - 0.05+0.018408-0.056734+0.006136-0.204019+.193281); //offset in radians #12
+        public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = ((Math.PI/6) - 0.122173 - 0.05+0.018408-0.056734+0.006136-0.204019+.193281+0.001534); //offset in radians #12
         // 12
 
-        public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = (-6.280105+Math.PI/4+.67 - .02 - 0.001534+0.019942-0.076707+0.0730732-.104311); //offset in radians #10
+        public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = (-6.280105+Math.PI/4+.67 - .02 - 0.001534+0.019942-0.076707+0.0730732-.104311-0.049087); //offset in radians #10
         //10
         
-        public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = (Math.PI+0.046019-0.036937+1.040037+Math.PI+0.058291-.122297-.052156); //offset in radians #11
+        public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = (Math.PI+0.046019-0.036937+1.040037+Math.PI+0.058291-.122297-.052156+0.044486); //offset in radians #11
         // 11
         
-        public static final double kBackRightDriveAbsoluteEncoderOffsetRad = (0); //offset in radians #9
+        public static final double kBackRightDriveAbsoluteEncoderOffsetRad = (0-0.12732); //offset in radians #9
         // 9
 
         public static final double kPhysicalMaxSpeedMetersPerSecond = 5;

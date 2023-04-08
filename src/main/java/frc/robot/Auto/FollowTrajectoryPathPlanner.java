@@ -36,23 +36,24 @@ public class FollowTrajectoryPathPlanner extends CommandBase {
   @Override
   public void initialize() {
     // Makes a trajectory                                                     
-    PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath(pathName,3,3);
+    PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath(pathName,0.1,1, false);
 
     // Resets the pose of the robot if true (should generally only be true for the first path of an auto)
-    if (zeroInitialPose) {
+    if (true == true) {
       driveSubsystem.resetOdometry(trajectoryToFollow.getInitialPose());
     }
 
     // PID controllers
-    PIDController xController = new PIDController(0, 0, 0);
-    PIDController yController = new PIDController(0, 0, 0);
-    PIDController thetaController = new PIDController(0.5, 0, 0);
+    PIDController xController = new PIDController(3, 0, 0);
+    PIDController yController = new PIDController(3, 0, 0);
+    PIDController thetaController = new PIDController(3, 0, 0);
 
   //   ProfiledPIDController thetaController = new ProfiledPIDController(
   //   AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
   // thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
     // Create a PPSwerveControllerCommand. This is almost identical to WPILib's SwerveControllerCommand, but it uses the holonomic rotation from the PathPlannerTrajectory to control the robot's rotation.
+    //driveSubsystem.resetOdometry(trajectoryToFollow.getInitialPose());
     followTrajectoryPathPlannerCommand = new PPSwerveControllerCommand(
       trajectoryToFollow,
       driveSubsystem::getPose, // Functional interface to feed supplier
@@ -61,7 +62,7 @@ public class FollowTrajectoryPathPlanner extends CommandBase {
       yController,
       thetaController,
       driveSubsystem::setModuleStates,
-      true,
+      false,
       driveSubsystem
     );
     

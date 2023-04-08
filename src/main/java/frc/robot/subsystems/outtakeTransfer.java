@@ -18,6 +18,7 @@ public class outtakeTransfer extends SubsystemBase {
   double direction;
   private final XboxController operatorController = new XboxController(1);
   double posHold;
+  double bumper;
 
   public outtakeTransfer() {
     outtakeMotor = new CANSparkMax(17, MotorType.kBrushless);
@@ -49,7 +50,7 @@ public class outtakeTransfer extends SubsystemBase {
   public void wheelieSetSpeedOpen() {
     SmartDashboard.putNumber("Pos Hold!", posHold);
     while(outtakeMotor.getEncoder().getPosition() - posHold < 10.0) {
-      outtakeMotor.set(.15);
+      outtakeMotor.set(.35);
     }
     outtakeMotor.set(0);
   }
@@ -57,7 +58,7 @@ public class outtakeTransfer extends SubsystemBase {
   public void wheelieSetSpeedClose() {
     SmartDashboard.putNumber("Pos Hold!", posHold);
     while(outtakeMotor.getEncoder().getPosition() - posHold > 1.0) {
-      outtakeMotor.set(-.15);
+      outtakeMotor.set(-.25);
     }
     outtakeMotor.set(0);
   }
@@ -65,15 +66,20 @@ public class outtakeTransfer extends SubsystemBase {
   public void wheelMovement() {
     EncoderPosition();
     direction = operatorController.getPOV(0);
+    bumper = operatorController.getRawAxis(2);
+
+    if (bumper > 0.2 || bumper < -0.2) {
+      outtakeMotor.set(.35);
+    }
     
     if(direction == 0) {
       //outtakeMotor.set(-.15);
-      wheelieSetSpeedOpen();
+      wheelieSetSpeedClose();
     } 
 
     else if(direction == 180) {
       //outtakeMotor.set(.15);
-      wheelieSetSpeedClose();
+      wheelieSetSpeedOpen();
     } 
 
     else {
