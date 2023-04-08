@@ -105,15 +105,19 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    AutoBuilder autoBuilder = new AutoBuilder();
-    autoBuilder.setRobotContainer(m_robotContainer);
-    autoBuilder.setAutoMode(autoChooser.getSelected());
     if (m_autonomousCommand != null) {
-        m_autonomousCommand.schedule();
-    }
+      m_autonomousCommand.schedule();
+    }  
+    // AutoBuilder autoBuilder = new AutoBuilder();
+    // autoBuilder.setRobotContainer(m_robotContainer);
+    // autoBuilder.setAutoMode(autoChooser.getSelected());
+    // if (m_autonomousCommand != null) {
+    //     m_autonomousCommand.schedule();
+    // }
 
-    m_autonomousCommand = autoBuilder.build();
+    // m_autonomousCommand = autoBuilder.build();
 
   }
 

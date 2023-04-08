@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Auto.AutoBuilder;
+import frc.robot.Auto.FollowTrajectoryPathPlanner;
 import frc.robot.Auto.PIDAutoBalancer;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -55,9 +56,9 @@ public class RobotContainer {
 
   public SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   public LimeLight limeLightSubsystem = new LimeLight();
-  public linearSlideArm armSubsystem = new linearSlideArm();
+  //public linearSlideArm armSubsystem = new linearSlideArm();
   public pistonIntake pistonIntakeSubsystem = new pistonIntake();
-  public outtakeTransfer outtakeTransferSubsystem = new outtakeTransfer();
+  //public outtakeTransfer outtakeTransferSubsystem = new outtakeTransfer();
   
 
 
@@ -104,10 +105,10 @@ public class RobotContainer {
     ));
      
 
-    armSubsystem.setDefaultCommand(new armJoystickCommand(
-      armSubsystem, 
-      () -> operatorController.getRawAxis(1)
-    ));
+    // armSubsystem.setDefaultCommand(new armJoystickCommand(
+    //   armSubsystem, 
+    //   () -> operatorController.getRawAxis(1)
+    // ));
 
     pistonIntakeSubsystem.setDefaultCommand(new pistonIntakeGrab(
       pistonIntakeSubsystem
@@ -117,9 +118,9 @@ public class RobotContainer {
       limeLightSubsystem
     ));
 
-    outtakeTransferSubsystem.setDefaultCommand(new outtakeTransferMovement(
-      outtakeTransferSubsystem
-    ));
+    // outtakeTransferSubsystem.setDefaultCommand(new outtakeTransferMovement(
+    //   outtakeTransferSubsystem
+    // ));
 
     configureButtonBindings();
 
@@ -321,6 +322,9 @@ private final Command auto3() {
 
 
   public Command getAutonomousCommand() {
+
+
+    return new FollowTrajectoryPathPlanner(swerveSubsystem, "PathTestingFRFR", false);
     //return m_chooser.getSelected();
     // return new SequentialCommandGroup(
     //   new PistonIntakeStatus(pistonIntakeSubsystem, "open"),
@@ -331,7 +335,7 @@ private final Command auto3() {
     //   new ArmAutoMovement(armSubsystem, "reset"),
     //   new InstantCommand(() -> swerveSubsystem.stopModules())
     //   );
-    return m_chooser.getSelected();
+    //return m_chooser.getSelected();
     //return auto2();
     //return new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem);
   }

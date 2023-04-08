@@ -161,7 +161,10 @@ public class SwerveSubsystem extends SubsystemBase {
     public void resetOdometry(Pose2d pose) {
         odometer.resetPosition(getRotation2d(),getSwerveModulePosition(),pose);
     }
-
+    public boolean resetOdometry2(Pose2d pose) {
+        odometer.resetPosition(getRotation2d(),getSwerveModulePosition(),pose);
+        return true;
+    }
     public PIDController getxController() {
         return xController;
     }
