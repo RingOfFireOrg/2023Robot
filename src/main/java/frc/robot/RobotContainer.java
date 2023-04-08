@@ -56,9 +56,9 @@ public class RobotContainer {
 
   public SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   public LimeLight limeLightSubsystem = new LimeLight();
-  //public linearSlideArm armSubsystem = new linearSlideArm();
+  public linearSlideArm armSubsystem = new linearSlideArm();
   public pistonIntake pistonIntakeSubsystem = new pistonIntake();
-  //public outtakeTransfer outtakeTransferSubsystem = new outtakeTransfer();
+  public outtakeTransfer outtakeTransferSubsystem = new outtakeTransfer();
   
 
 
@@ -105,10 +105,10 @@ public class RobotContainer {
     ));
      
 
-    // armSubsystem.setDefaultCommand(new armJoystickCommand(
-    //   armSubsystem, 
-    //   () -> operatorController.getRawAxis(1)
-    // ));
+    armSubsystem.setDefaultCommand(new armJoystickCommand(
+      armSubsystem, 
+      () -> operatorController.getRawAxis(1)
+    ));
 
     pistonIntakeSubsystem.setDefaultCommand(new pistonIntakeGrab(
       pistonIntakeSubsystem
@@ -118,9 +118,9 @@ public class RobotContainer {
       limeLightSubsystem
     ));
 
-    // outtakeTransferSubsystem.setDefaultCommand(new outtakeTransferMovement(
-    //   outtakeTransferSubsystem
-    // ));
+    outtakeTransferSubsystem.setDefaultCommand(new outtakeTransferMovement(
+      outtakeTransferSubsystem
+    ));
 
     configureButtonBindings();
 
@@ -316,15 +316,30 @@ private final Command auto3() {
 
 
 
-
+  public Command spliceAutoTest() {
+    return new SequentialCommandGroup
+    (
+      new FollowTrajectoryPathPlanner(swerveSubsystem, "SpliceTestPart1", true),
+      new FollowTrajectoryPathPlanner(swerveSubsystem, "SpliceTestPart2", false)
+    );
+  }
   
   
-
+  public Command orderTest() {
+    return new SequentialCommandGroup
+    (
+      new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem),
+      new FollowTrajectoryPathPlanner(swerveSubsystem, "SpliceTestPart2", false)
+    );
+  }
 
   public Command getAutonomousCommand() {
 
 
-    return new FollowTrajectoryPathPlanner(swerveSubsystem, "PathTestingFRFR", false);
+    return new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting1", true);
+
+
+
     //return m_chooser.getSelected();
     // return new SequentialCommandGroup(
     //   new PistonIntakeStatus(pistonIntakeSubsystem, "open"),

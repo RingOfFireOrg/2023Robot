@@ -36,7 +36,7 @@ public class FollowTrajectoryPathPlanner extends CommandBase {
   @Override
   public void initialize() {
     // Makes a trajectory                                                     
-    PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath(pathName,1,1);
+    PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath(pathName,3,3);
 
     // Resets the pose of the robot if true (should generally only be true for the first path of an auto)
     if (zeroInitialPose) {
@@ -44,9 +44,9 @@ public class FollowTrajectoryPathPlanner extends CommandBase {
     }
 
     // PID controllers
-    PIDController xController = new PIDController(0.8, 0, 0);
-    PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
-    PIDController thetaController = new PIDController(AutoConstants.kPThetaController, 0, 0);
+    PIDController xController = new PIDController(0, 0, 0);
+    PIDController yController = new PIDController(0, 0, 0);
+    PIDController thetaController = new PIDController(0.5, 0, 0);
 
   //   ProfiledPIDController thetaController = new ProfiledPIDController(
   //   AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
