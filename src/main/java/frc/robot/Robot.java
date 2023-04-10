@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
-
+import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.Auto.AutoBuilder;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -23,6 +23,9 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private static SendableChooser<AutoModes> autoChooser;
   private AutoModes previousSelectedAuto;
+  SwerveSubsystem swerveSubsystem;
+  private AutoBuilder autoBuilder;
+
 
   public enum AutoModes {
     AUTO1, AUTO2, AUTO3, AUTO4, AUTO5, AUTO6
@@ -30,6 +33,35 @@ public class Robot extends TimedRobot {
   
   @Override
   public void robotInit() {
+    //     Thread m_visionThread = new Thread(
+    //     () -> {
+    //       UsbCamera camera = CameraServer.startAutomaticCapture();
+
+    //       camera.setResolution(640, 480);
+        
+
+    //       CvSink cvSink = CameraServer.getVideo();
+
+    //       CvSource outputStream = CameraServer.putVideo("Rectangle", 640, 480);
+
+    //       Mat mat = new Mat();
+          
+    //       while (!Thread.interrupted()) {
+    //         if (cvSink.grabFrame(mat) == 0) {
+
+    //           outputStream.notifyError(cvSink.getError());
+   
+    //           continue;
+    //         }
+     
+    //         Imgproc.rectangle(
+    //             mat, new Point(100, 100), new Point(400, 400), new Scalar(255, 255, 255), 5);
+
+    //         outputStream.putFrame(mat);
+    //       }
+    //     });
+    // m_visionThread.setDaemon(true);
+    // m_visionThread.start();
     m_robotContainer = new RobotContainer();
 
     autoChooser = new SendableChooser<>();
@@ -76,8 +108,17 @@ public class Robot extends TimedRobot {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     if (m_autonomousCommand != null) {
-        m_autonomousCommand.schedule();
-    }
+      m_autonomousCommand.schedule();
+    }  
+    // AutoBuilder autoBuilder = new AutoBuilder();
+    // autoBuilder.setRobotContainer(m_robotContainer);
+    // autoBuilder.setAutoMode(autoChooser.getSelected());
+    // if (m_autonomousCommand != null) {
+    //     m_autonomousCommand.schedule();
+    // }
+
+    // m_autonomousCommand = autoBuilder.build();
+
   }
 
   /** This function is called periodically during autonomous. */
@@ -93,13 +134,11 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    
   }
 
   @Override

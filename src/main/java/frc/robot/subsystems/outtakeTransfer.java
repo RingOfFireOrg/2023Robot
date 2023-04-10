@@ -1,18 +1,24 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class outtakeTransfer extends SubsystemBase {
   VictorSP wheelieSpinner;
-  CANSparkMax outtakeMotor;
+  public CANSparkMax outtakeMotor;
   double direction;
   private final XboxController operatorController = new XboxController(1);
+  double posHold;
+  double bumper;
 
   public outtakeTransfer() {
     outtakeMotor = new CANSparkMax(17, MotorType.kBrushless);
@@ -22,19 +28,58 @@ public class outtakeTransfer extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+  }
+
+
+  public void EncoderPosition() {
+    outtakeMotor.getEncoder().setPositionConversionFactor(1.0);
+    outtakeMotor.getEncoder().setVelocityConversionFactor(1.0);
+    double encoderCount = outtakeMotor.getEncoder().getPosition();
+    SmartDashboard.putNumber("Encoder Count", encoderCount);
+  }
+
+  public void EncoderPositionReturn() {
+    outtakeMotor.getEncoder().setPositionConversionFactor(1.0);
+    outtakeMotor.getEncoder().setVelocityConversionFactor(1.0);
+    double posHold = outtakeMotor.getEncoder().getPosition();
+    SmartDashboard.putNumber("Pos Hold!", posHold);
+
+    //SmartDashboard.putNumber("Encoder Count", encoderCount);
+  }
+
+  public void wheelieSetSpeedOpen() {
+    SmartDashboard.putNumber("Pos Hold!", posHold);
+    while(outtakeMotor.getEncoder().getPosition() - posHold < 10.0) {
+      outtakeMotor.set(.35);
+    }
+    outtakeMotor.set(0);
+  }
+
+  public void wheelieSetSpeedClose() {
+    SmartDashboard.putNumber("Pos Hold!", posHold);
+    while(outtakeMotor.getEncoder().getPosition() - posHold > 1.0) {
+      outtakeMotor.set(-.25);
+    }
+    outtakeMotor.set(0);
   }
 
   public void wheelMovement() {
-
+    EncoderPosition();
     direction = operatorController.getPOV(0);
+    bumper = operatorController.getRawAxis(2);
+
+    if (bumper > 0.2 || bumper < -0.2) {
+      outtakeMotor.set(.35);
+    }
     
     if(direction == 0) {
-      outtakeMotor.set(.15);
+      //outtakeMotor.set(-.15);
+      wheelieSetSpeedClose();
     } 
 
     else if(direction == 180) {
-      outtakeMotor.set(-.15);
+      //outtakeMotor.set(.15);
+      wheelieSetSpeedOpen();
     } 
 
     else {
@@ -42,7 +87,6 @@ public class outtakeTransfer extends SubsystemBase {
     }
 
     if(direction == 270) {
-
       wheelieSpinner.set(1);
     } 
 
@@ -54,5 +98,5 @@ public class outtakeTransfer extends SubsystemBase {
       wheelieSpinner.set(0);
     }
   }
-  
 }
+

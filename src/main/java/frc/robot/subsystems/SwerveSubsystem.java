@@ -7,6 +7,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -94,6 +95,8 @@ public class SwerveSubsystem extends SubsystemBase {
     // }
     public double getHeading() {
         //double temp = Math.IEEEremainder(gyro.getAngle(), 360);
+        SmartDashboard.putNumber("Robot Angle in get heading", gyro.getAngle());
+
         double temp = (gyro.getAngle() % 360);
         if(temp < 0) {
             temp = temp + 360; 
@@ -110,7 +113,26 @@ public class SwerveSubsystem extends SubsystemBase {
     //     }
     //     return gyro.getAngle();
     // }
+    // public void setModuleStates(SwerveModuleState[] desiredStates) {
+    //     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+    //     frontLeft.setDesiredState(desiredStates[0]);
+    //     frontRight.setDesiredState(desiredStates[1]);
+    //     backLeft.setDesiredState(desiredStates[2]);
+    //     backRight.setDesiredState(desiredStates[3]);
+    // }
 
+    public void fieldCentricReset() {
+        gyro.reset();
+    }
+    public double pitchVals() {
+        return gyro.getPitch();
+    }
+    public double yawVals() {
+        return gyro.getYaw();
+    }
+    public double rollVals() {
+        return gyro.getRoll();
+    }
     public Rotation2d getRotation2d() {
        
         return Rotation2d.fromDegrees(getHeading());
@@ -125,10 +147,24 @@ public class SwerveSubsystem extends SubsystemBase {
         return odometer.getPoseMeters();
     }
 
+    void setModuleStates2(SwerveModuleState[] desiredStates) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        frontLeft.setDesiredState(desiredStates[0]);
+        frontRight.setDesiredState(desiredStates[1]);
+        backLeft.setDesiredState(desiredStates[2]);
+        backRight.setDesiredState(desiredStates[3]);
+    }
+  
+    public void resetPose(Pose2d pose) {
+        odometer.resetPosition(getRotation2d(),getSwerveModulePosition(),pose);
+    }
     public void resetOdometry(Pose2d pose) {
         odometer.resetPosition(getRotation2d(),getSwerveModulePosition(),pose);
     }
-
+    public boolean resetOdometry2(Pose2d pose) {
+        odometer.resetPosition(getRotation2d(),getSwerveModulePosition(),pose);
+        return true;
+    }
     public PIDController getxController() {
         return xController;
     }
@@ -148,6 +184,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void periodic() {
         odometer.update(getRotation2d(), getSwerveModulePosition());
+        SmartDashboard.putNumber("Pitch in random file idk what this is ", gyro.getPitch());
+        SmartDashboard.putNumber("Roll in random file idk what this is ", gyro.getRoll());
+        SmartDashboard.putNumber("Yaw in random file idk what this is ", gyro.getYaw());
+        
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putNumber("Robot Theta", getPose().getRotation().getDegrees());
 
@@ -197,6 +237,30 @@ public class SwerveSubsystem extends SubsystemBase {
             frontRight.brake(false);
             backLeft.brake(false);
             backRight.brake(false);
+        }
+    }
+
+    public Rotation2d getPitchAsRotation2d() {
+        // i know it gets roll and it says pitch but i kinda dont care
+        return Rotation2d.fromDegrees(gyro.getRoll());
+    }
+
+
+    public void drive(SwerveModuleState... desiredStates) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        frontLeft.setDesiredState(desiredStates[0]);
+        frontRight.setDesiredState(desiredStates[1]);
+        backLeft.setDesiredState(desiredStates[2]);
+        backRight.setDesiredState(desiredStates[3]);
+    }
+
+    
+    public void whilePitch() {
+        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.3, 0, 0);
+        SwerveModuleState[] moduleStates1 = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+    
+        while (rollVals() < -5 || rollVals() > 5) {
+          driveForward(moduleStates1);
         }
     }
     

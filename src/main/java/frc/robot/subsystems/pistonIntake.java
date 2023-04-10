@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.TeleopCommands.pistonIntakeGrab;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -53,7 +54,30 @@ public boolean getLimitSwitchBoolean() {
 
 
 
+  public boolean open() {
+    intake.set(Value.kReverse);
+    return true;
+  }
 
+  public boolean close() {
+    intake.set(Value.kForward);
+    return true;
+  }
+
+  public boolean intakeDown() {
+    while (intakeEncoder.getPosition() > -22 ) {
+      intakeActuator.set(-.4);
+    }
+    intakeActuator.set(0);
+    return true;
+  }
+  public boolean intakeUp() {
+    while(intakeEncoder.getPosition() < 1) {
+      intakeActuator.set(.4);
+    }
+    intakeActuator.set(0);
+    return true;
+  }
 
 
   public void joystickControl() {
@@ -65,39 +89,59 @@ public boolean getLimitSwitchBoolean() {
     boolean xButton = operatorController.getRawButton(3);
     boolean bButton = operatorController.getRawButton(2);
 
+    boolean yButton = operatorController.getRawButton(4);
+    boolean aButton = operatorController.getRawButton(1);
     //Transfering up and down
     double rightStickY = -operatorController.getRawAxis(5);
 
 
     if(xButton) {
-      intake.set(Value.kForward);
+      intake.set(Value.kReverse);
     } 
     else if (bButton) {
-      intake.set(Value.kReverse);
+      intake.set(Value.kForward);
     } 
     else {
       intake.set(Value.kOff);
     }
+
     if(rightStickY < 0.1) {
       intakeActuator.set(rightStickY/2);
+      //intakeUp();
     }
     else if(limitSwitch.get() == false && rightStickY > 0.1) {
       intakeActuator.stopMotor();
     }
     else if((rightStickY < -0.1 || rightStickY > 0.1) && limitSwitch.get() == true) {
       intakeActuator.set(rightStickY/2);
+      //intakeDown();
     } 
     else {
       intakeActuator.stopMotor();
     }
-    
+    if (yButton) {
+      while ( intakeEncoder.getPosition() < -12) {
+        intakeActuator.set(.4);
+      }
+      intakeActuator.set(0);
+
+      //intakeActuator.set(.2);
+    }
+    else if (aButton) {
+      while ( intakeEncoder.getPosition() > 5) {
+        intakeActuator.set(-.4);
+      }
+      intakeActuator.set(0);
+
+    }
     SmartDashboard.putNumber("Right Stick Y", rightStickY);
 
   
-  intakePosition = intakeEncoder.getPosition();
-  SmartDashboard.putNumber("Intake Position", intakePosition);
+    intakePosition = intakeEncoder.getPosition();
+    SmartDashboard.putNumber("Intake Position", intakePosition);
   }
 
+  
 
 }
 

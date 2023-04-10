@@ -54,25 +54,84 @@ public class linearSlideArm extends SubsystemBase {
     encoderPositionHold = encoder.getDistance();
   }
 
-
-  public void highConeHeight() {
+  public void highCubeHeight() {
     //boolean rBumper = operatorController.getRawButton(6);
     encoderPosition = encoder.getDistance();
-    while (encoderPosition - encoderPositionHold <= 29.5) {
-      extender.set(-.4);
+    while (encoderPosition - encoderPositionHold <= 38.1) {
+      extender.set(-1);
+      encoderPosition = encoder.getDistance();
+    }
+    extender.set(0);
+  }
+  public void midCubeHeight() {
+    //    WE NEED TO TEST NUMEBERS!!!!!!!!!!!
+    encoderPosition = encoder.getDistance();
+    while (encoderPosition - encoderPositionHold <= 15) {
+      extender.set(-1);
+      encoderPosition = encoder.getDistance();
+    }
+    extender.set(0);
+  }
+  public void resetHeight() {
+    //boolean rBumper = operatorController.getRawButton(6);
+    encoderPosition = encoder.getDistance();
+    while (encoderPosition - encoderPositionHold >= 0) {
+      extender.set(1);
       encoderPosition = encoder.getDistance();
     }
     extender.set(0);
   }
 
-  public void lowConeHeight() {
-    
+
+
+  public boolean highCubeHeightReturn() {
+    encoderPosition = encoder.getDistance();
+    while (encoderPosition - encoderPositionHold <= 38.15) {
+      extender.set(-1);
+      encoderPosition = encoder.getDistance();
+    }
+    extender.set(0);
+    return true;
   }
+  
+  public boolean midCubeHeightReturn() {
+    encoderPosition = encoder.getDistance();
+    while (encoderPosition - encoderPositionHold <= 24) {
+      extender.set(-1);
+      encoderPosition = encoder.getDistance();
+    }
+    extender.set(0);
+    return true;
+  }
+  public boolean resetHeightReturn() {
+    encoderPosition = encoder.getDistance();
+    while (encoderPosition - encoderPositionHold >= 1) {
+      extender.set(1);
+      encoderPosition = encoder.getDistance();
+    }
+    extender.set(0);
+    return true;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   public void commandOrder() {
     boolean rBumper = operatorController.getRawButton(6);
     if (rBumper == true) {
-      highConeHeight();
+      highCubeHeight();
     }
     else {
       armMovement();
@@ -90,25 +149,30 @@ public class linearSlideArm extends SubsystemBase {
     SmartDashboard.putNumber("Encoeder Updated Value", encoderPosition - encoderPositionHold);
 
 
-    if(stickVal < -0.1     && (encoderPosition - encoderPositionHold > -.25 || LBumper == true)) {// test to make sure the numbers work
-      //moving down
-      extender.set(stickVal/2);
-      encoderPosition = encoder.getDistance();
-    } 
-    else if(stickVal > 0.1 && (encoderPosition - encoderPositionHold < 29.5 || LBumper == true)) {
+    if(stickVal < -0.1) {// test to make sure the numbers work
       //moving up
-      extender.set(stickVal/2);
-      encoderPosition = encoder.getDistance();
+      if(encoder.getDistance() > 38.15) {
+        extender.set(0);
+      } else {
+        extender.set(stickVal/1.4);
+      }
+      
+      //encoderPosition = encoder.getDistance();
+    } 
+    else if(stickVal > 0.1) {
+      //moving down
+      extender.set(stickVal/1.4);
+      //encoderPosition = encoder.getDistance();
 
     }
     else {
       extender.set(0);
-      encoderPosition = encoder.getDistance();
+      //encoderPosition = encoder.getDistance();
 
     } 
     encoderPosition = encoder.getDistance();
 
- 
     
   }
+
 }

@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.TeleopCommands;
 
 import java.util.function.Supplier;
 
@@ -21,7 +21,7 @@ public class SwerveJoystickCommand extends CommandBase {
     private final SwerveSubsystem swerveSubsystem;
 
     private final Supplier<Double> xSpdFunctionField, ySpdFunctionField, xSpdFunctionRobot, ySpdFunctionRobot, turningSpdFunctionLeft, turningSpdFunctionRight;
-    private final Supplier<Boolean> fieldOrientedFunction, alignFunction, resetDirection;
+    private final Supplier<Boolean> fieldOrientedFunction, alignFunction, resetDirection, aButton, bButton, xButton, yButton;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
     public final double cameraHeight = Units.inchesToMeters(5);// replace number with height of camera on robot
@@ -40,6 +40,8 @@ public class SwerveJoystickCommand extends CommandBase {
     PIDController turnController = new PIDController(angularP, 0, angularD);
     boolean manuelMode = false;
     boolean fieldOrientTrue = true;
+    double speedDivide = 2;
+    String speedValue = "None";
     
 
     public SwerveJoystickCommand(SwerveSubsystem swerveSubsystem, 
@@ -52,6 +54,11 @@ public class SwerveJoystickCommand extends CommandBase {
             Supplier<Double> turningSpdFunctionLeft,
             Supplier<Double> turningSpdFunctionRight,
             Supplier<Boolean> fieldOrientedFunction, 
+
+            Supplier<Boolean> aButton,
+            Supplier<Boolean> bButton,
+            Supplier<Boolean> xButton,
+            Supplier<Boolean> yButton,
 
             Supplier<Boolean> alignButton, 
             Supplier<Boolean> resetDirectionButton) {
@@ -66,6 +73,11 @@ public class SwerveJoystickCommand extends CommandBase {
 
         this.turningSpdFunctionLeft = turningSpdFunctionLeft;
         this.turningSpdFunctionRight = turningSpdFunctionRight;
+
+        this.aButton = aButton;
+        this.bButton = bButton;
+        this.xButton = xButton;
+        this.yButton = yButton;
 
         this.fieldOrientedFunction = fieldOrientedFunction;
         this.alignFunction = alignButton;
@@ -93,17 +105,49 @@ public class SwerveJoystickCommand extends CommandBase {
 
     @Override
     public void initialize() {
+
     }
 
     @Override
     public void execute() {
 
 
+
+        if(driveController.getRawButton(7) == true) {
+            swerveSubsystem.fieldCentricReset();
+        }
+
+        if(aButton.get() == true) {
+            speedDivide = 2;
+        }
+        if(xButton.get() == true) {
+            speedDivide = 4;
+        }
+        if(bButton.get() == true) {
+            speedDivide = 1.3333;
+        }
+        if(yButton.get() == true) {
+            speedDivide = 1;
+        }
+
         if (xSpdFunctionField.get() >= 0.1 || xSpdFunctionField.get() <= -0.1 || ySpdFunctionField.get() >= 0.1 || ySpdFunctionField.get() <= -0.1) 
         {
+            if(aButton.get() == true) {
+                speedDivide = 2;
+            }
+            if(xButton.get() == true) {
+                speedDivide = 4;
+            }
+            if(bButton.get() == true) {
+                speedDivide = 1.3333;
+            }
+            if(yButton.get() == true) {
+                speedDivide = 1;
+            }
+
             // 1. Get real-time joystick inputs
-            double xSpeed = xSpdFunctionField.get();
-            double ySpeed = ySpdFunctionField.get();
+            double xSpeed = xSpdFunctionField.get()/speedDivide;
+            double ySpeed = ySpdFunctionField.get()/speedDivide;
             double turningSpeed = turningSpdFunctionLeft.get() - turningSpdFunctionRight.get();
 
             // 2. Apply deadband
@@ -125,15 +169,10 @@ public class SwerveJoystickCommand extends CommandBase {
             // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds (
             //     xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
 
-            if (!alignFunction.get()) {
-                // Relative to field
-                chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                         xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
-            } 
-            else {
-                // Relative to robot
-                chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
-            }
+
 
             // 5. Convert chassis speeds to individual module states
             SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
@@ -143,9 +182,23 @@ public class SwerveJoystickCommand extends CommandBase {
         }
         else 
         {
+            if(aButton.get() == true) {
+                speedDivide = 2;
+            }
+            if(xButton.get() == true) {
+                speedDivide = 4;
+            }
+            if(bButton.get() == true) {
+                speedDivide = 1.3333;
+            }
+            if(yButton.get() == true) {
+                speedDivide = 1;
+            }
+
             // 1. Get real-time joystick inputs
-            double xSpeed = xSpdFunctionRobot.get();
-            double ySpeed = ySpdFunctionRobot.get();
+            double xSpeed = xSpdFunctionRobot.get()/speedDivide;
+            //double ySpeed = ySpdFunctionRobot.get()/speedDivide;
+            double ySpeed = 0;
 
             double turningSpeed = turningSpdFunctionLeft.get() - turningSpdFunctionRight.get();
 
@@ -171,6 +224,7 @@ public class SwerveJoystickCommand extends CommandBase {
 
             // 6. Output each module states to wheels
             swerveSubsystem.setModuleStates(moduleStates);
+
         }
         
 
