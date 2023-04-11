@@ -39,8 +39,8 @@ public class FollowTrajectoryPathPlanner extends CommandBase {
     PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath(pathName,0.1,1, false);
 
     // Resets the pose of the robot if true (should generally only be true for the first path of an auto)
-    if (true == true) {
-      driveSubsystem.resetOdometry(trajectoryToFollow.getInitialPose());
+    if (zeroInitialPose) {
+      driveSubsystem.resetOdometry(trajectoryToFollow.getInitialHolonomicPose());
     }
 
     // PID controllers

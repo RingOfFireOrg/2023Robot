@@ -333,12 +333,28 @@ private final Command auto3() {
     );
   }
 
+  public Command midAutoHigh() {
+    return new SequentialCommandGroup
+    (
+      new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem),
+      new FollowTrajectoryPathPlanner(swerveSubsystem, "MidAutoPart1", true),
+      new FollowTrajectoryPathPlanner(swerveSubsystem, "MidAutoPart2", false),
+      new FollowTrajectoryPathPlanner(swerveSubsystem, "MidAutoPart3", false),
+      new PIDAutoBalancer(swerveSubsystem)
+
+    );
+  }
+
   public Command getAutonomousCommand() {
 
 
-    return new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting5", true);
+    return new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting4", true);
 
-
+    // return new SequentialCommandGroup
+    // (
+    //   new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting1", true),
+    //   new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting4", false)
+    //   );
 
     //return m_chooser.getSelected();
     // return new SequentialCommandGroup(
