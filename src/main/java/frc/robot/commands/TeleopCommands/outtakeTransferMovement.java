@@ -5,19 +5,26 @@
 package frc.robot.commands.TeleopCommands;
 
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.outtakeTransfer;
 
 public class outtakeTransferMovement extends CommandBase {
   outtakeTransfer wheelie;
+  private final Timer timer;
 
   public outtakeTransferMovement(outtakeTransfer wheelie) {
     addRequirements(wheelie);
     this.wheelie = wheelie;
+    
+    timer = new Timer();
+    timer.start();
   }
 
   @Override
   public void initialize() {
+    timer.reset();
+
     wheelie.EncoderPositionReturn();
   }
 
@@ -31,6 +38,12 @@ public class outtakeTransferMovement extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return false;
+    if (timer.hasElapsed(1.8)) {
+      return true;
+    }
+    else {
+      return false;
+    }
+    //return false;  
   }
 }

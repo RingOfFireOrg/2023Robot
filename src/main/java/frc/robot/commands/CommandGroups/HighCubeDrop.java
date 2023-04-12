@@ -24,11 +24,11 @@ public class HighCubeDrop extends SequentialCommandGroup {
 
     addCommands
     (
-      new PistonIntakeStatus(pistonIntakeSubsystem, "open"),
-      new PistonIntakeMovement(pistonIntakeSubsystem, "down"),
-      new TransferGrip(outtakeTransferSubsystem, "close"),
-      new ArmAutoMovement(arm, "high"),
       new TransferGrip(outtakeTransferSubsystem, "open"),
+      new PistonIntakeStatus(pistonIntakeSubsystem, "close"),
+      new PistonIntakeMovement(pistonIntakeSubsystem, "down"),
+      new ArmAutoMovement(arm, "high"),
+      new TransferGrip(outtakeTransferSubsystem, "close"),
       new ArmAutoMovement(arm, "reset"),
       new InstantCommand(() -> swerveSubsystem.stopModules())
     );

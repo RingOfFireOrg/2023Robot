@@ -49,7 +49,7 @@ public class outtakeTransfer extends SubsystemBase {
 
   public void wheelieSetSpeedOpen() {
     SmartDashboard.putNumber("Pos Hold!", posHold);
-    while(outtakeMotor.getEncoder().getPosition() - posHold < 10.0) {
+    while(outtakeMotor.getEncoder().getPosition() - posHold < 8.6) {
       outtakeMotor.set(.35);
     }
     outtakeMotor.set(0);
@@ -67,24 +67,27 @@ public class outtakeTransfer extends SubsystemBase {
     EncoderPosition();
     direction = operatorController.getPOV(0);
     bumper = operatorController.getRawAxis(2);
+    SmartDashboard.putNumber("Back bumpah Numbah", operatorController.getRawAxis(2));
 
-    if (bumper > 0.2 || bumper < -0.2) {
-      outtakeMotor.set(.35);
+    if (operatorController.getRawAxis(2) > 0.2 || operatorController.getRawAxis(2) < -0.2) {
+      outtakeMotor.set(operatorController.getRawAxis(2)/2.5);
     }
-    
-    if(direction == 0) {
+    else if (operatorController.getRawAxis(3) > 0.2 || operatorController.getRawAxis(3) < -0.2) {
+      outtakeMotor.set(-operatorController.getRawAxis(3)/2.5);
+    }    
+    else if(direction == 0) {
       //outtakeMotor.set(-.15);
       wheelieSetSpeedClose();
     } 
-
     else if(direction == 180) {
       //outtakeMotor.set(.15);
       wheelieSetSpeedOpen();
     } 
-
     else {
       outtakeMotor.set(0);
     }
+
+
 
     if(direction == 270) {
       wheelieSpinner.set(1);

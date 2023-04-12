@@ -35,6 +35,7 @@ public class TransferGrip extends CommandBase {
     else if (status == "close") {
       wheelie.wheelieSetSpeedClose();
     }
+    
   }
 
   @Override

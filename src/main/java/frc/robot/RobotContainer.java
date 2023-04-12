@@ -348,13 +348,18 @@ private final Command auto3() {
   public Command getAutonomousCommand() {
 
 
-    return new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting4", true);
+    //return new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem);
 
-    // return new SequentialCommandGroup
-    // (
-    //   new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting1", true),
-    //   new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting4", false)
-    //   );
+
+    //return new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting4", true);
+
+    return new SequentialCommandGroup 
+    (
+      new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem),
+      new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting4", true)
+
+    );
+
 
     //return m_chooser.getSelected();
     // return new SequentialCommandGroup(
