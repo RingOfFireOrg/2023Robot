@@ -63,7 +63,10 @@ public boolean getLimitSwitchBoolean() {
     intake.set(Value.kForward);
     return true;
   }
-
+  public boolean off() {
+    intake.set(Value.kOff);
+    return true;
+  }
   public boolean intakeDown() {
     while (intakeEncoder.getPosition() > -22 ) {
       intakeActuator.set(-.4);

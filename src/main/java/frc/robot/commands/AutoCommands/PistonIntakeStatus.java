@@ -24,6 +24,9 @@ public class PistonIntakeStatus extends CommandBase {
     else if (status == "close") {
       CMDStatus = piston.close();
     }
+    else if (status == "off") {
+      CMDStatus = piston.off();
+    }
    }
 
   @Override

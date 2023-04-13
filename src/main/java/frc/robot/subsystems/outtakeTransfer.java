@@ -30,6 +30,9 @@ public class outtakeTransfer extends SubsystemBase {
   public void periodic() {
   }
 
+  public void wheelieMotorSet(double power) {
+    outtakeMotor.set(power);
+  }
 
   public void EncoderPosition() {
     outtakeMotor.getEncoder().setPositionConversionFactor(1.0);

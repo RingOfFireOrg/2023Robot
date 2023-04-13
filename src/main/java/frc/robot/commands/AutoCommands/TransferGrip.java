@@ -5,6 +5,7 @@
 package frc.robot.commands.AutoCommands;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.outtakeTransfer;
 
@@ -25,6 +26,7 @@ public class TransferGrip extends CommandBase {
   @Override
   public void initialize() {
     timer.reset();
+    SmartDashboard.putString("2nd Command", "Not Finshed");
   }
 
   @Override
@@ -35,18 +37,26 @@ public class TransferGrip extends CommandBase {
     else if (status == "close") {
       wheelie.wheelieSetSpeedClose();
     }
-    
+    else if (status == "timedClose") {
+      wheelie.wheelieMotorSet(-0.4);
+    }
+    else if (status == "timedOpen") {
+      wheelie.wheelieMotorSet(0.4);
+    }    
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    SmartDashboard.putString("2nd Command", "Finshed");
+  }
 
   @Override
   public boolean isFinished() {
-    if (timer.hasElapsed(0.6)) {
-      timer.reset();
+    if (timer.hasElapsed(0.3)) {
       return true;
-  }
-  return false;
-  }
+    }
+    else {
+      return false;
+    }
+    }
 }
