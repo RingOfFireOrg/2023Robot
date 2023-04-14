@@ -13,9 +13,15 @@ import frc.robot.commands.TeleopCommands.armJoystickCommand;
 import frc.robot.commands.TeleopCommands.outtakeTransferMovement;
 import frc.robot.commands.TeleopCommands.pistonIntakeGrab;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import frc.robot.commands.CommandGroups.HighCubeDrop;
@@ -35,6 +41,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Auto.AutoBuilder;
 import frc.robot.Auto.FollowTrajectoryPathPlanner;
 import frc.robot.Auto.PIDAutoBalancer;
+import frc.robot.Auto.PPSwerveAutoBuild;
 import frc.robot.Auto.ReversePIDAutoBalancer;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -51,8 +58,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 
-
-
 public class RobotContainer {
 
   public SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
@@ -60,7 +65,11 @@ public class RobotContainer {
   public linearSlideArm armSubsystem = new linearSlideArm();
   public pistonIntake pistonIntakeSubsystem = new pistonIntake();
   public outtakeTransfer outtakeTransferSubsystem = new outtakeTransfer();
-  
+
+  public HashMap<String, Command> eventMap = new HashMap<>();
+
+
+//                                 ADD A REVERSE BAALENCE TO EVENT MAP
 
 
   private final XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -70,10 +79,23 @@ public class RobotContainer {
 
   public RobotContainer() {
     
+    // eventMap.put("ScoreHigh", new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem));
+    // eventMap.put("NormalBalence", new PIDAutoBalancer(swerveSubsystem));
 
+    // // Create the AutoBuilder. This only needs to be created once when robot code starts, not every time you want to create an auto command. A good place to put this is in RobotContainer along with your subsystems.
+    // SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder
+    // (
+    //   swerveSubsystem::getPose, // Pose2d supplier
+    //   swerveSubsystem::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
+    //   DriveConstants.kDriveKinematics,
+    //   new PIDConstants(0.4, 0.0, 0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+    //   new PIDConstants(1.75, 0.0, 0), // PID constants to correct for rotation error (used to create the rotation controller)
+    //   swerveSubsystem::setModuleStates, // Module states consumer used to output to the drive subsystem
+    //   eventMap,
+    //   true, 
+    //   swerveSubsystem 
+    // );
 
-    //m_chooser.setDefaultOption("Autonomus~~~~", AutoBuilder.auto11());
-    //m_chooser.addOption("Charge Station", auto2());
 
 
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCommand(
@@ -129,8 +151,6 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //new JoystickButton(driverController, 2).whenPressed(() -> swerveSubsystem.zeroHeading());
 
-    
-
   }
 
 
@@ -141,57 +161,6 @@ public class RobotContainer {
 
 
 
-
-
-
-
-  private final Command auto1(){
-    //1. Create trajectory settings
-    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-      .65,
-      .55)
-        .setKinematics(DriveConstants.kDriveKinematics);
-
-    // 2. Generate trajectory
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory
-    (
-      new Pose2d(0, 0, new Rotation2d(0)),
-      List.of (new Translation2d(1.63, 0)),
-
-      new Pose2d(1.63, 0, Rotation2d.fromDegrees(0)),
-      trajectoryConfig
-    );
-
-
-
-
-    // 3. Define PID controllers for tracking trajectory
-    PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
-    PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
-    ProfiledPIDController thetaController = new ProfiledPIDController(
-      AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-    // 4. Construct command to follow trajectory
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-      trajectory,
-      swerveSubsystem::getPose,
-      DriveConstants.kDriveKinematics,
-      xController,
-      yController,
-      thetaController,
-      swerveSubsystem::setModuleStates,
-      swerveSubsystem);
-
-     
-
-      // 5. Add some init and wrap-up, and return everything
-    return new SequentialCommandGroup(
-      new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
-      swerveControllerCommand,
-      new WaitCommand(4),
-      new InstantCommand(() -> swerveSubsystem.stopModules()));    
-  }
 
 
 
@@ -230,33 +199,6 @@ public class RobotContainer {
       swerveSubsystem::setModuleStates,
       swerveSubsystem);
 
-      // Trajectory trajectory2 = TrajectoryGenerator.generateTrajectory
-      // (
-      //   new Pose2d(0, 0, new Rotation2d(0)),
-      //   List.of (new Translation2d(0, 1.5)),
-  
-      //   new Pose2d(0, 1.5, Rotation2d.fromDegrees(0)),
-      //   trajectoryConfig
-      // );
-
-      // SwerveControllerCommand questionableShoot = new SwerveControllerCommand(
-      //   trajectory2,
-      //   swerveSubsystem::getPose,
-      //   DriveConstants.kDriveKinematics,
-      //   xController,
-      //   yController,
-      //   thetaController,
-      //   swerveSubsystem::setModuleStates,
-      //   swerveSubsystem);
-  
-
-    // return new SequentialCommandGroup(
-    //   new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory1.getInitialPose())),
-    //   undershoot,
-    //   new WaitCommand(2),
-    //   new PIDAutoBalancer(swerveSubsystem),
-    //   new InstantCommand(() -> swerveSubsystem.stopModules())
-    //   );
 
     //use thiss to test if its actually working
     return new SequentialCommandGroup(
@@ -272,46 +214,6 @@ public class RobotContainer {
 
 
   }
-private final Command auto3() {
-  
-  TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-    .65,
-    .55)
-      .setKinematics(DriveConstants.kDriveKinematics);
-
-  Trajectory trajectory1 = TrajectoryGenerator.generateTrajectory
-  (
-    new Pose2d(0, 0, new Rotation2d(0)),
-    List.of (new Translation2d(2, 0)),
-
-    new Pose2d(1, 0, Rotation2d.fromDegrees(0)),
-    trajectoryConfig
-  );
-
-
-  PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
-  PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
-  ProfiledPIDController thetaController = new ProfiledPIDController(
-    AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-  thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-  // 4. Construct command to follow trajectory
-  SwerveControllerCommand undershoot = new SwerveControllerCommand(
-    trajectory1,
-    swerveSubsystem::getPose,
-    DriveConstants.kDriveKinematics,
-    xController,
-    yController,
-    thetaController,
-    swerveSubsystem::setModuleStates,
-    swerveSubsystem);
-  
-  return new SequentialCommandGroup(
-    new InstantCommand(() -> pistonIntakeSubsystem.intakeDown()),
-    new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory1.getInitialPose())),
-    new InstantCommand(() -> swerveSubsystem.stopModules())
-    );
-}
 
 
 
@@ -329,6 +231,16 @@ private final Command auto3() {
     );
   }
 
+  public Command trajectoryTestNew(SwerveAutoBuilder autoBuilder) {
+
+    ArrayList<PathPlannerTrajectory> pathGroup = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("1meterback",new PathConstraints(1, 1));
+    autoBuilder.fullAuto(pathGroup).schedule();
+    return new InstantCommand();
+  
+  }
+
+
+  
   public Command getAutonomousCommand() {
 
 
@@ -339,11 +251,12 @@ private final Command auto3() {
 
     return new SequentialCommandGroup 
     (
-      new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem),
+      //new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem),
       //new FollowTrajectoryPathPlanner(swerveSubsystem, "3.99Meters", true,1,1)
-      new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting4", true,1,1,false),
+      //new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting4", true,1,1,false),
       //new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting5", false,1,1,false),
       //new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting6", false,1,1,false),
+      //new PPSwerveAutoBuild(swerveSubsystem, armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem,"2meterback",1,1)
 
       new ReversePIDAutoBalancer(swerveSubsystem)
     );

@@ -2,6 +2,7 @@ package frc.robot.Auto;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -25,6 +26,7 @@ public class FollowTrajectoryPathPlanner extends CommandBase {
   boolean reverseVal;
 
   PPSwerveControllerCommand followTrajectoryPathPlannerCommand;
+  SwerveAutoBuilder autobuild;
   private boolean done = false;
 
   /** Creates a new FollowTrajectoryPathPlanner. */
