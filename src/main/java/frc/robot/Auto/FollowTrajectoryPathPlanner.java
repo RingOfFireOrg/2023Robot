@@ -20,23 +20,31 @@ public class FollowTrajectoryPathPlanner extends CommandBase {
   private String pathName;
   private boolean zeroInitialPose;
 
+  double maxVel; 
+  double maxAccel;
+  boolean reverseVal;
+
   PPSwerveControllerCommand followTrajectoryPathPlannerCommand;
   private boolean done = false;
 
   /** Creates a new FollowTrajectoryPathPlanner. */
-  public FollowTrajectoryPathPlanner(SwerveSubsystem driveSubsystem, String pathName, boolean zeroInitialPose) {
+  public FollowTrajectoryPathPlanner(SwerveSubsystem driveSubsystem, String pathName, boolean zeroInitialPose, double maxVel, double maxAccel, boolean reverseVal) {
     this.driveSubsystem = driveSubsystem;
     addRequirements(driveSubsystem);
     
     this.pathName = pathName;
     this.zeroInitialPose = zeroInitialPose;
+    this.maxVel = maxVel;
+    this.maxAccel = maxAccel;
+    this.reverseVal = reverseVal;
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     // Makes a trajectory                                                     
-    PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath(pathName,1,1, false);
+    PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath(pathName,maxVel,maxAccel,reverseVal);
 
     // Resets the pose of the robot if true (should generally only be true for the first path of an auto)
     if (zeroInitialPose) {

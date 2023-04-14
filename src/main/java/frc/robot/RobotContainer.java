@@ -35,6 +35,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Auto.AutoBuilder;
 import frc.robot.Auto.FollowTrajectoryPathPlanner;
 import frc.robot.Auto.PIDAutoBalancer;
+import frc.robot.Auto.ReversePIDAutoBalancer;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -73,7 +74,6 @@ public class RobotContainer {
 
     //m_chooser.setDefaultOption("Autonomus~~~~", AutoBuilder.auto11());
     //m_chooser.addOption("Charge Station", auto2());
-    SmartDashboard.putData("Goooheeeheeheehee",m_chooser);
 
 
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCommand(
@@ -316,30 +316,14 @@ private final Command auto3() {
 
 
 
-  public Command spliceAutoTest() {
-    return new SequentialCommandGroup
-    (
-      new FollowTrajectoryPathPlanner(swerveSubsystem, "SpliceTestPart1", true),
-      new FollowTrajectoryPathPlanner(swerveSubsystem, "SpliceTestPart2", false)
-    );
-  }
   
-  
-  public Command orderTest() {
-    return new SequentialCommandGroup
-    (
-      new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem),
-      new FollowTrajectoryPathPlanner(swerveSubsystem, "SpliceTestPart2", false)
-    );
-  }
+
 
   public Command midAutoHigh() {
     return new SequentialCommandGroup
     (
       new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem),
-      new FollowTrajectoryPathPlanner(swerveSubsystem, "MidAutoPart1", true),
-      new FollowTrajectoryPathPlanner(swerveSubsystem, "MidAutoPart2", false),
-      new FollowTrajectoryPathPlanner(swerveSubsystem, "MidAutoPart3", false),
+
       new PIDAutoBalancer(swerveSubsystem)
 
     );
@@ -356,9 +340,15 @@ private final Command auto3() {
     return new SequentialCommandGroup 
     (
       new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem),
-      new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting4", true)
+      //new FollowTrajectoryPathPlanner(swerveSubsystem, "3.99Meters", true,1,1)
+      new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting4", true,1,1,false),
+      //new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting5", false,1,1,false),
+      //new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting6", false,1,1,false),
 
+      new ReversePIDAutoBalancer(swerveSubsystem)
     );
+
+    //return auto2();
 
 
     //return m_chooser.getSelected();

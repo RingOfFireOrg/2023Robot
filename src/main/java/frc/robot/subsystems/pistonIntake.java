@@ -122,21 +122,21 @@ public boolean getLimitSwitchBoolean() {
     else {
       intakeActuator.stopMotor();
     }
-    if (yButton) {
-      while ( intakeEncoder.getPosition() < -12) {
-        intakeActuator.set(.4);
-      }
-      intakeActuator.set(0);
+    // if (yButton) {
+    //   while ( intakeEncoder.getPosition() < -12) {
+    //     intakeActuator.set(.4);
+    //   }
+    //   intakeActuator.set(0);
 
-      //intakeActuator.set(.2);
-    }
-    else if (aButton) {
-      while ( intakeEncoder.getPosition() > 5) {
-        intakeActuator.set(-.4);
-      }
-      intakeActuator.set(0);
+    //   //intakeActuator.set(.2);
+    // }
+    // else if (aButton) {
+    //   while ( intakeEncoder.getPosition() > 5) {
+    //     intakeActuator.set(-.4);
+    //   }
+    //   intakeActuator.set(0);
 
-    }
+    // }
     SmartDashboard.putNumber("Right Stick Y", rightStickY);
 
   

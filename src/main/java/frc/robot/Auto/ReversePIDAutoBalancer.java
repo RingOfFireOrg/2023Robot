@@ -10,12 +10,12 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 
 
-public class PIDAutoBalancer extends CommandBase {
+public class ReversePIDAutoBalancer extends CommandBase {
     private final SwerveSubsystem drivetrainSubsystem;
     private final PIDController pidController;
     private final Timer timer;
 
-    public PIDAutoBalancer(SwerveSubsystem drivetrainSubsystem) {
+    public ReversePIDAutoBalancer(SwerveSubsystem drivetrainSubsystem) {
         this.drivetrainSubsystem = drivetrainSubsystem;
         this.pidController = new PIDController(
                 /*AutoConstants.PITCH_P*/ 0.045,
@@ -40,8 +40,8 @@ public class PIDAutoBalancer extends CommandBase {
                 pidController.calculate(
                         drivetrainSubsystem.getPitchAsRotation2d().getDegrees(), 0), -.6, .6);
 
-        if (Math.abs(drivetrainSubsystem.getPose().getRotation().getDegrees()) >= 90.0) {
-            val = -val;
+        if (-Math.abs(drivetrainSubsystem.getPose().getRotation().getDegrees()) >= 90.0) {
+            val = val;
             SmartDashboard.putNumber("Auto Val", val);
         }
         drivetrainSubsystem.drive(DriveConstants.kDriveKinematics.toSwerveModuleStates(
