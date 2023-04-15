@@ -183,16 +183,16 @@ public class SwerveJoystickCommand extends CommandBase {
         else if (xSpdFunctionRobot.get() >= 0.1 || xSpdFunctionRobot.get() <= -0.1 || ySpdFunctionRobot.get() >= 0.1 || ySpdFunctionRobot.get() <= -0.1)
         {
             if(aButton.get() == true) {
-                speedDivide = 2;
+                speedDivide = 10;
             }
             if(xButton.get() == true) {
-                speedDivide = 4;
+                speedDivide = 10;
             }
             if(bButton.get() == true) {
-                speedDivide = 1.3333;
+                speedDivide = 10;
             }
             if(yButton.get() == true) {
-                speedDivide = 1;
+                speedDivide = 10;
             }
 
             // 1. Get real-time joystick inputs

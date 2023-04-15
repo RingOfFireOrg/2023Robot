@@ -13,9 +13,14 @@ import frc.robot.commands.TeleopCommands.armJoystickCommand;
 import frc.robot.commands.TeleopCommands.outtakeTransferMovement;
 import frc.robot.commands.TeleopCommands.pistonIntakeGrab;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import frc.robot.commands.CommandGroups.HighCubeDrop;
@@ -35,7 +40,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Auto.AutoBuilder;
 import frc.robot.Auto.FollowTrajectoryPathPlanner;
 import frc.robot.Auto.PIDAutoBalancer;
+import frc.robot.Auto.PPSwerveAutoBuilder;
 import frc.robot.Auto.ReversePIDAutoBalancer;
+import frc.robot.Auto.SwerveAutoBuilder2;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -55,11 +62,16 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class RobotContainer {
 
-  public SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  public SwerveSubsystem swerveSubsystem = new SwerveSubsystem(
+
+  );
   public LimeLight limeLightSubsystem = new LimeLight();
   public linearSlideArm armSubsystem = new linearSlideArm();
   public pistonIntake pistonIntakeSubsystem = new pistonIntake();
   public outtakeTransfer outtakeTransferSubsystem = new outtakeTransfer();
+
+  public SwerveAutoBuilder2 a;
+
   
 
 
@@ -199,7 +211,7 @@ public class RobotContainer {
 
 
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-      .65,
+      .4,
       .55)
         .setKinematics(DriveConstants.kDriveKinematics);
 
@@ -224,8 +236,8 @@ public class RobotContainer {
       trajectory1,
       swerveSubsystem::getPose,
       DriveConstants.kDriveKinematics,
-      xController,
-      yController,
+      new PIDController(2, 0, 0),
+      new PIDController(2, 0, 0),
       thetaController,
       swerveSubsystem::setModuleStates,
       swerveSubsystem);
@@ -262,7 +274,7 @@ public class RobotContainer {
     return new SequentialCommandGroup(
       new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory1.getInitialPose())),
       undershoot,
-      new PIDAutoBalancer(swerveSubsystem),
+      //new PIDAutoBalancer(swerveSubsystem),
       // new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory2.getInitialPose())),
       // new WaitCommand(10),
       // questionableShoot,
@@ -319,12 +331,18 @@ private final Command auto3() {
   
 
 
-  public Command midAutoHigh() {
+  public Command oneMeter() {
+    HashMap<String, Command> eventMap = new HashMap<>();
+    eventMap.put("ScoreHigh", new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem));
+    
+    SwerveAutoBuilder m_trajectory =  a.newAutoBuilder(swerveSubsystem,eventMap);
+    ArrayList<PathPlannerTrajectory> pathGroup = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("1meter",new PathConstraints(1, 1));
+
     return new SequentialCommandGroup
     (
-      new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem),
-
-      new PIDAutoBalancer(swerveSubsystem)
+      //new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem),
+      m_trajectory.fullAuto(pathGroup)
+      //new PIDAutoBalancer(swerveSubsystem)
 
     );
   }
@@ -337,17 +355,22 @@ private final Command auto3() {
 
     //return new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting4", true);
 
+    // public SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+    // public LimeLight limeLightSubsystem = new LimeLight();
+    // public linearSlideArm armSubsystem = new linearSlideArm();
+    // public pistonIntake pistonIntakeSubsystem = new pistonIntake();
+    // public outtakeTransfer outtakeTransferSubsystem = new outtakeTransfer();
+
     return new SequentialCommandGroup 
     (
-      //new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem),
       //new FollowTrajectoryPathPlanner(swerveSubsystem, "3.99Meters", true,1,1)
       new FollowTrajectoryPathPlanner(swerveSubsystem, "3meter7", true,1,1,false)
+      //new PPSwerveAutoBuilder(swerveSubsystem, armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, "1meter", 1, 1)
       //new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting5", false,1,1,false),
       //new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting6", false,1,1,false),
 
       //new ReversePIDAutoBalancer(swerveSubsystem)
     );
-
     //return auto2();
 
 

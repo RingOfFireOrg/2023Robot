@@ -5,13 +5,35 @@
 package frc.robot;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.linearSlideArm;
+import frc.robot.subsystems.outtakeTransfer;
+import frc.robot.subsystems.pistonIntake;
 import frc.robot.Auto.AutoBuilder;
+import frc.robot.Auto.FollowTrajectoryPathPlanner;
+import frc.robot.Auto.SwerveAutoBuilder2;
+import frc.robot.commands.CommandGroups.HighCubeDrop;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -24,7 +46,13 @@ public class Robot extends TimedRobot {
   private static SendableChooser<AutoModes> autoChooser;
   private AutoModes previousSelectedAuto;
   SwerveSubsystem swerveSubsystem;
+  
   private AutoBuilder autoBuilder;
+
+  linearSlideArm armSubsystem;
+  pistonIntake pistonIntakeSubsystem ;
+  outtakeTransfer outtakeTransferSubsystem;
+  SwerveAutoBuilder2 builder;
 
 
   public enum AutoModes {
@@ -33,6 +61,21 @@ public class Robot extends TimedRobot {
   
   @Override
   public void robotInit() {
+    // HashMap<String, Command> eventMap = new HashMap<>();
+    // eventMap.put("ScoreHigh", new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem));
+    
+    // SwerveAutoBuilder m_trajectory =  builder.newAutoBuilder(swerveSubsystem,eventMap);
+    // ArrayList<PathPlannerTrajectory> pathGroup = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("1meter",new PathConstraints(5, 5));
+
+    // // Create and push Field2d to SmartDashboard.
+    // Field2d m_field = new Field2d();
+    // SmartDashboard.putData(m_field);
+
+    // // Push the trajectory to Field2d.
+    // m_field.getObject("traj").setTrajectory(m_trajectory.fullAuto(pathGroup));
+    
+
+
     //     Thread m_visionThread = new Thread(
     //     () -> {
     //       UsbCamera camera = CameraServer.startAutomaticCapture();
@@ -123,7 +166,11 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    //SmartDashboard.putNumber("Pose X", swerveSubsystem.getPose().getX());
+    //SmartDashboard.putNumber("Pose", swerveSubsystem.);
+
+  }
 
   @Override
   public void teleopInit() {

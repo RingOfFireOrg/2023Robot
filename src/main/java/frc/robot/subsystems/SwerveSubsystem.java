@@ -12,13 +12,13 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj.SerialPort;
-
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -59,19 +59,29 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
     
     private final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
+    private final SwerveDrivePoseEstimator odometer2 = new SwerveDrivePoseEstimator(
+            DriveConstants.kDriveKinematics, 
+            getRotation2d(),
+            getSwerveModulePosition(),
+            new Pose2d(0, 0, new Rotation2d()));
 
-
+    private final Field2d m_field = new Field2d();
 
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(
         DriveConstants.kDriveKinematics, getRotation2d(),
         getSwerveModulePosition(),
-        new Pose2d(1, 3, new Rotation2d()));
+        new Pose2d(0, 0, new Rotation2d()));
 
-    private final PIDController yController = new PIDController(AutoConstants.kPYController, 0.0, 0.0);
-    private final PIDController xController = new PIDController(AutoConstants.kPXController, 0.0, 0.0);
-    private final PIDController thetaController = new PIDController(AutoConstants.kPThetaController,0.0, 0.0);
+
+    private final PIDController yController = new PIDController(AutoConstants.kPYController /* 0.75 */, 0.0, 0.0);
+    private final PIDController xController = new PIDController(AutoConstants.kPXController/* 0.75 */, 0.0, 0.0);
+    private final PIDController thetaController = new PIDController(AutoConstants.kPThetaController/* 1.75 */,0.0, 0.0);
+    public SwerveModulePosition[] swerveModulePosition;
 
     public SwerveSubsystem() {
+        SmartDashboard.putData("Field", m_field);
+        //private final SwerveDrivePoseEstimator odometer2;
+
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
@@ -147,6 +157,10 @@ public class SwerveSubsystem extends SubsystemBase {
         return odometer.getPoseMeters();
     }
 
+    public Pose2d getPose2() {
+        return odometer2.getEstimatedPosition();
+    }
+
     void setModuleStates2(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         frontLeft.setDesiredState(desiredStates[0]);
@@ -160,11 +174,38 @@ public class SwerveSubsystem extends SubsystemBase {
     }
     public void resetOdometry(Pose2d pose) {
         odometer.resetPosition(getRotation2d(),getSwerveModulePosition(),pose);
+        SmartDashboard.putNumber(" reset dometer check", odometer.getPoseMeters().getX());
     }
+
+    public void resetOdometry3(Pose2d pose) {
+        odometer.resetPosition(Rotation2d.fromDegrees(gyro.getYaw()),getSwerveModulePosition(),pose);
+    }
+
+    public void resetOdometry4(Pose2d pose) {
+        odometer.resetPosition(Rotation2d.fromDegrees(getHeading()),getSwerveModulePosition(),pose);
+    }
+
     public boolean resetOdometry2(Pose2d pose) {
         odometer.resetPosition(getRotation2d(),getSwerveModulePosition(),pose);
         return true;
     }
+    public Rotation2d getGyroscopeHeading() {
+        return Rotation2d.fromDegrees(gyro.getYaw());
+    }
+    public void resetOdometerNew(Pose2d pose) {
+        updateSwerveModulePositions();
+        odometer2.resetPosition(getGyroscopeHeading(), swerveModulePosition, pose);
+    }
+    
+
+    public void updateSwerveModulePositions() {
+        swerveModulePosition[0] = frontLeft.getPosition();
+        swerveModulePosition[1] = frontRight.getPosition();
+        swerveModulePosition[2] = backLeft.getPosition();
+        swerveModulePosition[3] = backRight.getPosition();
+    }
+
+
     public PIDController getxController() {
         return xController;
     }
@@ -183,10 +224,15 @@ public class SwerveSubsystem extends SubsystemBase {
 
 
     public void periodic() {
+        
         odometer.update(getRotation2d(), getSwerveModulePosition());
-        SmartDashboard.putNumber("Pitch in random file idk what this is ", gyro.getPitch());
-        SmartDashboard.putNumber("Roll in random file idk what this is ", gyro.getRoll());
-        SmartDashboard.putNumber("Yaw in random file idk what this is ", gyro.getYaw());
+        m_field.setRobotPose(odometer.getPoseMeters());
+
+        SmartDashboard.putNumber("Get Pose X",odometer.getPoseMeters().getX());
+
+        // SmartDashboard.putNumber("Pitch", gyro.getPitch());
+        // SmartDashboard.putNumber("Roll", gyro.getRoll());
+        // SmartDashboard.putNumber("Yaw ", gyro.getYaw());
         
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putNumber("Robot Theta", getPose().getRotation().getDegrees());
@@ -207,6 +253,23 @@ public class SwerveSubsystem extends SubsystemBase {
         backLeft.setDesiredState(desiredStates[2]);
         backRight.setDesiredState(desiredStates[3]);
     }
+    
+    public void setModuleStates3(SwerveModuleState[] desiredStates) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        frontLeft.setDesiredState3(desiredStates[0]);
+        frontRight.setDesiredState3(desiredStates[1]);
+        backLeft.setDesiredState3(desiredStates[2]);
+        backRight.setDesiredState3(desiredStates[3]);
+    }
+
+    public void drive3(SwerveModuleState... desiredStates) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        frontLeft.setDesiredState(desiredStates[0]);
+        frontRight.setDesiredState(desiredStates[1]);
+        backLeft.setDesiredState(desiredStates[2]);
+        backRight.setDesiredState(desiredStates[3]);
+    }
+
 
     public SwerveModulePosition[] getSwerveModulePosition() {
         return new SwerveModulePosition[] {

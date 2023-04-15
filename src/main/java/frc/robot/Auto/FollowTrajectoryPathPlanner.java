@@ -44,7 +44,7 @@ public class FollowTrajectoryPathPlanner extends CommandBase {
   @Override
   public void initialize() {
     // Makes a trajectory                                                     
-    PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath(pathName,maxVel,maxAccel,reverseVal);
+    PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath("1meter",maxVel,maxAccel,reverseVal);
 
     // Resets the pose of the robot if true (should generally only be true for the first path of an auto)
     if (zeroInitialPose) {
