@@ -14,7 +14,7 @@ public final class Constants {
         public static final double kEncoderCPR = 2048;
 
         public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
-        public static final double kDriveMotorGearRatio = 1 / 8.14; //L1
+        public static final double kDriveMotorGearRatio = 1 / 6.75; //L1
         public static final double kTurningMotorGearRatio = 1 / (150/7);
         public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
         public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
@@ -27,7 +27,7 @@ public final class Constants {
 
         public static final double kTrackWidth = 0.5334; //meters //Units.inchesToMeters(21);
         // Distance between right and left wheels
-        public static final double kWheelBase = 0.6477;//meters //Units.inchesToMeters(25.5);
+        public static final double kWheelBase = 0.69; //meters //Units.inchesToMeters(25.5);
         // Distance between front and back wheels
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
                 new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
@@ -79,7 +79,7 @@ public final class Constants {
         public static final double kBackRightDriveAbsoluteEncoderOffsetRad = (0-0.12732+0.069029); //offset in radians #9
         // 9
 
-        public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
+        public static final double kPhysicalMaxSpeedMetersPerSecond = 4.267;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
         public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond ; //change denomenator
