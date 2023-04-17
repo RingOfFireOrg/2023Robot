@@ -52,7 +52,7 @@ public class TransferGrip extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    if (timer.hasElapsed(0.3)) {
+    if (timer.hasElapsed(0.2)) {
       return true;
     }
     else {

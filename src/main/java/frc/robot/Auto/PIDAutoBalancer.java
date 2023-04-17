@@ -51,7 +51,7 @@ public class PIDAutoBalancer extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (timer.hasElapsed(0.70)) {
+        if (timer.hasElapsed(0.50)) {
             timer.reset();
             return Math.abs(drivetrainSubsystem.getPitchAsRotation2d().getDegrees()) <= 1.0;
         }

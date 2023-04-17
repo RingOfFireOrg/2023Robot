@@ -32,16 +32,16 @@ public class HighCubeDrop extends SequentialCommandGroup {
       // new TransferGrip(outtakeTransferSubsystem, "close"),
       // new ArmAutoMovement(arm, "reset"),
       // new InstantCommand(() -> swerveSubsystem.stopModules())
-
-      new TransferGrip(outtakeTransferSubsystem, "timedOpen"),
-      
+     // new PistonIntakeMovement(pistonIntakeSubsystem, "off"),
+      new TransferGrip(outtakeTransferSubsystem, "timedOpen").alongWith(new WaitCommand(0.5)),
 
 
       //new PistonIntakeMovement(pistonIntakeSubsystem, "off"),
+      //new PistonIntakeMovement(pistonIntakeSubsystem, "downTimed"),
 
-      new HighCubeUpParrallelDeadline(arm, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem),
-      new TransferGrip(outtakeTransferSubsystem, "close").alongWith(new WaitCommand(0.1)),
-      new ArmAutoMovement(arm, "reset")
+      new HighCubeUpParrallelDeadline(arm, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem)
+      ,new TransferGrip(outtakeTransferSubsystem, "close").alongWith(new WaitCommand(0.1))
+      ,new ArmAutoMovement(arm, "reset")
 
 
       

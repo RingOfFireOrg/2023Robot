@@ -40,8 +40,8 @@ public class ReversePIDAutoBalancer extends CommandBase {
                 pidController.calculate(
                         drivetrainSubsystem.getPitchAsRotation2d().getDegrees(), 0), -.6, .6);
 
-        if (-Math.abs(drivetrainSubsystem.getPose().getRotation().getDegrees()) >= 90.0) {
-            val = val;
+        if (Math.abs(drivetrainSubsystem.getPose().getRotation().getDegrees()) >= 90.0) {
+            val = -val;
             SmartDashboard.putNumber("Auto Val", val);
         }
         drivetrainSubsystem.drive(DriveConstants.kDriveKinematics.toSwerveModuleStates(
@@ -51,7 +51,7 @@ public class ReversePIDAutoBalancer extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (timer.hasElapsed(0.70)) {
+        if (timer.hasElapsed(0.50)) {
             timer.reset();
             return Math.abs(drivetrainSubsystem.getPitchAsRotation2d().getDegrees()) <= 1.0;
         }

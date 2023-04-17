@@ -35,7 +35,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Auto.AutoBuilder;
 import frc.robot.Auto.FollowTrajectoryPathPlanner;
 import frc.robot.Auto.PIDAutoBalancer;
+import frc.robot.Auto.PPSwerveAutoBuilder;
 import frc.robot.Auto.ReversePIDAutoBalancer;
+import frc.robot.Auto.newBalance;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -339,13 +341,19 @@ private final Command auto3() {
 
     return new SequentialCommandGroup 
     (
-      //new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem),
-      //new FollowTrajectoryPathPlanner(swerveSubsystem, "3.99Meters", true,1,1)
-      new FollowTrajectoryPathPlanner(swerveSubsystem, "3meter7", true,1,1,false)
+      //new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem)
+      
+      //new FollowTrajectoryPathPlanner(swerveSubsystem, "ihopethisworkslol", true,1,1,false)
+      //new FollowTrajectoryPathPlanner(swerveSubsystem, "3meter7", true,1,1,false),
       //new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting5", false,1,1,false),
       //new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting6", false,1,1,false),
 
+      new PPSwerveAutoBuilder(swerveSubsystem, armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, "ihopethisworkslol", 0, 0)
+      //new PIDAutoBalancer(swerveSubsystem)
       //new ReversePIDAutoBalancer(swerveSubsystem)
+      //,new newBalance(swerveSubsystem)
+      //,new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem)
+
     );
 
     //return auto2();

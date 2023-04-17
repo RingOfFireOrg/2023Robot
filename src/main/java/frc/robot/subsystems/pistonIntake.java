@@ -81,7 +81,9 @@ public boolean getLimitSwitchBoolean() {
     intakeActuator.set(0);
     return true;
   }
-
+  public void wheelieMotorSet(double power) {
+    intakeActuator.set(power);
+  }
 
   public void joystickControl() {
 
