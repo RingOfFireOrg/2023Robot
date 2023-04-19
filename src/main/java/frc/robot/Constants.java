@@ -24,7 +24,20 @@ public final class Constants {
     }
 
     public static final class DriveConstants {
-
+        public static final double DriveMotor_P = 2.0; 
+        public static final double DriveMotor_I = 0.0; 
+        public static final double DriveMotor_D = 0.0; 
+        public static final double DRIVE_MOTOR_KS = 0; 
+        public static final double DRIVE_MOTOR_KV = 0;
+        public static final double DRIVE_MOTOR_KA = 0; 
+    
+        public static final double AzimuthMotor_P = 3.0;
+        public static final double AzimuthMotor_I = 0.0; 
+        public static final double AzimuthMotor_D = 0.0;
+        public static final double AZIMUTH_MOTOR_KS = 0; 
+        public static final double AZIMUTH_MOTOR_KV = 0; 
+        public static final double AZIMUTH_MOTOR_KA = 0; 
+    
         public static final double kTrackWidth = 0.5334; //meters //Units.inchesToMeters(21);
         // Distance between right and left wheels
         public static final double kWheelBase = 0.69; //meters //Units.inchesToMeters(25.5);
