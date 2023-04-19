@@ -38,10 +38,10 @@ public class TransferGrip extends CommandBase {
       wheelie.wheelieSetSpeedClose();
     }
     else if (status == "timedClose") {
-      wheelie.wheelieMotorSet(-0.4);
+      wheelie.wheelieMotorSet(-0.7);
     }
     else if (status == "timedOpen") {
-      wheelie.wheelieMotorSet(0.4);
+      wheelie.wheelieMotorSet(0.7);
     }    
   }
 
@@ -52,7 +52,7 @@ public class TransferGrip extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    if (timer.hasElapsed(0.2)) {
+    if (timer.hasElapsed(0.3)) {
       return true;
     }
     else {

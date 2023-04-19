@@ -154,14 +154,14 @@ public class linearSlideArm extends SubsystemBase {
       if(encoder.getDistance() > 38.15) {
         extender.set(0);
       } else {
-        extender.set(stickVal/1.6);
+        extender.set(stickVal/1.4);
       }
       
       //encoderPosition = encoder.getDistance();
     } 
     else if(stickVal > 0.1) {
       //moving down
-      extender.set(stickVal/1.4);
+      extender.set(stickVal/1.8);
       //encoderPosition = encoder.getDistance();
 
     }
