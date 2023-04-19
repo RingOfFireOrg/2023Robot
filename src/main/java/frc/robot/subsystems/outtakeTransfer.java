@@ -51,7 +51,7 @@ public class outtakeTransfer extends SubsystemBase {
 
   public void wheelieSetSpeedOpen() {
     SmartDashboard.putNumber("Pos Hold!", posHold);
-    while(outtakeMotor.getEncoder().getPosition() - posHold < 12.7) {
+    while(outtakeMotor.getEncoder().getPosition() - posHold < 9.5) {
       outtakeMotor.set(.35);
     }
     outtakeMotor.set(0);
