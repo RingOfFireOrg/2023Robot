@@ -82,12 +82,12 @@ public class outtakeTransfer extends SubsystemBase {
       outtakeMotor.set(-operatorController.getRawAxis(3)/4);
     }    
     else if(direction == 0) {
-      //outtakeMotor.set(-.15);
-      wheelieSetSpeedClose();
+      outtakeMotor.set(-.35);
+      //wheelieSetSpeedClose();
     } 
     else if(direction == 180) {
-      //outtakeMotor.set(.15);
-      wheelieSetSpeedOpen();
+      outtakeMotor.set(.35);
+      //wheelieSetSpeedOpen();
     } 
     else {
       outtakeMotor.set(0);

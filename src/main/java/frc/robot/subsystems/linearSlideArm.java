@@ -8,16 +8,22 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController;
+import edu.wpi.first.wpilibj.motorcontrol.Victor;
+import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.OIConstants;
 
+
 public class linearSlideArm extends SubsystemBase {
   /** Creates a new linearSlideArm. */
-  private CANSparkMax extenderMotor1;
-  private CANSparkMax extenderMotor2;
-  public RelativeEncoder extenderEncoder1;
-  public RelativeEncoder extenderEncoder2;
+  //private CANSparkMax extenderMotor1;
+  //private CANSparkMax extenderMotor2;
+  private VictorSP extenderMotor1;
+  private VictorSP extenderMotor2;
+  //public RelativeEncoder extenderEncoder1;
+  //public RelativeEncoder extenderEncoder2;
   public double extender1Position;
   public double extender2Position;
   public DutyCycleEncoder encoder;
@@ -30,10 +36,12 @@ public class linearSlideArm extends SubsystemBase {
 
 
   public linearSlideArm() {
-    extenderMotor1 = new CANSparkMax(14, MotorType.kBrushless);
-    extenderMotor2 = new CANSparkMax(15, MotorType.kBrushless);
-    extenderMotor1.setIdleMode(IdleMode.kBrake);
-    extenderMotor2.setIdleMode(IdleMode.kBrake);
+    //extenderMotor1 = new CANSparkMax(14, MotorType.kBrushless);
+    //extenderMotor2 = new CANSparkMax(15, MotorType.kBrushless);
+    //extenderMotor1.setIdleMode(IdleMode.kBrake);
+    //extenderMotor2.setIdleMode(IdleMode.kBrake);
+    extenderMotor1 = new VictorSP(8);
+    extenderMotor2 = new VictorSP(9);
     extender = new MotorControllerGroup(extenderMotor1, extenderMotor2);
     encoder = new DutyCycleEncoder(0);
     encoder.setDistancePerRotation(4.0);
