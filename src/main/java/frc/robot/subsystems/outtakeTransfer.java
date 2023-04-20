@@ -13,16 +13,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class outtakeTransfer extends SubsystemBase {
-  public CANSparkMax wheelieSpinner;
+  //public CANSparkMax wheelieSpinner;
   public CANSparkMax outtakeMotor;
   double direction;
   private final XboxController operatorController = new XboxController(1);
   double posHold;
-  double bumper;
+  double leftBumper;
+  double rightBumper;
 
   public outtakeTransfer() {
     outtakeMotor = new CANSparkMax(17, MotorType.kBrushless);
-    wheelieSpinner = new CANSparkMax(18, MotorType.kBrushless);
+    //wheelieSpinner = new CANSparkMax(18, MotorType.kBrushless);
   }
 
   @Override
@@ -66,20 +67,21 @@ public class outtakeTransfer extends SubsystemBase {
   }
 
   public void wheelMovement() {
-    
-    boolean yButton = operatorController.getRawButton(4);
-    boolean aButton = operatorController.getRawButton(1);
 
     EncoderPosition();
     direction = operatorController.getPOV(0);
-    bumper = operatorController.getRawAxis(2);
-    SmartDashboard.putNumber("Back bumpah Numbah", operatorController.getRawAxis(2));
+    leftBumper = operatorController.getRawAxis(2);
+    rightBumper = operatorController.getRawAxis(3);
 
-    if (operatorController.getRawAxis(2) > 0.2 || operatorController.getRawAxis(2) < -0.2) {
-      outtakeMotor.set(operatorController.getRawAxis(2)/4);
+
+
+    SmartDashboard.putNumber("Back bumpah Numbah", leftBumper);
+    
+    if (leftBumper > 0.2 || leftBumper < -0.2) {
+      outtakeMotor.set(leftBumper/4);
     }
-    else if (operatorController.getRawAxis(3) > 0.2 || operatorController.getRawAxis(3) < -0.2) {
-      outtakeMotor.set(-operatorController.getRawAxis(3)/4);
+    else if (rightBumper > 0.2 || rightBumper < -0.2) {
+      outtakeMotor.set(-rightBumper/4);
     }    
     else if(direction == 0) {
       outtakeMotor.set(-.35);
@@ -95,15 +97,15 @@ public class outtakeTransfer extends SubsystemBase {
 
 
 
-    if(operatorController.getRawButton(1) == true) {
-      wheelieSpinner.set(0.3);
-    } 
-    else if(operatorController.getRawButton(4) == true) {
-      wheelieSpinner.set(-.3);
-    } 
-    else {
-      wheelieSpinner.set(0);
-    }
+    // if(operatorController.getRawButton(1) == true) {
+    //   wheelieSpinner.set(0.3);
+    // } 
+    // else if(operatorController.getRawButton(4) == true) {
+    //   wheelieSpinner.set(-.3);
+    // } 
+    // else {
+    //   wheelieSpinner.set(0);
+    // }
   }
 }
 
