@@ -2,6 +2,7 @@ package frc.robot.commands.CommandGroups;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.AutoCommands.ArmAutoMovement;
 import frc.robot.commands.AutoCommands.PistonIntakeMovement;
 import frc.robot.commands.AutoCommands.PistonIntakeStatus;
@@ -24,13 +25,28 @@ public class HighCubeDrop extends SequentialCommandGroup {
 
     addCommands
     (
-      new PistonIntakeStatus(pistonIntakeSubsystem, "open"),
-      new PistonIntakeMovement(pistonIntakeSubsystem, "down"),
-      new TransferGrip(outtakeTransferSubsystem, "close"),
-      new ArmAutoMovement(arm, "high"),
-      new TransferGrip(outtakeTransferSubsystem, "open"),
-      new ArmAutoMovement(arm, "reset"),
-      new InstantCommand(() -> swerveSubsystem.stopModules())
+      // new TransferGrip(outtakeTransferSubsystem, "open"),
+      // new PistonIntakeStatus(pistonIntakeSubsystem, "close"),
+      // new PistonIntakeMovement(pistonIntakeSubsystem, "down"),
+      // new ArmAutoMovement(arm, "high"),
+      // new TransferGrip(outtakeTransferSubsystem, "close"),
+      // new ArmAutoMovement(arm, "reset"),
+      // new InstantCommand(() -> swerveSubsystem.stopModules())
+     // new PistonIntakeMovement(pistonIntakeSubsystem, "off"),
+      new TransferGrip(outtakeTransferSubsystem, "open").alongWith(new WaitCommand(0.5)),
+
+
+      new PistonIntakeMovement(pistonIntakeSubsystem, "off"),
+      new PistonIntakeMovement(pistonIntakeSubsystem, "downTimed"),
+
+      new HighCubeUpParrallelDeadline(arm, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem)
+      ,new TransferGrip(outtakeTransferSubsystem, "close").alongWith(new WaitCommand(0.2))
+      //new TransferGrip(outtakeTransferSubsystem, "timedClose").alongWith(new WaitCommand(0.5))
+
+      ,new ArmAutoMovement(arm, "reset")
+
+
+      
     );
   }
 }

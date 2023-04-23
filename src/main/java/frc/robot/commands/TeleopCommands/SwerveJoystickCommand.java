@@ -180,7 +180,7 @@ public class SwerveJoystickCommand extends CommandBase {
             // 6. Output each module states to wheels
             swerveSubsystem.setModuleStates(moduleStates);
         }
-        else 
+        else if (xSpdFunctionRobot.get() >= 0.1 || xSpdFunctionRobot.get() <= -0.1 || ySpdFunctionRobot.get() >= 0.1 || ySpdFunctionRobot.get() <= -0.1)
         {
             if(aButton.get() == true) {
                 speedDivide = 2;
@@ -197,8 +197,8 @@ public class SwerveJoystickCommand extends CommandBase {
 
             // 1. Get real-time joystick inputs
             double xSpeed = xSpdFunctionRobot.get()/speedDivide;
-            //double ySpeed = ySpdFunctionRobot.get()/speedDivide;
-            double ySpeed = 0;
+            double ySpeed = ySpdFunctionRobot.get()/speedDivide;
+            //double ySpeed = 0;
 
             double turningSpeed = turningSpdFunctionLeft.get() - turningSpdFunctionRight.get();
 
@@ -225,6 +225,38 @@ public class SwerveJoystickCommand extends CommandBase {
             // 6. Output each module states to wheels
             swerveSubsystem.setModuleStates(moduleStates);
 
+        }
+        else {
+            // 1. Get real-time joystick inputs
+            //double xSpeed = xSpdFunctionRobot.get()/speedDivide;
+            //double ySpeed = ySpdFunctionRobot.get()/speedDivide;
+            double xSpeed = 0;
+            double ySpeed = 0;
+
+            double turningSpeed = turningSpdFunctionLeft.get() - turningSpdFunctionRight.get();
+
+            // 2. Apply deadband
+            xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;
+            ySpeed = Math.abs(ySpeed) > OIConstants.kDeadband ? ySpeed : 0.0;
+            turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
+
+            // 3. Make the driving smoother
+            xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+            ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+            turningSpeed = turningLimiter.calculate(turningSpeed)
+                    * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+
+            // 4. Construct desired chassis speeds
+            ChassisSpeeds chassisSpeeds;
+            SmartDashboard.putNumber("Rotation 2d Number", swerveSubsystem.getRotation2dButaDouble());
+
+            chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
+
+            // 5. Convert chassis speeds to individual module states
+            SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+
+            // 6. Output each module states to wheels
+            swerveSubsystem.setModuleStates(moduleStates); 
         }
         
 

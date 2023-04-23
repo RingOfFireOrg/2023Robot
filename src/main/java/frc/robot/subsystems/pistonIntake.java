@@ -63,7 +63,10 @@ public boolean getLimitSwitchBoolean() {
     intake.set(Value.kForward);
     return true;
   }
-
+  public boolean off() {
+    intake.set(Value.kOff);
+    return true;
+  }
   public boolean intakeDown() {
     while (intakeEncoder.getPosition() > -22 ) {
       intakeActuator.set(-.4);
@@ -78,7 +81,9 @@ public boolean getLimitSwitchBoolean() {
     intakeActuator.set(0);
     return true;
   }
-
+  public void wheelieMotorSet(double power) {
+    intakeActuator.set(power);
+  }
 
   public void joystickControl() {
 
@@ -119,21 +124,21 @@ public boolean getLimitSwitchBoolean() {
     else {
       intakeActuator.stopMotor();
     }
-    if (yButton) {
-      while ( intakeEncoder.getPosition() < -12) {
-        intakeActuator.set(.4);
-      }
-      intakeActuator.set(0);
+    // if (yButton) {
+    //   while ( intakeEncoder.getPosition() < -12) {
+    //     intakeActuator.set(.4);
+    //   }
+    //   intakeActuator.set(0);
 
-      //intakeActuator.set(.2);
-    }
-    else if (aButton) {
-      while ( intakeEncoder.getPosition() > 5) {
-        intakeActuator.set(-.4);
-      }
-      intakeActuator.set(0);
+    //   //intakeActuator.set(.2);
+    // }
+    // else if (aButton) {
+    //   while ( intakeEncoder.getPosition() > 5) {
+    //     intakeActuator.set(-.4);
+    //   }
+    //   intakeActuator.set(0);
 
-    }
+    // }
     SmartDashboard.putNumber("Right Stick Y", rightStickY);
 
   

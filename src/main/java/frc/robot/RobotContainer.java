@@ -35,6 +35,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Auto.AutoBuilder;
 import frc.robot.Auto.FollowTrajectoryPathPlanner;
 import frc.robot.Auto.PIDAutoBalancer;
+import frc.robot.Auto.PPSwerveAutoBuilder;
+import frc.robot.Auto.ReversePIDAutoBalancer;
+import frc.robot.Auto.newBalance;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -73,7 +76,6 @@ public class RobotContainer {
 
     //m_chooser.setDefaultOption("Autonomus~~~~", AutoBuilder.auto11());
     //m_chooser.addOption("Charge Station", auto2());
-    SmartDashboard.putData("Goooheeeheeheehee",m_chooser);
 
 
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCommand(
@@ -316,28 +318,46 @@ private final Command auto3() {
 
 
 
-  public Command spliceAutoTest() {
-    return new SequentialCommandGroup
-    (
-      new FollowTrajectoryPathPlanner(swerveSubsystem, "SpliceTestPart1", true),
-      new FollowTrajectoryPathPlanner(swerveSubsystem, "SpliceTestPart2", false)
-    );
-  }
   
-  
-  public Command orderTest() {
+
+
+  public Command midAutoHigh() {
     return new SequentialCommandGroup
     (
       new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem),
-      new FollowTrajectoryPathPlanner(swerveSubsystem, "SpliceTestPart2", false)
+
+      new PIDAutoBalancer(swerveSubsystem)
+
     );
   }
 
   public Command getAutonomousCommand() {
 
 
-    return new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting5", true);
+    //return new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem);
 
+
+    //return new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting4", true);
+
+    return new SequentialCommandGroup 
+    (
+      //new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem)
+      
+      //new FollowTrajectoryPathPlanner(swerveSubsystem, "ihopethisworkslol", true,1,1,false)
+      //new FollowTrajectoryPathPlanner(swerveSubsystem, "3meter7", true,1,1,false),
+      //new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting5", false,1,1,false),
+      //new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting6", false,1,1,false),
+
+
+      new PPSwerveAutoBuilder(swerveSubsystem, armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, "ihopethisworkslol", 0, 0)
+      //new PIDAutoBalancer(swerveSubsystem)
+      //new ReversePIDAutoBalancer(swerveSubsystem)
+      //,new newBalance(swerveSubsystem)
+      //new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem)
+
+    );
+
+    //return auto2();
 
 
     //return m_chooser.getSelected();
