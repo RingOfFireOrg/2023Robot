@@ -144,6 +144,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Pose2d getPose() {
+        SmartDashboard.putString( "  Get Pose meters ", odometer.getPoseMeters().toString());
         return odometer.getPoseMeters();
     }
 
@@ -190,6 +191,10 @@ public class SwerveSubsystem extends SubsystemBase {
         
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putNumber("Robot Theta", getPose().getRotation().getDegrees());
+        SmartDashboard.putNumber(" Robot Tranlsation    fl", frontLeft.getDrivePosition());
+        SmartDashboard.putNumber(" Robot Tranlsation    fr", frontRight.getDrivePosition());
+        SmartDashboard.putNumber(" Robot Tranlsation    bl", backLeft.getDrivePosition());
+        SmartDashboard.putNumber(" Robot Tranlsation    br", backRight.getDrivePosition());
 
     }
 

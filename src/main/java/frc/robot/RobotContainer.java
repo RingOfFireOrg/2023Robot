@@ -348,11 +348,12 @@ private final Command auto3() {
       //new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting5", false,1,1,false),
       //new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting6", false,1,1,false),
 
+
       new PPSwerveAutoBuilder(swerveSubsystem, armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, "ihopethisworkslol", 0, 0)
       //new PIDAutoBalancer(swerveSubsystem)
       //new ReversePIDAutoBalancer(swerveSubsystem)
       //,new newBalance(swerveSubsystem)
-      //,new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem)
+      //new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem)
 
     );
 

@@ -76,8 +76,12 @@ public class SwerveModule {
     }
     
     public double getDrivePosition() { //math is for manual conversion factor because TalonFX controllers do not have ConversionFactor functions
-        return ((driveEncoder.getPosition() / ModuleConstants.kEncoderCPR) * ModuleConstants.kDriveEncoderRot2Meter);
+       return ((driveEncoder.getPosition() / ModuleConstants.kEncoderCPR) * ModuleConstants.kDriveEncoderRot2Meter);
+       //return (driveEncoder.getPosition()* ModuleConstants.kDriveMotorGearRatio) * Math.PI * ModuleConstants.kWheelDiameterMeters;
     }
+
+
+ 
 
     public double getTurningPosition() {
         return (getAbsoluteEncoderRad());
@@ -108,7 +112,11 @@ public class SwerveModule {
     }
 
     public void setDesiredState(SwerveModuleState state) {
+        //double angle = absoluteEncoder.getAbsolutePosition();
+
         SmartDashboard.putNumber("Swerve[" + encId + "] state", getAbsoluteEncoderRad());
+        SmartDashboard.putNumber("Swerve[" + encId + "] state 2", absoluteEncoder.getAbsolutePosition());
+
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
             stop();
             return;
