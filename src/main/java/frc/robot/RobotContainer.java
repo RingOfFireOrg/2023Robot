@@ -29,6 +29,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -67,6 +68,7 @@ public class RobotContainer {
 
   private final XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final XboxController operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+  private final Joystick extraJoystick = new Joystick(3);
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
@@ -81,8 +83,8 @@ public class RobotContainer {
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCommand(
       swerveSubsystem,
       // Left Joystick Field Oriented
-      () -> -driverController.getRawAxis(OIConstants.kDriverYAxis),
-      () -> driverController.getRawAxis(OIConstants.kDriverXAxis),
+      () -> -driverController.getRawAxis(OIConstants.kDriverYAxis) + -extraJoystick.getRawAxis(1),
+      () -> driverController.getRawAxis(OIConstants.kDriverXAxis) + extraJoystick.getRawAxis(0),
 
       //Right Joystick For Robot Centic
       () -> -driverController.getRawAxis(5),
