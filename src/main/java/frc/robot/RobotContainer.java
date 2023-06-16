@@ -1,7 +1,6 @@
 package frc.robot;
 
 
-import frc.robot.commands.LimeLightVals;
 import frc.robot.commands.AutoCommands.ArmAutoMovement;
 import frc.robot.commands.AutoCommands.PistonIntakeMovement;
 import frc.robot.commands.AutoCommands.PistonIntakeStatus;
@@ -51,6 +50,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 
@@ -118,20 +118,24 @@ public class RobotContainer {
       pistonIntakeSubsystem
     ));
 
-    limeLightSubsystem.setDefaultCommand(new LimeLightVals(
-      limeLightSubsystem
-    ));
+    // limeLightSubsystem.setDefaultCommand(new LimeLightVals(
+    //   limeLightSubsystem
+    // ));
 
     outtakeTransferSubsystem.setDefaultCommand(new outtakeTransferMovement(
       outtakeTransferSubsystem
     ));
 
-    configureButtonBindings();
+    configureButtonBindings(swerveSubsystem, driverController);
 
   }
 
-  private void configureButtonBindings() {
-    //new JoystickButton(driverController, 2).whenPressed(() -> swerveSubsystem.zeroHeading());
+  private void configureButtonBindings(SwerveSubsystem swerveSubsystem, XboxController driverController) {
+    new JoystickButton(driverController, 2).whenPressed(() -> swerveSubsystem.zeroHeading());
+    driverController.
+    
+
+    
 
     
 
