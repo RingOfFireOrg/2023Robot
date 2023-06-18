@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.AutoCommands.ArmAutoMovement;
 import frc.robot.commands.AutoCommands.PistonIntakeMovement;
-import frc.robot.commands.AutoCommands.PistonIntakeStatus;
 import frc.robot.commands.AutoCommands.TransferGrip;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.linearSlideArm;

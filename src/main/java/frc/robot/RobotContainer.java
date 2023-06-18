@@ -1,13 +1,13 @@
 package frc.robot;
 
 
-import frc.robot.commands.LimeLightVals;
 import frc.robot.commands.AutoCommands.ArmAutoMovement;
 import frc.robot.commands.AutoCommands.PistonIntakeMovement;
 import frc.robot.commands.AutoCommands.PistonIntakeStatus;
 import frc.robot.commands.AutoCommands.TransferGrip;
 import frc.robot.commands.CommandGroups.HighCubeDrop;
 import frc.robot.commands.CommandGroups.MidCubeDrop;
+import frc.robot.commands.TeleopCommands.LimeLightVals;
 import frc.robot.commands.TeleopCommands.SwerveJoystickCommand;
 import frc.robot.commands.TeleopCommands.armJoystickCommand;
 import frc.robot.commands.TeleopCommands.outtakeTransferMovement;
@@ -34,10 +34,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Auto.AutoBuilder;
-import frc.robot.Auto.FollowTrajectoryPathPlanner;
 import frc.robot.Auto.PIDAutoBalancer;
 import frc.robot.Auto.PPSwerveAutoBuilder;
-import frc.robot.Auto.ReversePIDAutoBalancer;
 import frc.robot.Auto.newBalance;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;

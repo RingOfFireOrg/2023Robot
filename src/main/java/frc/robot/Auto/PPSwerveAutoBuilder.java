@@ -46,7 +46,7 @@ ArrayList<PathPlannerTrajectory> pathGroup = (ArrayList<PathPlannerTrajectory>) 
 // in your code that will be used by all path following commands.
 HashMap<String, Command> eventMap = new HashMap<>();
 eventMap.put("ScoreHigh", new HighCubeDrop(arm, wheelie, piston, driveSubsystem));
-eventMap.put("Balence", new ReversePIDAutoBalancer(driveSubsystem));
+eventMap.put("Balence", new PIDAutoBalancer(driveSubsystem));
 eventMap.put("ScoreHighhh", new InstantCommand());
 
 // Create the AutoBuilder. This only needs to be created once when robot code starts, not every time you want to create an auto command. A good place to put this is in RobotContainer along with your subsystems.

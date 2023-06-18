@@ -10,9 +10,32 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimeLight extends SubsystemBase {
-  /** Creates a new Limelight2. */
+
+
+
+
+
+
+
+
+
+
+
+
+// MAKE NEW LIMELIGHT SUBSYSTEM
+
+
+
+
+
+
+
+
+
+
+
   public LimeLight( ) {
-    // Need to tune these values
+
     final double visionrange = 0; 
     final double lowScoringHeight = 0; 
     final double middleScoringHeight = 0;

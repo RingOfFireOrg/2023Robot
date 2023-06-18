@@ -1,9 +1,7 @@
 package frc.robot.commands.CommandGroups;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import frc.robot.commands.AutoCommands.ArmAutoMovement;
-import frc.robot.commands.AutoCommands.PistonIntakeMovement;
 import frc.robot.commands.AutoCommands.TransferSetGrip;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.linearSlideArm;
