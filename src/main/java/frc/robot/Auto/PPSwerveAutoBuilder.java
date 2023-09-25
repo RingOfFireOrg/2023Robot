@@ -36,10 +36,7 @@ public class PPSwerveAutoBuilder extends SequentialCommandGroup {
 
 {
 
-// This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
-// for every path in the group
 
-//ArrayList<PathPlannerTrajectory> pathGroup = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("ihopethisworkslol",new PathConstraints(1, 1));
 ArrayList<PathPlannerTrajectory> pathGroup = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("THORAUTO1",new PathConstraints(0.5, 0.5));
 
 // This is just an example event map. It would be better to have a constant, global event map

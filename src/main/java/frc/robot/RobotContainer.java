@@ -1,12 +1,7 @@
 package frc.robot;
 
 
-import frc.robot.commands.AutoCommands.ArmAutoMovement;
-import frc.robot.commands.AutoCommands.PistonIntakeMovement;
-import frc.robot.commands.AutoCommands.PistonIntakeStatus;
-import frc.robot.commands.AutoCommands.TransferGrip;
 import frc.robot.commands.CommandGroups.HighCubeDrop;
-import frc.robot.commands.CommandGroups.MidCubeDrop;
 import frc.robot.commands.TeleopCommands.LimeLightVals;
 import frc.robot.commands.TeleopCommands.SwerveJoystickCommand;
 import frc.robot.commands.TeleopCommands.armJoystickCommand;
@@ -15,10 +10,6 @@ import frc.robot.commands.TeleopCommands.pistonIntakeGrab;
 
 import java.util.List;
 
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
-
-import frc.robot.commands.CommandGroups.HighCubeDrop;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -28,15 +19,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Auto.AutoBuilder;
 import frc.robot.Auto.PIDAutoBalancer;
 import frc.robot.Auto.PPSwerveAutoBuilder;
-import frc.robot.Auto.newBalance;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -197,83 +184,7 @@ public class RobotContainer {
 
 
 
-  private final Command auto2() {
-
-
-    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-      .65,
-      .55)
-        .setKinematics(DriveConstants.kDriveKinematics);
-
-    Trajectory trajectory1 = TrajectoryGenerator.generateTrajectory
-    (
-      new Pose2d(0, 0, new Rotation2d(0)),
-      List.of (new Translation2d(1, 0)),
-
-      new Pose2d(1, 0, Rotation2d.fromDegrees(0)),
-      trajectoryConfig
-    );
-
-
-    PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
-    PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
-    ProfiledPIDController thetaController = new ProfiledPIDController(
-      AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-    // 4. Construct command to follow trajectory
-    SwerveControllerCommand undershoot = new SwerveControllerCommand(
-      trajectory1,
-      swerveSubsystem::getPose,
-      DriveConstants.kDriveKinematics,
-      xController,
-      yController,
-      thetaController,
-      swerveSubsystem::setModuleStates,
-      swerveSubsystem);
-
-      // Trajectory trajectory2 = TrajectoryGenerator.generateTrajectory
-      // (
-      //   new Pose2d(0, 0, new Rotation2d(0)),
-      //   List.of (new Translation2d(0, 1.5)),
   
-      //   new Pose2d(0, 1.5, Rotation2d.fromDegrees(0)),
-      //   trajectoryConfig
-      // );
-
-      // SwerveControllerCommand questionableShoot = new SwerveControllerCommand(
-      //   trajectory2,
-      //   swerveSubsystem::getPose,
-      //   DriveConstants.kDriveKinematics,
-      //   xController,
-      //   yController,
-      //   thetaController,
-      //   swerveSubsystem::setModuleStates,
-      //   swerveSubsystem);
-  
-
-    // return new SequentialCommandGroup(
-    //   new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory1.getInitialPose())),
-    //   undershoot,
-    //   new WaitCommand(2),
-    //   new PIDAutoBalancer(swerveSubsystem),
-    //   new InstantCommand(() -> swerveSubsystem.stopModules())
-    //   );
-
-    //use thiss to test if its actually working
-    return new SequentialCommandGroup(
-      new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory1.getInitialPose())),
-      undershoot,
-      new PIDAutoBalancer(swerveSubsystem),
-      // new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory2.getInitialPose())),
-      // new WaitCommand(10),
-      // questionableShoot,
-      new InstantCommand(() -> swerveSubsystem.stopModules())
-      );
-
-
-
-  }
 private final Command auto3() {
   
   TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
@@ -333,45 +244,20 @@ private final Command auto3() {
 
   public Command getAutonomousCommand() {
 
-
-    //return new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem);
-
-
-    //return new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting4", true);
-
     return new SequentialCommandGroup 
     (
       //new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem)
-      
-      //new FollowTrajectoryPathPlanner(swerveSubsystem, "ihopethisworkslol", true,1,1,false)
       //new FollowTrajectoryPathPlanner(swerveSubsystem, "3meter7", true,1,1,false),
       //new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting5", false,1,1,false),
       //new FollowTrajectoryPathPlanner(swerveSubsystem, "PIDTesting6", false,1,1,false),
-
-
       new PPSwerveAutoBuilder(swerveSubsystem, armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, "THORAUTO1", 0, 0)
       //new PIDAutoBalancer(swerveSubsystem)
       //new ReversePIDAutoBalancer(swerveSubsystem)
-      //,new newBalance(swerveSubsystem)
+      //new newBalance(swerveSubsystem)
       //new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem)
 
     );
 
-    //return auto2();
-
-
-    //return m_chooser.getSelected();
-    // return new SequentialCommandGroup(
-    //   new PistonIntakeStatus(pistonIntakeSubsystem, "open"),
-    //   new PistonIntakeMovement(pistonIntakeSubsystem, "down"),
-    //   new TransferGrip(outtakeTransferSubsystem, "close"),
-    //   new ArmAutoMovement(armSubsystem, "high"),
-    //   new TransferGrip(outtakeTransferSubsystem, "open"),
-    //   new ArmAutoMovement(armSubsystem, "reset"),
-    //   new InstantCommand(() -> swerveSubsystem.stopModules())
-    //   );
-    //return m_chooser.getSelected();
-    //return auto2();
-    //return new HighCubeDrop(armSubsystem, outtakeTransferSubsystem, pistonIntakeSubsystem, swerveSubsystem);
+   
   }
 }

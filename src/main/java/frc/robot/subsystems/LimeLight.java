@@ -36,10 +36,7 @@ public class LimeLight extends SubsystemBase {
 
   public LimeLight( ) {
 
-    final double visionrange = 0; 
-    final double lowScoringHeight = 0; 
-    final double middleScoringHeight = 0;
-    final double highScoringHeight = 0;
+
   } 
   public double[] getVisionVals() {
     // https://docs.limelightvision.io/en/latest/networktables_api.html
