@@ -40,7 +40,7 @@ public class PPSwerveAutoBuilder extends SequentialCommandGroup {
 // for every path in the group
 
 //ArrayList<PathPlannerTrajectory> pathGroup = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("ihopethisworkslol",new PathConstraints(1, 1));
-ArrayList<PathPlannerTrajectory> pathGroup = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("RotationTest",new PathConstraints(0.5, 0.5));
+ArrayList<PathPlannerTrajectory> pathGroup = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("THORAUTO1",new PathConstraints(0.5, 0.5));
 
 // This is just an example event map. It would be better to have a constant, global event map
 // in your code that will be used by all path following commands.
